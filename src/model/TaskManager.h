@@ -1,25 +1,20 @@
 #pragma once
 
 #include<map>
-#include<vector>
-#include<utility>
 #include"Task.h"
+#include"id/IdGenerator.h"
+#include"id/TaskId.h"
 
 class TaskManager {
 public:
-    TaskManager() { max_id_ = 0; }
-
-    int Add(Task);
-
-    void Edit(int, Task);
-
-    void Complete(int);
-
-    void Delete(int);
-
-    std::map<int, Task> Show() const;
-
+    TaskManager() {}
+    TaskId Add(Task);
+    void Edit(TaskId, Task);
+    void Complete(TaskId);
+    void Delete(TaskId);
+    std::map<TaskId, Task> Show() const;
+    Task getTask(TaskId) const;
 private:
-    std::map<int, Task> tasks_;
-    int max_id_;
+    std::map<TaskId, Task> tasks_;
+    IdGenerator generator_;
 };

@@ -1,12 +1,14 @@
-#include <iostream>
+#include<iostream>
 #include<ctime>
+#include<string>
 #include"model/Task.h"
 #include"model/TaskManager.h"
+#include"model/id/TaskId.h"
 
 void Print(TaskManager &manager) {
-    std::map<int, Task> tasks = manager.Show();
+    std::map<TaskId, Task> tasks = manager.Show();
     for (auto t: tasks) {
-        std::cout << "id: " << t.first << "   ";
+        std::cout << "id: " << t.first.value() << "   ";
         std::cout << "title: " << t.second.get_title() << "   ";
         std::cout << "priority: " << static_cast<int>(t.second.get_priority()) << "   ";
         time_t time = t.second.get_date();
@@ -28,9 +30,9 @@ int main() {
     manager.Add(Task::Create("second", Task::Priority::LOU, ToTime("23:00 12/11/2021")));
     manager.Add(Task::Create("third", Task::Priority::NONE, ToTime("11:15 5/12/2021")));
     Print(manager);
-    manager.Complete(2);
-    manager.Delete(1);
+    manager.Complete(TaskId::Create(2));
+    manager.Delete(TaskId::Create(1));
     manager.Add(Task::Create("fourth", Task::Priority::HIGH, ToTime("14:00 10/5/2022")));
-    manager.Edit(0, Task::Create("fifth", Task::Priority::MEDIUM, ToTime("5:05 3/4/2022")));
+    manager.Edit(TaskId::Create(0), Task::Create("fifth", Task::Priority::MEDIUM, ToTime("5:05 3/4/2022")));
     Print(manager);
 }

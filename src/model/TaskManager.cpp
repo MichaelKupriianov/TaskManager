@@ -1,28 +1,32 @@
-#include<map>
-#include<stdexcept>
-#include"Task.h"
 #include "TaskManager.h"
+#include<stdexcept>
 
-int TaskManager::Add(Task task) {
-    tasks_[max_id_] = task;
-    return max_id_++;
+TaskId TaskManager::Add(Task task) {
+    TaskId id(generator_.GenerateId());
+    tasks_.insert({id, task});
+    return id;
 }
 
-void TaskManager::Edit(int id, Task task) {
+void TaskManager::Edit(TaskId id, Task task) {
     if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
-    tasks_[id] = task;
+    tasks_.erase(id);
+    tasks_.insert({id, task});
 }
 
-void TaskManager::Complete(int id) {
+void TaskManager::Complete(TaskId id) {
     if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
     tasks_.erase(id);
 }
 
-void TaskManager::Delete(int id) {
-    if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
+void TaskManager::Delete(TaskId id) {
     tasks_.erase(id);
 }
 
-std::map<int, Task> TaskManager::Show() const {
+std::map<TaskId, Task> TaskManager::Show() const {
     return tasks_;
+}
+
+Task TaskManager::getTask(TaskId id) const {
+    if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
+    return tasks_.at(id);
 }
