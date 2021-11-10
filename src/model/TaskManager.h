@@ -17,7 +17,7 @@ public:
 
     void Delete(int);
 
-    std::map<int, Task> Show();
+    std::map<int, Task> Show() const;
 
 private:
     std::map<int, Task> tasks_;

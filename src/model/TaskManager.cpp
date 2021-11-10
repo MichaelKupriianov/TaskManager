@@ -23,6 +23,6 @@ void TaskManager::Delete(int id) {
     tasks_.erase(id);
 }
 
-std::map<int, Task> TaskManager::Show() {
+std::map<int, Task> TaskManager::Show() const {
     return tasks_;
 }
