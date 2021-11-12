@@ -12,9 +12,9 @@ void Print(const TaskId &id) {
 }
 
 void Print(const Task &task) {
-    std::cout << "title: " << task.get_title() << "   ";
-    std::cout << "priority: " << ToString(task.get_priority()) << "   ";
-    time_t time = task.get_date();
+    std::cout << "title: " << task.title() << "   ";
+    std::cout << "priority: " << ToString(task.priority()) << "   ";
+    time_t time = task.date();
     std::cout << "date: " << ctime(&time);
 }
 
