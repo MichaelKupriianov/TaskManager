@@ -1,5 +1,5 @@
 #include"gtest/gtest.h"
-#include"../../../src/model/id/IdGenerator.h"
+#include"id/IdGenerator.h"
 
 class IdGeneratorTest : public ::testing::Test {};
 

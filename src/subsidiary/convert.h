@@ -2,7 +2,7 @@
 
 #include<ctime>
 #include<string>
-#include"../model/Task.h"
+#include"Task.h"
 
 time_t ToTime(const std::string &date) {
     tm time = {};

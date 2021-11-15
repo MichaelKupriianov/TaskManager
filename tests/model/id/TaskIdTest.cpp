@@ -1,5 +1,5 @@
 #include"gtest/gtest.h"
-#include"../../../src/model/id/TaskId.h"
+#include"id/TaskId.h"
 
 class TaskIdTest : public ::testing::Test {};
 

@@ -1,6 +1,6 @@
-#include"model/Task.h"
-#include"model/TaskManager.h"
-#include"model/id/TaskId.h"
+#include"Task.h"
+#include"TaskManager.h"
+#include"id/TaskId.h"
 #include"subsidiary/convert.h"
 #include"subsidiary/print.h"
 

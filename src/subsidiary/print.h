@@ -2,9 +2,9 @@
 
 #include<iostream>
 #include<map>
-#include"../model/id/TaskId.h"
-#include"../model/Task.h"
-#include"../model/TaskManager.h"
+#include"id/TaskId.h"
+#include"Task.h"
+#include"TaskManager.h"
 #include"convert.h"
 
 void Print(const TaskId &id) {

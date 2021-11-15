@@ -1,5 +1,5 @@
 #include"gtest/gtest.h"
-#include"../../src/model/TaskManager.h"
+#include"TaskManager.h"
 
 class TaskManagerTest : public ::testing::Test {
 protected:
