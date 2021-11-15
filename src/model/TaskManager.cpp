@@ -1,13 +1,13 @@
 #include "TaskManager.h"
 #include<stdexcept>
 
-TaskId TaskManager::Add(Task task) {
+TaskId TaskManager::Add(const Task &task) {
     TaskId id(generator_.GenerateId());
     tasks_.insert({id, task});
     return id;
 }
 
-void TaskManager::Edit(TaskId id, Task task) {
+void TaskManager::Edit(TaskId id, const Task &task) {
     if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
     tasks_.erase(id);
     tasks_.insert({id, task});

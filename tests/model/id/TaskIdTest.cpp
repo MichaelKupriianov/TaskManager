@@ -1,9 +1,7 @@
 #include"gtest/gtest.h"
 #include"../../../src/model/id/TaskId.h"
 
-class TaskIdTest : public ::testing::Test {
-
-};
+class TaskIdTest : public ::testing::Test {};
 
 TEST_F(TaskIdTest, shouldGreateRegularTaskID) {
     EXPECT_EQ(TaskId::Create(0).value(), 0);

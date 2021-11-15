@@ -4,7 +4,7 @@
 #include<string>
 #include"../model/Task.h"
 
-time_t ToTime(std::string date) {
+time_t ToTime(const std::string &date) {
     tm time = {};
     std::string pattern{"%H:%M %d/%m/%Y"};
     if (!strptime(date.c_str(), pattern.c_str(), &time))
@@ -12,7 +12,7 @@ time_t ToTime(std::string date) {
     return mktime(&time);
 }
 
-Task::Priority ToPriority(std::string priority) {
+Task::Priority ToPriority(const std::string &priority) {
     if (priority == "high") return Task::Priority::HIGH;
     if (priority == "medium") return Task::Priority::MEDIUM;
     if (priority == "low") return Task::Priority::LOU;

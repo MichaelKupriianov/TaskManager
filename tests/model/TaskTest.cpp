@@ -1,12 +1,10 @@
 #include"gtest/gtest.h"
 #include"../../src/model/Task.h"
 
-class TaskTest : public ::testing::Test {
-
-};
+class TaskTest : public ::testing::Test {};
 
 TEST_F(TaskTest, shouldCreateRegularTask) {
-    Task task(Task::Create("first", Task::Priority::NONE, 500));
+    const Task task(Task::Create("first", Task::Priority::NONE, 500));
     EXPECT_EQ(task.title(), "first");
     EXPECT_EQ(task.priority(), Task::Priority::NONE);
     EXPECT_EQ(task.date(), 500);

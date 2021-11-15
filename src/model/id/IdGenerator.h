@@ -9,7 +9,6 @@ public:
     TaskId GenerateId() {
         return TaskId::Create(max_id++);
     }
-
 private:
     int max_id;
 };

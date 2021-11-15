@@ -1,9 +1,7 @@
 #include"gtest/gtest.h"
 #include"../../../src/model/id/IdGenerator.h"
 
-class IdGeneratorTest : public ::testing::Test {
-
-};
+class IdGeneratorTest : public ::testing::Test {};
 
 TEST_F(IdGeneratorTest, shouldGenerateID) {
     IdGenerator generator;

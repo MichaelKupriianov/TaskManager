@@ -32,7 +32,7 @@ TEST_F(TaskManagerTest, shouldCreateTask) {
 TEST_F(TaskManagerTest, shouldEditTask) {
     TaskManager manager;
     manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
+    const Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
     manager.Edit(TaskId::Create(0), modified_task);
     EXPECT_TRUE(CompareTasks(manager.getTask(TaskId::Create(0)), modified_task));
 }
@@ -40,7 +40,7 @@ TEST_F(TaskManagerTest, shouldEditTask) {
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
     TaskManager manager;
     manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
+    const Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
     EXPECT_THROW(manager.Edit(TaskId::Create(1), modified_task), std::range_error);
 }
 
@@ -66,12 +66,14 @@ TEST_F(TaskManagerTest, shouldDeletTask) {
 
 TEST_F(TaskManagerTest, shouldShowTasks) {
     TaskManager manager;
-    Task task1(Task::Create("first", Task::Priority::MEDIUM, 500));
-    Task task2(Task::Create("second", Task::Priority::HIGH, 1000));
-    std::map<TaskId, Task> map;
-    map.insert({TaskId::Create(0), task1});
-    map.insert({TaskId::Create(1), task2});
+    const Task task1(Task::Create("first", Task::Priority::MEDIUM, 500));
+    const Task task2(Task::Create("second", Task::Priority::HIGH, 1000));
     manager.Add(task1);
     manager.Add(task2);
-    EXPECT_TRUE(CompareMaps(manager.Show(), std::move(map)));
+
+    std::map<TaskId, Task> expected;
+    expected.insert({TaskId::Create(0), task1});
+    expected.insert({TaskId::Create(1), task2});
+
+    EXPECT_TRUE(CompareMaps(manager.Show(), std::move(expected)));
 }

@@ -2,8 +2,8 @@
 
 class TaskId {
 public:
-    unsigned int value() const { return value_; }
     static TaskId Create(int);
+    unsigned int value() const { return value_; }
 public:
     TaskId(const TaskId &) = default;
     TaskId &operator=(const TaskId &) = delete;

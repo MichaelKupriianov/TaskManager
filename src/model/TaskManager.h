@@ -8,10 +8,11 @@
 class TaskManager {
 public:
     TaskManager() {}
-    TaskId Add(Task);
-    void Edit(TaskId, Task);
+    TaskId Add(const Task &);
+    void Edit(TaskId, const Task &);
     void Complete(TaskId);
     void Delete(TaskId);
+
     std::map<TaskId, Task> Show() const;
     Task getTask(TaskId) const;
 private:
