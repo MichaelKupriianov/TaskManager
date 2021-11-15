@@ -20,6 +20,7 @@ public:
 public:
     Task(const Task &) = default;
     Task &operator=(const Task &) = delete;
+    friend bool operator==(const Task &, const Task &);
 private:
     Task(const std::string &title, Priority priority, time_t date) :
             title_{title}, priority_{priority}, due_date_{date} {}

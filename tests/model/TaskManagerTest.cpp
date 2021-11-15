@@ -1,32 +1,13 @@
 #include"gtest/gtest.h"
 #include"TaskManager.h"
 
-class TaskManagerTest : public ::testing::Test {
-protected:
-    bool CompareTasks(Task first, Task second) {
-        return (first.title() == second.title() && first.priority() == second.priority() &&
-                first.date() == second.date());
-    }
-
-    bool CompareMaps(std::map<TaskId, Task> &&first, std::map<TaskId, Task> &&second) {
-        if (first.size() != second.size()) return false;
-        bool result = true;
-        auto it1 = first.begin();
-        auto it2 = second.begin();
-        while (it1 != first.end()) {
-            result &= ((*it1).first == (*it2).first);
-            result &= CompareTasks((*it1).second, (*it2).second);
-            it1++; it2++;
-        }
-        return result;
-    }
-};
+class TaskManagerTest : public ::testing::Test {};
 
 TEST_F(TaskManagerTest, shouldCreateTask) {
     TaskManager manager;
     Task task(Task::Create("first", Task::Priority::MEDIUM, 500));
     manager.Add(task);
-    EXPECT_TRUE(CompareTasks(manager.getTask(TaskId::Create(0)), task));
+    EXPECT_EQ(manager.getTask(TaskId::Create(0)), task);
 }
 
 TEST_F(TaskManagerTest, shouldEditTask) {
@@ -34,7 +15,7 @@ TEST_F(TaskManagerTest, shouldEditTask) {
     manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
     const Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
     manager.Edit(TaskId::Create(0), modified_task);
-    EXPECT_TRUE(CompareTasks(manager.getTask(TaskId::Create(0)), modified_task));
+    EXPECT_EQ(manager.getTask(TaskId::Create(0)), modified_task);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
@@ -75,5 +56,5 @@ TEST_F(TaskManagerTest, shouldShowTasks) {
     expected.insert({TaskId::Create(0), task1});
     expected.insert({TaskId::Create(1), task2});
 
-    EXPECT_TRUE(CompareMaps(manager.Show(), std::move(expected)));
+    EXPECT_EQ(manager.Show(), std::move(expected));
 }
