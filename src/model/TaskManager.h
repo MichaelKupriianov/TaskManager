@@ -10,7 +10,7 @@
 class TaskManager {
 public:
     TaskManager(): generator_(new IdGenerator) {}
-    TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
+    explicit TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
 public:
     TaskId Add(const Task &);
     void Edit(TaskId, const Task &);

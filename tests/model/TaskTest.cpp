@@ -22,5 +22,5 @@ TEST_F(TaskTest, shouldCompareTasks) {
     const Task task1(Task::Create("first", Task::Priority::NONE, 500));
     const Task task2(Task::Create("second", Task::Priority::MEDIUM, 1000));
     EXPECT_EQ(task1, task1);
-    EXPECT_FALSE(task1==task2);
+    EXPECT_FALSE(task1 == task2);
 }

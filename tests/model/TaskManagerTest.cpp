@@ -2,28 +2,29 @@
 #include"gmock/gmock.h"
 #include"TaskManager.h"
 
-using::testing::Return;
-using::testing::AtLeast;
+using ::testing::Return;
+using ::testing::AtLeast;
 
-class MockIdGenerator: public IdGenerator {
+class MockIdGenerator : public IdGenerator {
 public:
     MOCK_METHOD(TaskId, GenerateId, (), (override));
 };
 
 class TaskManagerTest : public ::testing::Test {
 protected:
-    void SetUp() {
+    void SetUp() override {
         std::unique_ptr<MockIdGenerator> ptr_gen(new MockIdGenerator);
         EXPECT_CALL(*ptr_gen, GenerateId())
                 .Times(AtLeast(1))
                 .WillOnce(Return(TaskId::Create(0)))
                 .WillRepeatedly(Return(TaskId::Create(1)));
 
-        task1_=std::make_unique<Task>(Task::Create("first", Task::Priority::MEDIUM, 500));
-        task2_=std::make_unique<Task>(Task::Create("second", Task::Priority::NONE, 1000));
-        manager_=std::make_unique<TaskManager>(std::move(ptr_gen));
+        task1_ = std::make_unique<Task>(Task::Create("first", Task::Priority::MEDIUM, 500));
+        task2_ = std::make_unique<Task>(Task::Create("second", Task::Priority::NONE, 1000));
+        manager_ = std::make_unique<TaskManager>(std::move(ptr_gen));
         manager_->Add(*task1_);
     }
+
 protected:
     std::unique_ptr<TaskManager> manager_;
     std::unique_ptr<Task> task1_, task2_;
@@ -62,7 +63,7 @@ TEST_F(TaskManagerTest, shouldShowTasks) {
     expected.insert({TaskId::Create(0), *task1_});
     expected.insert({TaskId::Create(1), *task2_});
 
-    EXPECT_EQ(manager_->Show(), std::move(expected));
+    EXPECT_EQ(manager_->Show(), expected);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionIfIdGeneratorWorksdBadly) {
