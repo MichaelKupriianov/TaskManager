@@ -7,9 +7,9 @@ TaskId TaskId::Create(int id) {
 };
 
 bool operator<(const TaskId &first, const TaskId &second) {
-    return first.value() < second.value();
+    return first.value_ < second.value_;
 }
 
 bool operator==(const TaskId &first, const TaskId &second) {
-    return first.value() == second.value();
+    return first.value_ == second.value_;
 }

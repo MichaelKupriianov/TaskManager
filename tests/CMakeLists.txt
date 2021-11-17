@@ -8,6 +8,6 @@ add_executable(all_tests model/TaskTest.cpp model/TaskManagerTest.cpp model/id/T
         ../src/model/Task.h ../src/model/Task.cpp ../src/model/TaskManager.h ../src/model/TaskManager.cpp
         ../src/model/id/IdGenerator.h ../src/model/id/TaskId.h ../src/model/id/TaskId.cpp)
 
-target_link_libraries(all_tests GTest::GTest GTest::Main)
+target_link_libraries(all_tests GTest::gtest GTest::gmock GTest::gmock_main)
 
 gtest_discover_tests(all_tests)

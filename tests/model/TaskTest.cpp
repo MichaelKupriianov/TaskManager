@@ -17,3 +17,10 @@ TEST_F(TaskTest, shouldThrowExceptionIfEmptyTitle) {
 TEST_F(TaskTest, shouldThrowExceptionIfNegativeTime) {
     EXPECT_THROW(Task task(Task::Create("first", Task::Priority::NONE, -5)), std::runtime_error);
 }
+
+TEST_F(TaskTest, shouldCompareTasks) {
+    const Task task1(Task::Create("first", Task::Priority::NONE, 500));
+    const Task task2(Task::Create("second", Task::Priority::MEDIUM, 1000));
+    EXPECT_EQ(task1, task1);
+    EXPECT_FALSE(task1==task2);
+}

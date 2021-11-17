@@ -4,11 +4,12 @@
 
 class IdGenerator {
 public:
-    IdGenerator() : max_id(0) {}
+    IdGenerator(int v = 0) : max_id_(v) {}
 
-    TaskId GenerateId() {
-        return TaskId::Create(max_id++);
+    virtual TaskId GenerateId() {
+        return TaskId::Create(max_id_++);
     }
+    virtual ~IdGenerator() = default;
 private:
-    int max_id;
+    int max_id_;
 };

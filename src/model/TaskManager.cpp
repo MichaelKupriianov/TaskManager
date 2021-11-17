@@ -2,7 +2,8 @@
 #include<stdexcept>
 
 TaskId TaskManager::Add(const Task &task) {
-    TaskId id(generator_.GenerateId());
+    TaskId id(generator_->GenerateId());
+    if (tasks_.count(id) == 1) throw std::range_error("There is already a task with such ID");
     tasks_.insert({id, task});
     return id;
 }

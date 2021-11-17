@@ -1,60 +1,71 @@
 #include"gtest/gtest.h"
+#include"gmock/gmock.h"
 #include"TaskManager.h"
 
-class TaskManagerTest : public ::testing::Test {};
+using::testing::Return;
+using::testing::AtLeast;
+
+class MockIdGenerator: public IdGenerator {
+public:
+    MOCK_METHOD(TaskId, GenerateId, (), (override));
+};
+
+class TaskManagerTest : public ::testing::Test {
+protected:
+    void SetUp() {
+        std::unique_ptr<MockIdGenerator> ptr_gen(new MockIdGenerator);
+        EXPECT_CALL(*ptr_gen, GenerateId())
+                .Times(AtLeast(1))
+                .WillOnce(Return(TaskId::Create(0)))
+                .WillRepeatedly(Return(TaskId::Create(1)));
+
+        task1_=std::make_unique<Task>(Task::Create("first", Task::Priority::MEDIUM, 500));
+        task2_=std::make_unique<Task>(Task::Create("second", Task::Priority::NONE, 1000));
+        manager_=std::make_unique<TaskManager>(std::move(ptr_gen));
+        manager_->Add(*task1_);
+    }
+protected:
+    std::unique_ptr<TaskManager> manager_;
+    std::unique_ptr<Task> task1_, task2_;
+};
 
 TEST_F(TaskManagerTest, shouldCreateTask) {
-    TaskManager manager;
-    Task task(Task::Create("first", Task::Priority::MEDIUM, 500));
-    manager.Add(task);
-    EXPECT_EQ(manager.getTask(TaskId::Create(0)), task);
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)), *task1_);
 }
 
 TEST_F(TaskManagerTest, shouldEditTask) {
-    TaskManager manager;
-    manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    const Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
-    manager.Edit(TaskId::Create(0), modified_task);
-    EXPECT_EQ(manager.getTask(TaskId::Create(0)), modified_task);
+    manager_->Edit(TaskId::Create(0), *task2_);
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)), *task2_);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
-    TaskManager manager;
-    manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    const Task modified_task(Task::Create("second", Task::Priority::NONE, 700));
-    EXPECT_THROW(manager.Edit(TaskId::Create(1), modified_task), std::range_error);
+    EXPECT_THROW(manager_->Edit(TaskId::Create(1), *task2_), std::range_error);
 }
 
 TEST_F(TaskManagerTest, shouldCompareTask) {
-    TaskManager manager;
-    manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    manager.Complete(TaskId::Create(0));
-    EXPECT_EQ(manager.Show().size(), 0);
+    manager_->Complete(TaskId::Create(0));
+    EXPECT_EQ(manager_->Show().size(), 0);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenCompleteIfIDNotExist) {
-    TaskManager manager;
-    manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    EXPECT_THROW(manager.Complete(TaskId::Create(1)), std::range_error);
+    EXPECT_THROW(manager_->Complete(TaskId::Create(1)), std::range_error);
 }
 
-TEST_F(TaskManagerTest, shouldDeletTask) {
-    TaskManager manager;
-    manager.Add(Task::Create("first", Task::Priority::MEDIUM, 500));
-    manager.Delete(TaskId::Create(0));
-    EXPECT_EQ(manager.Show().size(), 0);
+TEST_F(TaskManagerTest, shouldDeleteTask) {
+    manager_->Delete(TaskId::Create(0));
+    EXPECT_EQ(manager_->Show().size(), 0);
 }
 
 TEST_F(TaskManagerTest, shouldShowTasks) {
-    TaskManager manager;
-    const Task task1(Task::Create("first", Task::Priority::MEDIUM, 500));
-    const Task task2(Task::Create("second", Task::Priority::HIGH, 1000));
-    manager.Add(task1);
-    manager.Add(task2);
-
+    manager_->Add(*task2_);
     std::map<TaskId, Task> expected;
-    expected.insert({TaskId::Create(0), task1});
-    expected.insert({TaskId::Create(1), task2});
+    expected.insert({TaskId::Create(0), *task1_});
+    expected.insert({TaskId::Create(1), *task2_});
 
-    EXPECT_EQ(manager.Show(), std::move(expected));
+    EXPECT_EQ(manager_->Show(), std::move(expected));
+}
+
+TEST_F(TaskManagerTest, shouldThrowExceptionIfIdGeneratorWorksdBadly) {
+    manager_->Add(*task2_);
+    EXPECT_THROW(manager_->Add(*task2_), std::runtime_error);
 }

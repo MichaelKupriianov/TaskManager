@@ -10,3 +10,10 @@ TEST_F(IdGeneratorTest, shouldGenerateID) {
     EXPECT_EQ(generator.GenerateId().value(), TaskId::Create(2).value());
 }
 
+TEST_F(IdGeneratorTest, shouldCreateGenerator) {
+    IdGenerator generator(15);
+    EXPECT_EQ(generator.GenerateId().value(), TaskId::Create(15).value());
+    EXPECT_EQ(generator.GenerateId().value(), TaskId::Create(16).value());
+    EXPECT_EQ(generator.GenerateId().value(), TaskId::Create(17).value());
+}
+
