@@ -31,12 +31,12 @@ protected:
 };
 
 TEST_F(TaskManagerTest, shouldCreateTask) {
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)), *task1_);
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task(), *task1_);
 }
 
 TEST_F(TaskManagerTest, shouldEditTask) {
     manager_->Edit(TaskId::Create(0), *task2_);
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)), *task2_);
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task(), *task2_);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
@@ -45,7 +45,7 @@ TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
 
 TEST_F(TaskManagerTest, shouldCompareTask) {
     manager_->Complete(TaskId::Create(0));
-    EXPECT_EQ(manager_->Show().size(), 0);
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task().state(), Task::State::DONE);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenCompleteIfIDNotExist) {
@@ -57,11 +57,16 @@ TEST_F(TaskManagerTest, shouldDeleteTask) {
     EXPECT_EQ(manager_->Show().size(), 0);
 }
 
+TEST_F(TaskManagerTest, shouldEditLabel) {
+    manager_->Label(TaskId::Create(0), "first");
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task().label(), "first");
+}
+
 TEST_F(TaskManagerTest, shouldShowTasks) {
     manager_->Add(*task2_);
-    std::map<TaskId, Task> expected;
-    expected.insert({TaskId::Create(0), *task1_});
-    expected.insert({TaskId::Create(1), *task2_});
+    std::map<TaskId, GeneralizedTask> expected;
+    expected.insert({TaskId::Create(0), GeneralizedTask::Create(*task1_, TaskId::NotExistentId())});
+    expected.insert({TaskId::Create(1), GeneralizedTask::Create(*task2_, TaskId::NotExistentId())});
 
     EXPECT_EQ(manager_->Show(), expected);
 }

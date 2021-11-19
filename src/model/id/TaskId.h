@@ -3,6 +3,8 @@
 class TaskId {
 public:
     static TaskId Create(int);
+    static TaskId NotExistentId() { return TaskId(-1); }
+
     unsigned int value() const { return value_; }
 public:
     TaskId(const TaskId &) = default;

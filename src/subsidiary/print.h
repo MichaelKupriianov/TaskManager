@@ -19,10 +19,10 @@ void Print(const Task &task) {
 }
 
 void Print(const TaskManager &manager) {
-    std::map<TaskId, Task> tasks = manager.Show();
-    for (auto t: tasks) {
-        Print(t.first);
-        Print(t.second);
-    }
-    std::cout << '\n';
+//    std::map<TaskId, Task> tasks = manager.Show();
+//    for (auto t: tasks) {
+//        Print(t.first);
+//        Print(t.second);
+//    }
+//    std::cout << '\n';
 }

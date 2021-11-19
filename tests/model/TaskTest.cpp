@@ -1,7 +1,8 @@
 #include"gtest/gtest.h"
 #include"Task.h"
 
-class TaskTest : public ::testing::Test {};
+class TaskTest : public ::testing::Test {
+};
 
 TEST_F(TaskTest, shouldCreateRegularTask) {
     const Task task(Task::Create("first", Task::Priority::NONE, 500));
