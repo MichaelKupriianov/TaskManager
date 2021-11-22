@@ -23,8 +23,8 @@ public:
     std::string title() const { return title_; }
     Priority priority() const { return priority_; }
     time_t date() const { return due_date_; }
-    std::string label() const {return label_;}
-    Task::State state() const {return state_;}
+    std::string label() const { return label_; }
+    Task::State state() const { return state_; }
 public:
     Task(const Task &) = default;
     Task &operator=(const Task &) = delete;
@@ -39,5 +39,6 @@ private:
     const State state_;
 };
 
-
+Task::Priority TaskToPriority(const std::string &);
+std::string PriorityToTask(const Task::Priority);
 
