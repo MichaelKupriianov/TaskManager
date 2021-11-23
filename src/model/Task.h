@@ -17,7 +17,7 @@ public:
         DONE
     };
 public:
-    static Task Create(const std::string &, Priority, time_t = 0,
+    static Task Create(const std::string &, Priority = Priority::NONE, time_t = 0,
                        const std::string & = "", State = State::NONE);
 public:
     std::string title() const { return title_; }
