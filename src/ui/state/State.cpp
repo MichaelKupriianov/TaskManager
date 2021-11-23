@@ -1,34 +1,27 @@
 #include "State.h"
-
-#include<iostream>
+#include<string>
 #include<stdexcept>
-#include<memory>
-
-#include"StateAdd.h"
-
-std::unique_ptr<State> StringToCommand(const std::string &command) {
-    if (command == "add") return std::unique_ptr<State>(new StateAdd);
-    if (command == "quit") return std::unique_ptr<State>(new StateQuit);
-    throw std::runtime_error("There is no such command");
-}
+#include"Factory.h"
+#include"Reader.h"
 
 std::unique_ptr<State> StateCommand::execute(Context &context) {
-    std::cout << "> ";
-
-    std::string command;
-    std::cin >> command;
-
+    std::string command(Reader::ReadCommand());
     try {
-        return StringToCommand(command);
+        return Factory::CreateState(command);
     }
     catch (const std::exception &exception) {
-        std::cout << exception.what() << '\n';
-        return std::unique_ptr<State>(new StateCommand);
+        Reader::HandleException(exception);
+        return Factory::CreateState("command");
     }
 }
 
 std::unique_ptr<State> StateQuit::execute(Context &context) {
-    std::cout << "Good Luck!\n";
-    context.Finished();
-    return std::unique_ptr<State>(new StateQuit);
+    Reader::Quit();
+    context.setFinished();
+    return Factory::CreateState("quit");
+}
+
+std::unique_ptr<State> StateHelp::execute(Context &context) {
+    Reader::Help();
+    return Factory::CreateState("command");
 }

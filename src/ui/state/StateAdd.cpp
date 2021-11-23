@@ -1,16 +1,50 @@
-#include "StateAdd.h"
+#include"StateAdd.h"
+#include"Factory.h"
+#include"Reader.h"
 
-#include<ctime>
-#include<string>
+std::unique_ptr<State> StateAdd::execute(Context &context) {
+    std::unique_ptr<State> state(Factory::CreateStateAdd("title"));
+    context.setAddFinished(false);
 
-time_t StringToTime(const std::string &date) {
-    tm time = {};
-    std::string pattern{"%H:%M %d/%m/%Y"};
-    if (!strptime(date.c_str(), pattern.c_str(), &time))
-        throw std::runtime_error("Incorrect time entry");
-    return mktime(&time);
+    while (!context.add_finished()) {
+        state = std::move(state->execute(context));
+    }
+    return Factory::CreateState("command");
 }
 
-std::string TimeToString(time_t time) {
-    return ctime(&time);
+std::unique_ptr<State> StateAddTitle::execute(Context &context) {
+    const std::string title(Reader::ReadTitle("Add"));
+    try {
+        context.setTask(title);
+        return Factory::CreateState("priority");
+    }
+    catch (const std::exception &exception) {
+        Reader::HandleException(exception);
+        return Factory::CreateState("title");
+    }
+}
+
+std::unique_ptr<State> StateAddPriority::execute(Context &context) {
+    const std::string priority(Reader::ReadPriority("Add"));
+    try {
+        context.setTask(context.task_title(), StringToPriority(priority));
+        return Factory::CreateState("time");
+    }
+    catch (const std::exception &exception) {
+        Reader::HandleException(exception);
+        return Factory::CreateState("priority");
+    }
+}
+
+std::unique_ptr<State> StateAddTime::execute(Context &context) {
+    const std::string time(Reader::ReadTime("Add"));
+    try {
+        context.setTask(context.task_title(), context.task_priority(), StringToTime(time));
+        context.setAddFinished(true);
+        return Factory::CreateState("priority");
+    }
+    catch (const std::exception &exception) {
+        Reader::HandleException(exception);
+        return Factory::CreateState("priority");
+    }
 }

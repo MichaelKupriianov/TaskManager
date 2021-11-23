@@ -1,10 +1,24 @@
 #pragma once
 
+#include<memory>
 #include"State.h"
 
 class StateAdd : public State {
-    std::unique_ptr<State> execute(Context &) override {}
+public:
+    virtual std::unique_ptr<State> execute(Context &) override;
 };
 
-time_t StringToTime(const std::string &);
-std::string TimeToString(time_t time);
+class StateAddTitle : public StateAdd {
+public:
+    std::unique_ptr<State> execute(Context &) override;
+};
+
+class StateAddPriority : public StateAdd {
+public:
+    std::unique_ptr<State> execute(Context &) override;
+};
+
+class StateAddTime : public StateAdd {
+public:
+    std::unique_ptr<State> execute(Context &) override;
+};

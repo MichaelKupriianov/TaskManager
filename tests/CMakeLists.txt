@@ -12,7 +12,7 @@ target_link_libraries(model_tests GTest::gtest GTest::gmock GTest::gmock_main)
 
 gtest_discover_tests(model_tests)
 
-add_executable(ui_tests ../src/ui/state/State.cpp ../src/ui/state/State.h ../src/ui/StateMachine.cpp ../src/ui/StateMachine.h ../src/ui/Context.cpp ../src/ui/Context.h ../src/ui/state/StateAdd.cpp ../src/ui/state/StateAdd.h)
+add_executable(ui_tests ../src/ui/state/State.cpp ../src/ui/state/State.h ../src/ui/StateMachine.cpp ../src/ui/StateMachine.h ../src/ui/Context.cpp ../src/ui/Context.h ../src/ui/state/StateAdd.cpp ../src/ui/state/StateAdd.h ../src/ui/Factory.cpp ../src/ui/Factory.h ../src/ui/Reader.cpp ../src/ui/Reader.h)
 
 target_link_libraries(ui_tests GTest::gtest GTest::gmock GTest::gmock_main)
 

@@ -39,6 +39,6 @@ private:
     const State state_;
 };
 
-Task::Priority TaskToPriority(const std::string &);
-std::string PriorityToTask(const Task::Priority);
+Task::Priority StringToPriority(const std::string &);
+std::string PriorityToString(const Task::Priority);
 
