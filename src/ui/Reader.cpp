@@ -19,29 +19,38 @@ void Reader::Quit() {
 std::string Reader::ReadCommand() {
     std::cout << "> ";
     std::string command;
-    std::cin >> command;
+    getline(std::cin, command);
     return command;
 }
 
 std::string Reader::ReadTitle(const std::string &command) {
     std::cout << "[" << command << " Task] title: ";
     std::string title;
-    std::cin >> title;
+    getline(std::cin, title);
     return title;
 }
 
 std::string Reader::ReadPriority(const std::string &command) {
-    std::cout << "[" << command << " Task] priority: ";
-    std::string title;
-    std::cin >> title;
-    return title;
+    std::cout << "[" << command << " Task] priority (high, medium, lou or none): ";
+    std::string priority;
+    getline(std::cin, priority);
+    return priority;
 }
 
 std::string Reader::ReadTime(const std::string &command) {
-    std::cout << "[" << command << " Task] time: ";
+    std::cout << "[" << command << " Task] time (in 24:00 10/10/2000 format): ";
     std::string time;
-    std::cin >> time;
+    getline(std::cin, time);
     return time;
+}
+
+bool Reader::Confirm() {
+    std::cout << "Confirm? (Y/N): ";
+    std::string answer;
+    getline(std::cin, answer);
+    if (answer == "Y") return true;
+    if (answer == "N") return false;
+    return Reader::Confirm();
 }
 
 void Reader::HandleException(const std::exception &exception) {

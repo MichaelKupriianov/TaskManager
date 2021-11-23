@@ -10,6 +10,7 @@ public:
     static std::string ReadTitle(const std::string &);
     static std::string ReadPriority(const std::string &);
     static std::string ReadTime(const std::string &);
+    static bool Confirm();
     static void HandleException(const std::exception &);
 };
 

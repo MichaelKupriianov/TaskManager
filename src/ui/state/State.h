@@ -25,25 +25,25 @@ public:
 
 class StateEdit : public State {
 public:
-    std::unique_ptr<State> execute(Context &) override;
+    std::unique_ptr<State> execute(Context &) override {}
 };
 
 class StateComplete : public State {
 public:
-    std::unique_ptr<State> execute(Context &) override;
+    std::unique_ptr<State> execute(Context &) override {}
 };
 
 class StateDelete : public State {
 public:
-    std::unique_ptr<State> execute(Context &) override;
+    std::unique_ptr<State> execute(Context &) override {}
 };
 
 class StateLabel : public State {
 public:
-    std::unique_ptr<State> execute(Context &) override;
+    std::unique_ptr<State> execute(Context &) override {}
 };
 
 class StateShow : public State {
 public:
-    std::unique_ptr<State> execute(Context &) override;
+    std::unique_ptr<State> execute(Context &) override {}
 };
