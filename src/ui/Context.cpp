@@ -1,7 +1,6 @@
 #include"Context.h"
 
-void Context::setTask(const std::string &title, Task::Priority priority, time_t time,
-                      const std::string &label, Task::State state) {
-    auto ptr = std::make_unique<Task>(Task::Create(title, priority, time, label, state));
+void Context::setTask(const Task::Parameter &parameter) {
+    auto ptr = std::make_unique<Task>(Task::Create(parameter));
     task_ = std::move(ptr);
 }

@@ -21,8 +21,7 @@ public:
 
     void setAddFinished(bool state) { add_finished_ = state; }
 
-    void setTask(const std::string &, Task::Priority = Task::Priority::NONE, time_t = 0,
-                 const std::string & = "", Task::State = Task::State::NONE);
+    void setTask(const Task::Parameter &);
 private:
     bool finished_ = false;
 private:

@@ -9,14 +9,14 @@ std::unique_ptr<Step> StepAdd::execute(Context &context) {
     while (!context.add_finished()) {
         state = std::move(state->execute(context));
     }
-    if (!reader.Confirm()) context.setTask("..");
+    if (!reader.Confirm()) context.setTask({".."});
     return Factory::CreateStep("command");
 }
 
 std::unique_ptr<Step> StepAddTitle::execute(Context &context) {
     const std::string title(reader.ReadTitle("Add"));
     try {
-        context.setTask(title);
+        context.setTask({title});
         return Factory::CreateSubStep("priority");
     }
     catch (const std::exception &exception) {
@@ -28,7 +28,7 @@ std::unique_ptr<Step> StepAddTitle::execute(Context &context) {
 std::unique_ptr<Step> StepAddPriority::execute(Context &context) {
     const std::string priority(reader.ReadPriority("Add"));
     try {
-        context.setTask(context.task_title(), StringToPriority(priority));
+        context.setTask({context.task_title(), StringToPriority(priority)});
         return Factory::CreateSubStep("time");
     }
     catch (const std::exception &exception) {
@@ -40,7 +40,7 @@ std::unique_ptr<Step> StepAddPriority::execute(Context &context) {
 std::unique_ptr<Step> StepAddTime::execute(Context &context) {
     const std::string time(reader.ReadTime("Add"));
     try {
-        context.setTask(context.task_title(), context.task_priority(), StringToTime(time));
+        context.setTask({context.task_title(), context.task_priority(), StringToTime(time)});
         context.setAddFinished(true);
         return Factory::CreateSubStep("time");
     }
