@@ -2,10 +2,13 @@
 
 #include<memory>
 #include"Context.h"
+#include"Reader.h"
 
 class State {
 public:
     virtual std::unique_ptr<State> execute(Context &) = 0;
+protected:
+    Reader reader;
 };
 
 class StateCommand : public State {

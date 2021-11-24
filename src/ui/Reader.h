@@ -4,14 +4,14 @@
 
 class Reader {
 public:
-    static void Help();
-    static void Quit();
-    static std::string ReadCommand();
-    static std::string ReadTitle(const std::string &);
-    static std::string ReadPriority(const std::string &);
-    static std::string ReadTime(const std::string &);
-    static bool Confirm();
-    static void HandleException(const std::exception &);
+    void Help();
+    void Quit();
+    std::string ReadCommand();
+    std::string ReadTitle(const std::string &);
+    std::string ReadPriority(const std::string &);
+    std::string ReadTime(const std::string &);
+    bool Confirm();
+    void HandleException(const std::exception &);
 };
 
 time_t StringToTime(const std::string &);

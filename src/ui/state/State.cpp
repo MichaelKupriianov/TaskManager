@@ -2,26 +2,25 @@
 #include<string>
 #include<stdexcept>
 #include"Factory.h"
-#include"Reader.h"
 
 std::unique_ptr<State> StateCommand::execute(Context &context) {
-    std::string command(Reader::ReadCommand());
+    std::string command(reader.ReadCommand());
     try {
         return Factory::CreateState(command);
     }
     catch (const std::exception &exception) {
-        Reader::HandleException(exception);
+        reader.HandleException(exception);
         return Factory::CreateState("command");
     }
 }
 
 std::unique_ptr<State> StateQuit::execute(Context &context) {
-    Reader::Quit();
+    reader.Quit();
     context.setFinished();
     return Factory::CreateState("quit");
 }
 
 std::unique_ptr<State> StateHelp::execute(Context &context) {
-    Reader::Help();
+    reader.Help();
     return Factory::CreateState("command");
 }
