@@ -1,6 +1,6 @@
-#include "StateMachine.h"
+#include "StepMachine.h"
 
-void StateMachine::Doing() {
+void StepMachine::Doing() {
     while (!context_.finished()) {
         state_ = std::move(state_->execute(context_));
     }

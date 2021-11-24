@@ -1,7 +1,7 @@
-#include"StateMachine.h"
+#include"StepMachine.h"
 
 int main() {
-    StateMachine machine;
+    StepMachine machine;
     machine.Doing();
     return 0;
 }

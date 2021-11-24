@@ -1,22 +1,22 @@
 #include"Factory.h"
-#include"StateAdd.h"
+#include"StepAdd.h"
 
-std::unique_ptr<State> Factory::CreateState(const std::string &state) {
-    if (state == "command") return std::unique_ptr<State>(new StateCommand);
-    if (state == "quit") return std::unique_ptr<State>(new StateQuit);
-    if (state == "help") return std::unique_ptr<State>(new StateHelp);
-    if (state == "add") return std::unique_ptr<State>(new StateAdd);
-    if (state == "edit") return std::unique_ptr<State>(new StateEdit);
-    if (state == "complete") return std::unique_ptr<State>(new StateComplete);
-    if (state == "delete") return std::unique_ptr<State>(new StateDelete);
-    if (state == "label") return std::unique_ptr<State>(new StateLabel);
-    if (state == "show") return std::unique_ptr<State>(new StateShow);
-    throw std::runtime_error("There is no such state");
+std::unique_ptr<Step> Factory::CreateStep(const std::string &step) {
+    if (step == "command") return std::unique_ptr<Step>(new StepCommand);
+    if (step == "quit") return std::unique_ptr<Step>(new StepQuit);
+    if (step == "help") return std::unique_ptr<Step>(new StepHelp);
+    if (step == "add") return std::unique_ptr<Step>(new StepAdd);
+    if (step == "edit") return std::unique_ptr<Step>(new StepEdit);
+    if (step == "complete") return std::unique_ptr<Step>(new StepComplete);
+    if (step == "delete") return std::unique_ptr<Step>(new StepDelete);
+    if (step == "label") return std::unique_ptr<Step>(new StepLabel);
+    if (step == "show") return std::unique_ptr<Step>(new StepShow);
+    throw std::runtime_error("There is no such step");
 }
 
-std::unique_ptr<State> Factory::CreateStateAdd(const std::string &state) {
-    if (state == "title") return std::unique_ptr<State>(new StateAddTitle);
-    if (state == "priority") return std::unique_ptr<State>(new StateAddPriority);
-    if (state == "time") return std::unique_ptr<State>(new StateAddTime);
-    throw std::runtime_error("There is no such state");
+std::unique_ptr<Step> Factory::CreateSubStep(const std::string &step) {
+    if (step == "title") return std::unique_ptr<Step>(new StepAddTitle);
+    if (step == "priority") return std::unique_ptr<Step>(new StepAddPriority);
+    if (step == "time") return std::unique_ptr<Step>(new StepAddTime);
+    throw std::runtime_error("There is no such step");
 }

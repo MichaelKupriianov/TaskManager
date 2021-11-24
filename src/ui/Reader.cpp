@@ -4,10 +4,10 @@
 void Reader::Help() {
     std::cout << "You can use such command:\n";
     std::cout << "add - Add new task\n";
-    std::cout << "edit [Task ID] - Edit existent task\n";
-    std::cout << "complete [Task ID] - Complete existent task\n";
-    std::cout << "delete [Task ID]- Delete existent task\n";
-    std::cout << "label [Task ID] - Edit label of existent task\n";
+    std::cout << "edit - Edit existent task\n";
+    std::cout << "complete - Complete existent task\n";
+    std::cout << "delete - Delete existent task\n";
+    std::cout << "label - Edit label of existent task\n";
     std::cout << "show - Show all tasks\n";
     std::cout << "quit - finish work\n\n";
 }
