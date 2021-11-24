@@ -9,7 +9,7 @@ class StepMachine {
 public:
     StepMachine() : state_(Factory::CreateStep("command")) {}
 
-    void Doing();
+    void Run();
 private:
     std::unique_ptr<Step> state_;
     Context context_;

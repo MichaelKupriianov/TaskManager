@@ -26,24 +26,19 @@ public:
     std::unique_ptr<Step> execute(Context &) override;
 };
 
-class StepEdit : public Step {
-public:
-    std::unique_ptr<Step> execute(Context &) override {}
-};
-
 class StepComplete : public Step {
 public:
-    std::unique_ptr<Step> execute(Context &) override {}
+    std::unique_ptr<Step> execute(Context &) override;
 };
 
 class StepDelete : public Step {
 public:
-    std::unique_ptr<Step> execute(Context &) override {}
+    std::unique_ptr<Step> execute(Context &) override;
 };
 
 class StepLabel : public Step {
 public:
-    std::unique_ptr<Step> execute(Context &) override {}
+    std::unique_ptr<Step> execute(Context &) override;
 };
 
 class StepShow : public Step {

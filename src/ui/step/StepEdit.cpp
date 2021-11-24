@@ -1,11 +1,11 @@
-#include"StepAdd.h"
+#include"StepEdit.h"
 #include"Factory.h"
 #include"Reader.h"
 
-std::unique_ptr<Step> StepAdd::execute(Context &context) {
-    std::unique_ptr<SubStep> state(Factory::CreateSubStep("title"));
+std::unique_ptr<Step> StepEdit::execute(Context &context) {
+    std::unique_ptr<SubStep> state(Factory::CreateSubStep("id"));
     context.set_local_finished(false);
-    context.set_current_step("Add");
+    context.set_current_step("Edit");
 
     while (!context.local_finished()) {
         state = std::move(state->execute(context));

@@ -7,9 +7,11 @@ public:
     void Help();
     void Quit();
     std::string ReadCommand();
+    int ReadId(const std::string &);
     std::string ReadTitle(const std::string &);
     std::string ReadPriority(const std::string &);
     std::string ReadTime(const std::string &);
+    std::string ReadLabel(const std::string &);
     bool Confirm();
     void HandleException(const std::exception &);
 };

@@ -2,6 +2,6 @@
 
 int main() {
     StepMachine machine;
-    machine.Doing();
+    machine.Run();
     return 0;
 }

@@ -23,6 +23,19 @@ std::string Reader::ReadCommand() {
     return command;
 }
 
+int Reader::ReadId(const std::string &command) {
+    std::cout << "[" << command << " Task] id: ";
+    std::string id;
+    getline(std::cin, id);
+    try {
+        return std::stoi(id);
+    }
+    catch (...) {
+        std::cout << "This is not ID\n";
+        return ReadId(command);
+    }
+}
+
 std::string Reader::ReadTitle(const std::string &command) {
     std::cout << "[" << command << " Task] title: ";
     std::string title;
@@ -44,13 +57,20 @@ std::string Reader::ReadTime(const std::string &command) {
     return time;
 }
 
+std::string Reader::ReadLabel(const std::string &command) {
+    std::cout << "[" << command << " Task] label: ";
+    std::string label;
+    getline(std::cin, label);
+    return label;
+}
+
 bool Reader::Confirm() {
     std::cout << "Confirm? (Y/N): ";
     std::string answer;
     getline(std::cin, answer);
     if (answer == "Y") return true;
     if (answer == "N") return false;
-    return Reader::Confirm();
+    return Confirm();
 }
 
 void Reader::HandleException(const std::exception &exception) {
