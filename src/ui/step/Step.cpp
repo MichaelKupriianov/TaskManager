@@ -46,3 +46,7 @@ std::unique_ptr<Step> StepLabel::execute(Context &context) {
     if (!reader.Confirm()) {}
     return Factory::CreateStep("command");
 }
+
+std::unique_ptr<Step> StepShow::execute(Context &context) {
+    return Factory::CreateStep("command");
+}

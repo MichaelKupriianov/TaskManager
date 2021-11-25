@@ -3,6 +3,8 @@
 #include<string>
 #include<memory>
 #include"Step.h"
+#include"StepAdd.h"
+#include"StepEdit.h"
 #include"SubStep.h"
 
 class Factory {

@@ -1,6 +1,4 @@
 #include"Factory.h"
-#include"StepAdd.h"
-#include"StepEdit.h"
 
 std::unique_ptr<Step> Factory::CreateStep(const std::string &step) {
     if (step == "command") return std::unique_ptr<Step>(new StepCommand);
@@ -21,4 +19,8 @@ std::unique_ptr<SubStep> Factory::CreateSubStep(const std::string &step) {
     if (step == "priority") return std::unique_ptr<SubStep>(new SubStepPriority);
     if (step == "time") return std::unique_ptr<SubStep>(new SubStepTime);
     throw std::runtime_error("There is no such step");
+}
+
+std::unique_ptr<Wizard_Step> GetNextStep(WizardState) {
+
 }

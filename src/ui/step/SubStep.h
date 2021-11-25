@@ -7,6 +7,7 @@
 class SubStep {
 public:
     virtual std::unique_ptr<SubStep> execute(Context &) = 0;
+    virtual ~SubStep() = default;
 protected:
     Reader reader;
 };

@@ -7,6 +7,7 @@
 class Step {
 public:
     virtual std::unique_ptr<Step> execute(Context &) = 0;
+    virtual ~Step() = default;
 protected:
     Reader reader;
 };
@@ -43,5 +44,5 @@ public:
 
 class StepShow : public Step {
 public:
-    std::unique_ptr<Step> execute(Context &) override {}
+    std::unique_ptr<Step> execute(Context &) override;
 };
