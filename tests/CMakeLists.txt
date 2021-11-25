@@ -17,7 +17,9 @@ gtest_discover_tests(model_tests)
 add_executable(ui_tests ../src/model/Task.h ../src/model/Task.cpp ../src/ui/step/Step.cpp ../src/ui/step/Step.h
         ../src/ui/StepMachine.cpp ../src/ui/StepMachine.h ../src/ui/Context.cpp ../src/ui/Context.h
         ../src/ui/step/StepAdd.cpp ../src/ui/step/StepAdd.h ../src/ui/Factory.cpp ../src/ui/Factory.h
-        ../src/ui/Reader.cpp ../src/ui/Reader.h ../src/ui/step/SubStep.cpp ../src/ui/step/SubStep.h ../src/ui/step/StepEdit.cpp ../src/ui/step/StepEdit.h)
+        ../src/ui/input/ConsoleManager.cpp ../src/ui/input/ConsoleManager.h ../src/ui/step/SubStep.cpp ../src/ui/step/SubStep.h
+        ../src/ui/step/StepEdit.cpp ../src/ui/step/StepEdit.h ui/ContextTest.cpp ui/FactoryTest.cpp ui/input/ConsoleManagerTest.cpp
+        ui/StepMachineTest.cpp ../src/ui/input/Validator.cpp ../src/ui/input/Validator.h ui/input/ValidatorTest.cpp)
 
 target_link_libraries(ui_tests GTest::gtest GTest::gmock GTest::gmock_main)
 
