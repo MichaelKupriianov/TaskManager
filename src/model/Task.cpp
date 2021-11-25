@@ -20,18 +20,3 @@ bool operator==(const Task &first, const Task &second) {
            first.date_ == second.date_ && first.label_ == second.label_ && first.state_ == second.state_;
 }
 
-Task::Priority StringToPriority(const std::string &priority) {
-    if (priority == "high") return Task::Priority::HIGH;
-    if (priority == "medium") return Task::Priority::MEDIUM;
-    if (priority == "lou") return Task::Priority::LOU;
-    if (priority == "none") return Task::Priority::NONE;
-    throw std::runtime_error("There is no such priority");
-}
-
-std::string PriorityToString(Task::Priority priority) {
-    if (priority == Task::Priority::HIGH) return "high";
-    if (priority == Task::Priority::MEDIUM) return "medium";
-    if (priority == Task::Priority::LOU) return "lou";
-    return "none";
-}
-

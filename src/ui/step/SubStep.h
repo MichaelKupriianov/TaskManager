@@ -2,19 +2,14 @@
 
 #include"Step.h"
 #include"Context.h"
-#include"Reader.h"
+#include"ConsoleManager.h"
 
 class SubStep {
 public:
     virtual std::unique_ptr<SubStep> execute(Context &) = 0;
     virtual ~SubStep() = default;
 protected:
-    Reader reader;
-};
-
-class SubStepId : public SubStep {
-public:
-    std::unique_ptr<SubStep> execute(Context &) override;
+    ConsoleManager reader;
 };
 
 class SubStepTitle : public SubStep {

@@ -1,20 +1,20 @@
 #pragma once
 
 #include<string>
+#include"Task.h"
 
-class Reader {
+class ConsoleManager {
 public:
     void Help();
     void Quit();
     std::string ReadCommand();
     int ReadId(const std::string &);
     std::string ReadTitle(const std::string &);
-    std::string ReadPriority(const std::string &);
-    std::string ReadTime(const std::string &);
+    Task::Priority ReadPriority(const std::string &);
+    time_t ReadTime(const std::string &);
     std::string ReadLabel(const std::string &);
     bool Confirm();
-    void HandleException(const std::exception &);
 };
 
-time_t StringToTime(const std::string &);
-std::string TimeToString(time_t);
+Task::Priority StringToPriority(const std::string &);
+std::string PriorityToString(const Task::Priority);

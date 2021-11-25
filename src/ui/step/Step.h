@@ -2,14 +2,14 @@
 
 #include<memory>
 #include"Context.h"
-#include"Reader.h"
+#include"ConsoleManager.h"
 
 class Step {
 public:
     virtual std::unique_ptr<Step> execute(Context &) = 0;
     virtual ~Step() = default;
 protected:
-    Reader reader;
+    ConsoleManager reader;
 };
 
 class StepCommand : public Step {

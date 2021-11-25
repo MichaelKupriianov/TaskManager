@@ -48,7 +48,3 @@ private:
     const std::string label_;
     const State state_;
 };
-
-Task::Priority StringToPriority(const std::string &);
-std::string PriorityToString(const Task::Priority);
-
