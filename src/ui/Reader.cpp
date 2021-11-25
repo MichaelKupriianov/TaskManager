@@ -51,7 +51,7 @@ std::string Reader::ReadPriority(const std::string &command) {
 }
 
 std::string Reader::ReadTime(const std::string &command) {
-    std::cout << "[" << command << " Task] time (in 24:00 10/10/2000 format): ";
+    std::cout << "[" << command << " Task] time (in 12:12 12/12/2012 format): ";
     std::string time;
     getline(std::cin, time);
     return time;
