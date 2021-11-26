@@ -9,7 +9,6 @@ public:
     virtual TaskId GenerateId() {
         return TaskId::Create(max_id_++);
     }
-    virtual ~IdGenerator() = default;
 private:
     int max_id_;
 };

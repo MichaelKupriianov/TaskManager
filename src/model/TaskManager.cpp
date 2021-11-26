@@ -18,7 +18,8 @@ void TaskManager::Edit(TaskId id, const Task &task) {
 void TaskManager::Complete(TaskId id) {
     if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
     Task task = tasks_.at(id).task();
-    Task modified_task = Task::Create({task.title(), task.priority(), task.date(), task.label(), Task::State::DONE});
+    Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
+                                                              task.date(), task.label(), Task::Condition::COMPLETED));
     TaskId parent = tasks_.at(id).parent();
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
@@ -31,7 +32,8 @@ void TaskManager::Delete(TaskId id) {
 void TaskManager::Label(TaskId id, const std::string &label) {
     if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
     Task task = tasks_.at(id).task();
-    Task modified_task = Task::Create({task.title(), task.priority(), task.date(), label, task.state()});
+    Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
+                                                              task.date(), label, task.state()));
     TaskId parent = tasks_.at(id).parent();
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});

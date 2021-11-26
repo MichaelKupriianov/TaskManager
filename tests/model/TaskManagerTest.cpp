@@ -19,8 +19,10 @@ protected:
                 .WillOnce(Return(TaskId::Create(0)))
                 .WillRepeatedly(Return(TaskId::Create(1)));
 
-        task1_ = std::make_unique<Task>(Task::Create({"first", Task::Priority::MEDIUM, 500}));
-        task2_ = std::make_unique<Task>(Task::Create({"second", Task::Priority::NONE, 1000}));
+        task1_ = std::make_unique<Task>(Task::Create(Task::Arguments::Create("first",
+                                                                             Task::Priority::MEDIUM, 500)));
+        task2_ = std::make_unique<Task>(Task::Create(Task::Arguments::Create("second",
+                                                                             Task::Priority::NONE, 1000)));
         manager_ = std::make_unique<TaskManager>(std::move(ptr_gen));
         manager_->Add(*task1_);
     }
@@ -45,7 +47,7 @@ TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
 
 TEST_F(TaskManagerTest, shouldCompareTask) {
     manager_->Complete(TaskId::Create(0));
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task().state(), Task::State::DONE);
+    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task().state(), Task::Condition::COMPLETED);
 }
 
 TEST_F(TaskManagerTest, shouldThrowExceptionWhenCompleteIfIDNotExist) {
