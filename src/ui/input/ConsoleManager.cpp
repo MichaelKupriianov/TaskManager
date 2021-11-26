@@ -1,9 +1,12 @@
-#include "input/ConsoleManager.h"
+#include"ConsoleManager.h"
 #include<iostream>
 #include<optional>
-#include"Validator.h"
+#include"Converter.h"
 
-void ConsoleManager::Help() {
+ConsoleManager::ConsoleManager(TypeOfStep step) :
+        command_(Converter::StepTypeToString(step)) {}
+
+void ConsoleManager::Help() const {
     std::cout << "You can use such command:\n";
     std::cout << "add - Add new task\n";
     std::cout << "edit - Edit existent task\n";
@@ -14,95 +17,71 @@ void ConsoleManager::Help() {
     std::cout << "quit - finish work\n\n";
 }
 
-void ConsoleManager::Quit() {
+void ConsoleManager::Quit() const {
     std::cout << "Good luck!\n";
 }
 
-std::string ConsoleManager::ReadCommand() {
+TypeOfStep ConsoleManager::ReadCommand() const {
     std::cout << "> ";
     std::string command;
     getline(std::cin, command);
-    if (std::optional<std::string> error = Validator::ValidateCommand(command); error.has_value()) {
-        std::cout << error.value();
-        return ReadCommand();
-    }
-    return command;
+    if (std::optional<TypeOfStep> result = Converter::StringToStepType(command); result.has_value())
+        return result.value();
+    std::cout << "There is no such command\n";
+    return ReadCommand();
 }
 
-int ConsoleManager::ReadId(const std::string &command) {
-    std::cout << "[" << command << " Task] id: ";
+int ConsoleManager::ReadId() const {
+    std::cout << "[" << command_ << " Task] ID: ";
     std::string id;
     getline(std::cin, id);
-    if (std::optional<std::string> error = Validator::ValidateId(id); error.has_value()) {
-        std::cout << error.value();
-        return ReadId(command);
-    }
-    return std::stoi(id);
+    if (std::optional<int> result = Converter::StringToId(id); result.has_value())
+        return result.value();
+    std::cout << "Enter the ID in the correct format\n";
+    return ReadId();
 }
 
-std::string ConsoleManager::ReadTitle(const std::string &command) {
-    std::cout << "[" << command << " Task] title: ";
+std::string ConsoleManager::ReadTitle() const {
+    std::cout << "[" << command_ << " Task] title: ";
     std::string title;
     getline(std::cin, title);
-    if (std::optional<std::string> error = Validator::ValidateTitle(title); error.has_value()) {
-        std::cout << error.value();
-        return ReadTitle(command);
-    }
-    return title;
+    if (!title.empty()) return title;
+    std::cout << "Title should be non-empty\n";
+    return ReadTitle();
 }
 
-Task::Priority ConsoleManager::ReadPriority(const std::string &command) {
-    std::cout << "[" << command << " Task] priority (high, medium, lou or none): ";
+Task::Priority ConsoleManager::ReadPriority() const {
+    std::cout << "[" << command_ << " Task] priority (high, medium, lou or none): ";
     std::string priority;
     getline(std::cin, priority);
-    if (std::optional<std::string> error = Validator::ValidatePriority(priority); error.has_value()) {
-        std::cout << error.value();
-        return ReadPriority(command);
-    }
-    return StringToPriority(priority);
+    if (std::optional<Task::Priority> result = Converter::StringToPriority(priority); result.has_value())
+        return result.value();
+    std::cout << "There is no such priority\n";
+    return ReadPriority();
 }
 
-time_t ConsoleManager::ReadTime(const std::string &command) {
-    std::cout << "[" << command << " Task] time (in 12:12 12/12/2012 format): ";
+time_t ConsoleManager::ReadTime() const {
+    std::cout << "[" << command_ << " Task] time (in 12:12 12/12/2012 format): ";
     std::string time;
     getline(std::cin, time);
-    if (std::optional<std::string> error = Validator::ValidateTime(time); error.has_value()) {
-        std::cout << error.value();
-        return ReadTime(command);
-    }
-    return StringToTime(time);
+    if (std::optional<time_t> result = Converter::StringToTime(time); result.has_value())
+        return result.value();
+    std::cout << "Enter the time in the correct format:\n(for example, the time must be after January 1, 1970)\n";
+    return ReadTime();
 }
 
-std::string ConsoleManager::ReadLabel(const std::string &command) {
-    std::cout << "[" << command << " Task] label: ";
+std::string ConsoleManager::ReadLabel() const {
+    std::cout << "[" << command_ << " Task] label: ";
     std::string label;
     getline(std::cin, label);
     return label;
 }
 
-bool ConsoleManager::Confirm() {
+bool ConsoleManager::Confirm() const {
     std::cout << "Confirm? (Y/N): ";
     std::string answer;
     getline(std::cin, answer);
-    if (std::optional<std::string> error = Validator::ValidateConfirm(answer); error.has_value()) {
-        return Confirm();
-    }
     if (answer == "Y") return true;
-    return false;
-}
-
-
-Task::Priority StringToPriority(const std::string &priority) {
-    if (priority == "high") return Task::Priority::HIGH;
-    if (priority == "medium") return Task::Priority::MEDIUM;
-    if (priority == "lou") return Task::Priority::LOU;
-    if (priority == "none") return Task::Priority::NONE;
-    throw std::runtime_error("There is no such priority");
-}
-
-std::string PriorityToString(Task::Priority priority) {
-    if (priority == Task::Priority::HIGH) return "high";
-    if (priority == Task::Priority::MEDIUM) return "medium";
-    if (priority == Task::Priority::LOU) return "lou";
-    return "none";
+    if (answer == "N") return false;
+    return Confirm();
 }

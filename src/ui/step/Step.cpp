@@ -3,44 +3,41 @@
 #include<stdexcept>
 #include"Factory.h"
 
-std::unique_ptr<Step> StepCommand::execute(Context &context) {
-    std::string command(reader.ReadCommand());
+std::unique_ptr<Step> StepRoot::execute(Context &context) {
+    TypeOfStep command(console_manager_.ReadCommand());
     return Factory::CreateStep(command);
 }
 
 std::unique_ptr<Step> StepQuit::execute(Context &context) {
-    reader.Quit();
-    context.set_global_finished();
-    return Factory::GetNextStep();
+    console_manager_.Quit();
+    context.finished();
+    return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepHelp::execute(Context &context) {
-    reader.Help();
-    return Factory::GetNextStep();
+    console_manager_.Help();
+    return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepComplete::execute(Context &context) {
-    context.set_current_step("Complete");
-    context.set_id(reader.ReadId(context.current_step()));
-    if (!reader.Confirm()) {}
-    return Factory::GetNextStep();
+    context.set_id(console_manager_.ReadId());
+    if (!console_manager_.Confirm()) {}
+    return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepDelete::execute(Context &context) {
-    context.set_current_step("Delete");
-    context.set_id(reader.ReadId(context.current_step()));
-    if (!reader.Confirm()) {}
-    return Factory::GetNextStep();
+    context.set_id(console_manager_.ReadId());
+    if (!console_manager_.Confirm()) {}
+    return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepLabel::execute(Context &context) {
-    context.set_current_step("Label");
-    context.set_task({context.task_title(), context.task_priority(), context.task_date(),
-                      reader.ReadLabel(context.current_step()), context.task_state()});
-    if (!reader.Confirm()) {}
-    return Factory::GetNextStep();
+    context.set_id(console_manager_.ReadId());
+    std::string label(console_manager_.ReadLabel());
+    if (!console_manager_.Confirm()) {}
+    return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepShow::execute(Context &context) {
-    return Factory::GetNextStep();
+    return Factory::GetRootStep();
 }

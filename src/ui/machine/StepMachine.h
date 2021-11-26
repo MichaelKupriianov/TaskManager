@@ -7,7 +7,7 @@
 
 class StepMachine {
 public:
-    StepMachine() : state_(Factory::GetNextStep()) {}
+    StepMachine() : state_(Factory::GetRootStep()) {}
 
     void Run();
 private:
