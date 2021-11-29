@@ -10,8 +10,6 @@ public:
 public:
     TaskId parent() const { return parent_; }
     Task task() const { return task_; }
-
-    friend bool operator==(const GeneralizedTask &, const GeneralizedTask &);
 private:
     GeneralizedTask(const Task &task, TaskId id) : task_(task), parent_(id) {}
 private:
@@ -19,3 +17,4 @@ private:
     const TaskId parent_;
 };
 
+bool operator==(const GeneralizedTask &, const GeneralizedTask &);

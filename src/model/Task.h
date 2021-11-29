@@ -39,7 +39,6 @@ public:
 
     Task(const Task &) = default;
     Task &operator=(const Task &) = delete;
-    friend bool operator==(const Task &, const Task &);
 private:
     Task(const Arguments &);
 private:
@@ -49,3 +48,5 @@ private:
     const std::string label_;
     const Condition state_;
 };
+
+bool operator==(const Task &, const Task &);

@@ -21,7 +21,7 @@ Task::Task(const Arguments &parameter) :
         label_(parameter.label_), state_(parameter.state_) {}
 
 bool operator==(const Task &first, const Task &second) {
-    return first.title_ == second.title_ && first.priority_ == second.priority_ &&
-           first.date_ == second.date_ && first.label_ == second.label_ && first.state_ == second.state_;
+    return first.title() == second.title() && first.priority() == second.priority() &&
+           first.date() == second.date() && first.label() == second.label() && first.state() == second.state();
 }
 

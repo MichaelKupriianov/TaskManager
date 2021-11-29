@@ -5,5 +5,5 @@ GeneralizedTask GeneralizedTask::Create(const Task &task, TaskId id) {
 }
 
 bool operator==(const GeneralizedTask &first, const GeneralizedTask &second) {
-    return first.task_ == second.task_ && first.parent_ == second.parent_;
+    return first.task() == second.task() && first.parent() == second.parent();
 }
