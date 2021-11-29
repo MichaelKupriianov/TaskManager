@@ -61,12 +61,12 @@ Task::Priority ConsoleManager::ReadPriority() const {
 }
 
 time_t ConsoleManager::ReadTime() const {
-    std::cout << "[" << command_ << " Task] time (in 12:12 12/12/2012 format): ";
+    std::cout << "[" << command_ << " Task] time (in 12:12 12/12 or 12/12 format): ";
     std::string time;
     getline(std::cin, time);
     if (std::optional<time_t> result = Converter::StringToTime(time); result.has_value())
         return result.value();
-    std::cout << "Enter the time in the correct format:\n(for example, the time must be after January 1, 1970)\n";
+    std::cout << "Enter the time in the correct format (or don't enter anything):\n";
     return ReadTime();
 }
 

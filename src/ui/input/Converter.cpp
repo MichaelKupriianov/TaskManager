@@ -4,17 +4,20 @@ std::optional<Task::Priority> Converter::StringToPriority(const std::string &pri
     if (priority == "high") return Task::Priority::HIGH;
     if (priority == "medium") return Task::Priority::MEDIUM;
     if (priority == "lou") return Task::Priority::LOU;
-    if (priority == "none") return Task::Priority::NONE;
+    if (priority == "none" || priority == "") return Task::Priority::NONE;
     return std::nullopt;
 }
 
 std::optional<time_t> Converter::StringToTime(const std::string &date) {
+    if (date == "") return 0;
     tm time = {};
-    std::string pattern{"%H:%M %d/%m/%Y"};
+    std::string pattern;
+    if (date.size() > 5) pattern = "%H:%M %d/%m";
+    else pattern = "%d/%m";
     if (!strptime(date.c_str(), pattern.c_str(), &time))
         return std::nullopt;
-    if (time_t result = mktime(&time); result >= 0) return result;
-    return std::nullopt;
+    time.tm_year = 2021;
+    return mktime(&time);
 }
 
 std::optional<TypeOfStep> Converter::StringToStepType(const std::string &command) {
