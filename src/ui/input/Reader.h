@@ -5,9 +5,9 @@
 #include"Task.h"
 #include"TypeOfStep.h"
 
-class ConsoleManager {
+class Reader {
 public:
-    explicit ConsoleManager(TypeOfStep);
+    explicit Reader(TypeOfStep);
 
     void Help() const;
     void Quit() const;

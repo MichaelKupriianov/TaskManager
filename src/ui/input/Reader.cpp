@@ -1,12 +1,12 @@
-#include"ConsoleManager.h"
+#include"Reader.h"
 #include<iostream>
 #include<optional>
 #include"Converter.h"
 
-ConsoleManager::ConsoleManager(TypeOfStep step) :
+Reader::Reader(TypeOfStep step) :
         command_(Converter::StepTypeToString(step)) {}
 
-void ConsoleManager::Help() const {
+void Reader::Help() const {
     std::cout << "You can use such command:\n";
     std::cout << "add - Add new task\n";
     std::cout << "edit - Edit existent task\n";
@@ -17,11 +17,11 @@ void ConsoleManager::Help() const {
     std::cout << "quit - finish work\n\n";
 }
 
-void ConsoleManager::Quit() const {
+void Reader::Quit() const {
     std::cout << "Good luck!\n";
 }
 
-TypeOfStep ConsoleManager::ReadCommand() const {
+TypeOfStep Reader::ReadCommand() const {
     std::cout << "> ";
     std::string command;
     getline(std::cin, command);
@@ -31,7 +31,7 @@ TypeOfStep ConsoleManager::ReadCommand() const {
     return ReadCommand();
 }
 
-int ConsoleManager::ReadId() const {
+int Reader::ReadId() const {
     std::cout << "[" << command_ << " Task] ID: ";
     std::string id;
     getline(std::cin, id);
@@ -41,7 +41,7 @@ int ConsoleManager::ReadId() const {
     return ReadId();
 }
 
-std::string ConsoleManager::ReadTitle() const {
+std::string Reader::ReadTitle() const {
     std::cout << "[" << command_ << " Task] title: ";
     std::string title;
     getline(std::cin, title);
@@ -50,7 +50,7 @@ std::string ConsoleManager::ReadTitle() const {
     return ReadTitle();
 }
 
-Task::Priority ConsoleManager::ReadPriority() const {
+Task::Priority Reader::ReadPriority() const {
     std::cout << "[" << command_ << " Task] priority (high, medium, lou or none): ";
     std::string priority;
     getline(std::cin, priority);
@@ -60,7 +60,7 @@ Task::Priority ConsoleManager::ReadPriority() const {
     return ReadPriority();
 }
 
-time_t ConsoleManager::ReadTime() const {
+time_t Reader::ReadTime() const {
     std::cout << "[" << command_ << " Task] time (in 12:12 12/12 or 12/12 format): ";
     std::string time;
     getline(std::cin, time);
@@ -70,14 +70,14 @@ time_t ConsoleManager::ReadTime() const {
     return ReadTime();
 }
 
-std::string ConsoleManager::ReadLabel() const {
+std::string Reader::ReadLabel() const {
     std::cout << "[" << command_ << " Task] label: ";
     std::string label;
     getline(std::cin, label);
     return label;
 }
 
-bool ConsoleManager::Confirm() const {
+bool Reader::Confirm() const {
     std::cout << "Confirm? (Y/N): ";
     std::string answer;
     getline(std::cin, answer);

@@ -2,7 +2,7 @@
 
 #include<memory>
 #include"Context.h"
-#include"ConsoleManager.h"
+#include"Reader.h"
 #include"TypeOfStep.h"
 
 class Step {
@@ -13,56 +13,56 @@ public:
 
 class StepRoot : public Step {
 public:
-    StepRoot() : console_manager_(TypeOfStep::ROOT) {}
+    StepRoot() : reader_(TypeOfStep::ROOT) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };
 
 class StepQuit : public Step {
 public:
-    StepQuit() : console_manager_(TypeOfStep::QUIT) {}
+    StepQuit() : reader_(TypeOfStep::QUIT) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };
 
 class StepHelp : public Step {
 public:
-    StepHelp() : console_manager_(TypeOfStep::HELP) {}
+    StepHelp() : reader_(TypeOfStep::HELP) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };
 
 class StepComplete : public Step {
 public:
-    StepComplete() : console_manager_(TypeOfStep::COMPLETE) {}
+    StepComplete() : reader_(TypeOfStep::COMPLETE) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };
 
 class StepDelete : public Step {
 public:
-    StepDelete() : console_manager_(TypeOfStep::DELETE) {}
+    StepDelete() : reader_(TypeOfStep::DELETE) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };
 
 class StepLabel : public Step {
 public:
-    StepLabel() : console_manager_(TypeOfStep::LABEL) {}
+    StepLabel() : reader_(TypeOfStep::LABEL) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };
 
 class StepShow : public Step {
 public:
-    StepShow() : console_manager_(TypeOfStep::SHOW) {}
+    StepShow() : reader_(TypeOfStep::SHOW) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader reader_;
 };

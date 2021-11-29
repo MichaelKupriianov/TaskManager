@@ -10,5 +10,5 @@ public:
     StepEdit() : console_manager_(TypeOfStep::EDIT) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    ConsoleManager console_manager_;
+    Reader console_manager_;
 };
