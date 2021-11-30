@@ -16,4 +16,5 @@ private:
 };
 
 bool operator<(const TaskId &, const TaskId &);
+bool operator>(const TaskId &, const TaskId &);
 bool operator==(const TaskId &, const TaskId &);

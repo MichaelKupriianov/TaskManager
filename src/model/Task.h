@@ -24,7 +24,7 @@ public:
         const Priority priority_;
         const time_t date_;
         const std::string &label_;
-        const Condition state_;
+        const Condition condition_;
     private:
         Arguments(const std::string &, Priority, time_t, const std::string &, Condition);
     };
@@ -35,7 +35,7 @@ public:
     Priority priority() const { return priority_; }
     time_t date() const { return date_; }
     std::string label() const { return label_; }
-    Task::Condition state() const { return state_; }
+    Task::Condition condition() const { return condition_; }
 
     Task(const Task &) = default;
     Task &operator=(const Task &) = delete;
@@ -46,7 +46,7 @@ private:
     const Priority priority_;
     const time_t date_;
     const std::string label_;
-    const Condition state_;
+    const Condition condition_;
 };
 
 bool operator==(const Task &, const Task &);

@@ -8,7 +8,7 @@ Task::Arguments Task::Arguments::Create(const std::string &title, Priority prior
 
 Task::Arguments::Arguments(const std::string &title, Priority priority, time_t time,
                            const std::string &label, Condition state) :
-        title_(title), priority_(priority), date_(time), label_(label), state_(state) {}
+        title_(title), priority_(priority), date_(time), label_(label), condition_(state) {}
 
 Task Task::Create(const Arguments &parameter) {
     if (parameter.title_.empty()) throw std::runtime_error("There are no tasks without title");
@@ -18,10 +18,10 @@ Task Task::Create(const Arguments &parameter) {
 
 Task::Task(const Arguments &parameter) :
         title_(parameter.title_), priority_(parameter.priority_), date_(parameter.date_),
-        label_(parameter.label_), state_(parameter.state_) {}
+        label_(parameter.label_), condition_(parameter.condition_) {}
 
 bool operator==(const Task &first, const Task &second) {
     return first.title() == second.title() && first.priority() == second.priority() &&
-           first.date() == second.date() && first.label() == second.label() && first.state() == second.state();
+           first.date() == second.date() && first.label() == second.label() && first.condition() == second.condition();
 }
 
