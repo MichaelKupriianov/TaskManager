@@ -42,21 +42,21 @@ void TaskManager::Label(TaskId id, const std::string &label) {
 
 std::vector<std::pair<TaskId, Task>> TaskManager::ShowChild(TaskId parent, Sort sort) const {
     std::vector<std::pair<TaskId, Task>> result;
-    for(auto task: tasks_)
-        if (task.second.parent() == parent && task.second.task().condition()==Task::Condition::NONE)
-            result.push_back({task.first, task.second.task()});
-    if (sort==Sort::ID) std::sort(result.begin(), result.end(), ComparatorId);
-    if (sort==Sort::PRIORITY) std::sort(result.begin(), result.end(), ComparatorPriority);
-    if (sort==Sort::DATE) std::sort(result.begin(), result.end(), ComparatorDate);
+    for (const auto &[id, task]: tasks_)
+        if (task.parent() == parent && task.task().condition() == Task::Condition::NONE)
+            result.emplace_back(id, task.task());
+    if (sort == Sort::ID) std::sort(result.begin(), result.end(), ComparatorId);
+    if (sort == Sort::PRIORITY) std::sort(result.begin(), result.end(), ComparatorPriority);
+    if (sort == Sort::DATE) std::sort(result.begin(), result.end(), ComparatorDate);
     return result;
 }
 
 std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> TaskManager::ShowAll(
         Sort sort) const {
     std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> result;
-    std::vector<std::pair<TaskId, Task>> parents=ShowChild(TaskId::NotExistentId(), sort);
-    for(auto parent :parents) {
-        result.push_back({parent, ShowChild(parent.first, sort)});
+    std::vector<std::pair<TaskId, Task>> parents = ShowChild(TaskId::NotExistentId(), sort);
+    for (const auto &parent: parents) {
+        result.emplace_back(parent, ShowChild(parent.first, sort));
     }
     return result;
 }
@@ -67,7 +67,7 @@ bool TaskManager::ComparatorId(const std::pair<TaskId, Task> &first, const std::
 }
 
 bool TaskManager::ComparatorPriority(const std::pair<TaskId, Task> &first, const std::pair<TaskId, Task> &second) {
-    if (static_cast<int>(first.second.priority())>static_cast<int>(second.second.priority())) return true;
+    if (static_cast<int>(first.second.priority()) > static_cast<int>(second.second.priority())) return true;
     return false;
 }
 

@@ -40,7 +40,7 @@ public:
     Task(const Task &) = default;
     Task &operator=(const Task &) = delete;
 private:
-    Task(const Arguments &);
+    explicit Task(const Arguments &);
 private:
     const std::string title_;
     const Priority priority_;

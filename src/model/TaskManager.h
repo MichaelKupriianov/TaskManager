@@ -18,7 +18,7 @@ public:
     };
 public:
     TaskManager() : generator_(new IdGenerator) {}
-    TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
+    explicit TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
 
     TaskId Add(const Task &, TaskId = TaskId::NotExistentId());
     void Edit(TaskId, const Task &);
@@ -29,7 +29,7 @@ public:
     std::vector<std::pair<TaskId, Task>> ShowChild(TaskId = TaskId::NotExistentId(),
                                                    Sort = Sort::ID) const;
     std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> ShowAll(
-                                                   Sort = Sort::ID) const;
+            Sort = Sort::ID) const;
 private:
     static bool ComparatorPriority(const std::pair<TaskId, Task> &, const std::pair<TaskId, Task> &);
     static bool ComparatorDate(const std::pair<TaskId, Task> &, const std::pair<TaskId, Task> &);
