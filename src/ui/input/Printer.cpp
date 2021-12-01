@@ -30,6 +30,6 @@ void Printer::PrintTask(const std::pair<TaskId, Task> &task) {
     std::cout << "id: " << task.first.value();
     std::cout << ", title: " << task.second.title();
     std::cout << ", priority: " << Converter::PriorityToString(task.second.priority());
-     std::cout << ", date: " << Converter::DateToString(task.second.date());
+    std::cout << ", date: " << Converter::DateToString(task.second.date());
     if (!task.second.label().empty()) std::cout << ", label: " << task.second.label();
 }

@@ -80,10 +80,10 @@ std::string Reader::ReadLabel() const {
 }
 
 bool Reader::Confirm() const {
-    std::cout << "Confirm? (Y/N): ";
+    std::cout << "Confirm? (y/n): ";
     std::string answer;
     getline(std::cin, answer);
-    if (answer == "Y") return true;
-    if (answer == "N") return false;
+    if (answer == "y") return true;
+    if (answer == "n") return false;
     return Confirm();
 }
