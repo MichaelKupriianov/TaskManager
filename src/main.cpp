@@ -1,7 +1,7 @@
-#include"StepMachine.h"
+#include"Controller.h"
 
 int main() {
-    StepMachine machine;
-    machine.Run();
+    Controller controller;
+    controller.Run();
     return 0;
 }

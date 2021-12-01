@@ -1,7 +1,10 @@
-#include "StepMachine.h"
+#include"StepMachine.h"
+#include"Command.h"
 
-void StepMachine::Run() {
-    while (!context_.if_finished()) {
-        state_ = std::move(state_->execute(context_));
+Context StepMachine::Run() {
+    Context context;
+    while(context.command() == Command::NONE) {
+        state_=std::move(state_->execute(context));
     }
+    return context;
 }

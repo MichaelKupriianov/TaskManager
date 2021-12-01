@@ -9,8 +9,7 @@ class StepMachine {
 public:
     StepMachine() : state_(Factory::GetRootStep()) {}
 
-    void Run();
+    Context Run();
 private:
     std::unique_ptr<Step> state_;
-    Context context_;
 };
