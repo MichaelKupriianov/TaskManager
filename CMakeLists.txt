@@ -4,6 +4,7 @@ project(TaskManager)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(src/model/)
+include_directories(src/model/id)
 include_directories(src/controller/)
 include_directories(src/ui/)
 include_directories(src/ui/step/)

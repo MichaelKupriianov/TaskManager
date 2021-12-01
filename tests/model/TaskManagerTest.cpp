@@ -16,13 +16,13 @@ protected:
         std::unique_ptr<MockIdGenerator> ptr_gen(new MockIdGenerator);
         EXPECT_CALL(*ptr_gen, GenerateId())
                 .Times(AtLeast(1))
-                .WillOnce(Return(TaskId::Create(0)))
-                .WillRepeatedly(Return(TaskId::Create(1)));
+                .WillOnce(Return(TaskId::Create(0).value()))
+                .WillRepeatedly(Return(TaskId::Create(1).value()));
 
         task1_ = std::make_unique<Task>(Task::Create(Task::Arguments::Create("first",
-                                                                             Task::Priority::MEDIUM, 500)));
+                                                                             Task::Priority::MEDIUM, 500)).value());
         task2_ = std::make_unique<Task>(Task::Create(Task::Arguments::Create("second",
-                                                                             Task::Priority::NONE, 1000)));
+                                                                             Task::Priority::NONE, 1000)).value());
         manager_ = std::make_unique<TaskManager>(std::move(ptr_gen));
         manager_->Add(*task1_);
     }
@@ -33,47 +33,42 @@ protected:
 };
 
 TEST_F(TaskManagerTest, shouldCreateTask) {
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task(), *task1_);
+    EXPECT_EQ(manager_->ShowAll()[0].first.second, *task1_);
 }
 
 TEST_F(TaskManagerTest, shouldEditTask) {
-    manager_->Edit(TaskId::Create(0), *task2_);
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task(), *task2_);
+    EXPECT_TRUE(manager_->Edit(TaskId::Create(0).value(), *task2_));
+    EXPECT_EQ(manager_->ShowAll()[0].first.second, *task2_);
 }
 
-TEST_F(TaskManagerTest, shouldThrowExceptionWhenEditIfIDNotExist) {
-    EXPECT_THROW(manager_->Edit(TaskId::Create(1), *task2_), std::range_error);
+TEST_F(TaskManagerTest, shouldReturnFalseWhenEditIfIDNotExist) {
+    EXPECT_FALSE(manager_->Edit(TaskId::Create(1).value(), *task2_));
 }
 
-TEST_F(TaskManagerTest, shouldCompareTask) {
-    manager_->Complete(TaskId::Create(0));
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task().state(), Task::Condition::COMPLETED);
+TEST_F(TaskManagerTest, shouldCompleteTask) {
+    EXPECT_TRUE(manager_->Complete(TaskId::Create(0).value()));
+    EXPECT_EQ(manager_->ShowAll().size(), 0);
 }
 
-TEST_F(TaskManagerTest, shouldThrowExceptionWhenCompleteIfIDNotExist) {
-    EXPECT_THROW(manager_->Complete(TaskId::Create(1)), std::range_error);
+TEST_F(TaskManagerTest, shouldReturnFalseWhenCompleteIfIDNotExist) {
+    EXPECT_FALSE(manager_->Complete(TaskId::Create(1).value()));
 }
 
 TEST_F(TaskManagerTest, shouldDeleteTask) {
-    manager_->Delete(TaskId::Create(0));
-    EXPECT_EQ(manager_->Show().size(), 0);
+    EXPECT_TRUE(manager_->Delete(TaskId::Create(0).value()));
+    EXPECT_EQ(manager_->ShowAll().size(), 0);
+}
+
+TEST_F(TaskManagerTest, shouldReturnFalseWhenDeleteIfIDNotExist) {
+    EXPECT_FALSE(manager_->Delete(TaskId::Create(1).value()));
 }
 
 TEST_F(TaskManagerTest, shouldEditLabel) {
-    manager_->Label(TaskId::Create(0), "first");
-    EXPECT_EQ(manager_->getTask(TaskId::Create(0)).task().label(), "first");
+    EXPECT_TRUE(manager_->Label(TaskId::Create(0).value(), "first"));
+    EXPECT_EQ(manager_->ShowAll()[0].first.second.label(), "first");
 }
 
-TEST_F(TaskManagerTest, shouldShowTasks) {
-    manager_->Add(*task2_);
-    std::map<TaskId, GeneralizedTask> expected;
-    expected.insert({TaskId::Create(0), GeneralizedTask::Create(*task1_, TaskId::NotExistentId())});
-    expected.insert({TaskId::Create(1), GeneralizedTask::Create(*task2_, TaskId::NotExistentId())});
-
-    EXPECT_EQ(manager_->Show(), expected);
-}
-
-TEST_F(TaskManagerTest, shouldThrowExceptionIfIdGeneratorWorksdBadly) {
-    manager_->Add(*task2_);
-    EXPECT_THROW(manager_->Add(*task2_), std::runtime_error);
+TEST_F(TaskManagerTest, shouldReturnFalseIfIdGeneratorWorksdBadly) {
+    EXPECT_TRUE(manager_->Add(*task2_));
+    EXPECT_FALSE(manager_->Add(*task2_));
 }

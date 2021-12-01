@@ -5,7 +5,7 @@ class GeneralizedTaskTest : public ::testing::Test {
 };
 
 TEST_F(GeneralizedTaskTest, shouldCreateGeneralizedTest) {
-    Task task(Task::Create(Task::Arguments::Create("first", Task::Priority::LOU)));
+    Task task(Task::Create(Task::Arguments::Create("first", Task::Priority::LOU)).value());
     TaskId parent(TaskId::NotExistentId());
     GeneralizedTask gen_task(GeneralizedTask::Create(task, parent));
     EXPECT_EQ(gen_task.task(), task);
@@ -13,9 +13,9 @@ TEST_F(GeneralizedTaskTest, shouldCreateGeneralizedTest) {
 }
 
 TEST_F(GeneralizedTaskTest, shouldCompareGeneralizedTasks) {
-    Task task(Task::Create(Task::Arguments::Create("first", Task::Priority::LOU)));
+    Task task(Task::Create(Task::Arguments::Create("first", Task::Priority::LOU)).value());
     TaskId parent1(TaskId::NotExistentId());
-    TaskId parent2(TaskId::Create(0));
+    TaskId parent2(TaskId::Create(0).value());
     GeneralizedTask gen_task1(GeneralizedTask::Create(task, parent1));
     GeneralizedTask gen_task2(GeneralizedTask::Create(task, parent2));
     EXPECT_EQ(gen_task1, gen_task1);
