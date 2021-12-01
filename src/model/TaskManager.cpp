@@ -40,38 +40,42 @@ void TaskManager::Label(TaskId id, const std::string &label) {
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
 }
 
-std::vector<std::pair<TaskId, Task>> TaskManager::ShowChild(TaskId parent, Sort sort) const {
-    std::vector<std::pair<TaskId, Task>> result;
+TaskManager::ArrayOfIdWithTask TaskManager::ShowChild(TaskId parent, Sort sort) const {
+    std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
         if (task.parent() == parent && task.task().condition() == Task::Condition::NONE)
-            result.emplace_back(id, task.task());
-    if (sort == Sort::ID) std::sort(result.begin(), result.end(), ComparatorId);
-    if (sort == Sort::PRIORITY) std::sort(result.begin(), result.end(), ComparatorPriority);
-    if (sort == Sort::DATE) std::sort(result.begin(), result.end(), ComparatorDate);
+            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
+    if (sort == Sort::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
+    if (sort == Sort::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
+    if (sort == Sort::DATE) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorDate);
+    ArrayOfIdWithTask result;
+    for (const auto &t: for_sorting)
+        result.emplace_back(*t);
     return result;
 }
 
-std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> TaskManager::ShowAll(
+std::vector<std::pair<TaskManager::IdWithTask, TaskManager::ArrayOfIdWithTask>> TaskManager::ShowAll(
         Sort sort) const {
-    std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> result;
-    std::vector<std::pair<TaskId, Task>> parents = ShowChild(TaskId::NotExistentId(), sort);
+    std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> result;
+    ArrayOfIdWithTask parents = ShowChild(TaskId::NotExistentId(), sort);
     for (const auto &parent: parents) {
         result.emplace_back(parent, ShowChild(parent.first, sort));
     }
     return result;
 }
 
-bool TaskManager::ComparatorId(const std::pair<TaskId, Task> &first, const std::pair<TaskId, Task> &second) {
-    if (first.first > second.first) return true;
+bool TaskManager::ComparatorId(const std::unique_ptr<IdWithTask> &first, const std::unique_ptr<IdWithTask> &second) {
+    if (first->first < second->first) return true;
     return false;
 }
 
-bool TaskManager::ComparatorPriority(const std::pair<TaskId, Task> &first, const std::pair<TaskId, Task> &second) {
-    if (static_cast<int>(first.second.priority()) > static_cast<int>(second.second.priority())) return true;
+bool
+TaskManager::ComparatorPriority(const std::unique_ptr<IdWithTask> &first, const std::unique_ptr<IdWithTask> &second) {
+    if (static_cast<int>(first->second.priority()) < static_cast<int>(second->second.priority())) return true;
     return false;
 }
 
-bool TaskManager::ComparatorDate(const std::pair<TaskId, Task> &first, const std::pair<TaskId, Task> &second) {
-    if (first.second.date() > second.second.date()) return true;
+bool TaskManager::ComparatorDate(const std::unique_ptr<IdWithTask> &first, const std::unique_ptr<IdWithTask> &second) {
+    if (first->second.date() < second->second.date()) return true;
     return false;
 }

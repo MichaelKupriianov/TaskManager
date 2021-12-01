@@ -25,15 +25,18 @@ public:
     void Complete(TaskId);
     void Delete(TaskId);
     void Label(TaskId, const std::string &);
-
-    std::vector<std::pair<TaskId, Task>> ShowChild(TaskId = TaskId::NotExistentId(),
-                                                   Sort = Sort::ID) const;
-    std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> ShowAll(
+public:
+    using IdWithTask = std::pair<TaskId, Task>;
+    using ArrayOfIdWithTask =std::vector<IdWithTask>;
+public:
+    ArrayOfIdWithTask ShowChild(TaskId = TaskId::NotExistentId(),
+                                Sort = Sort::ID) const;
+    std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> ShowAll(
             Sort = Sort::ID) const;
 private:
-    static bool ComparatorPriority(const std::pair<TaskId, Task> &, const std::pair<TaskId, Task> &);
-    static bool ComparatorDate(const std::pair<TaskId, Task> &, const std::pair<TaskId, Task> &);
-    static bool ComparatorId(const std::pair<TaskId, Task> &, const std::pair<TaskId, Task> &);
+    static bool ComparatorPriority( const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
+    static bool ComparatorDate(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
+    static bool ComparatorId(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
 private:
     std::map<TaskId, GeneralizedTask> tasks_;
     std::unique_ptr<IdGenerator> generator_;
