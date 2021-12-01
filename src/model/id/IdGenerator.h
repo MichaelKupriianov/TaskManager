@@ -7,7 +7,7 @@ public:
     explicit IdGenerator(int v = 0) : max_id_(v) {}
 
     virtual TaskId GenerateId() {
-        return TaskId::Create(max_id_++);
+        return TaskId::Create(max_id_++).value();
     }
 private:
     int max_id_;

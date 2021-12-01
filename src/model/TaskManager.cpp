@@ -1,43 +1,48 @@
-#include "TaskManager.h"
-#include<stdexcept>
+#include"TaskManager.h"
 #include<algorithm>
 
-TaskId TaskManager::Add(const Task &task, TaskId parent) {
+bool TaskManager::Add(const Task &task, TaskId parent) {
     TaskId id(generator_->GenerateId());
-    if (tasks_.count(id) == 1) throw std::range_error("There is already a task with such ID");
+    if (tasks_.count(id) == 1) return false;
     tasks_.insert({id, GeneralizedTask::Create(task, parent)});
-    return id;
+    return true;
 }
 
-void TaskManager::Edit(TaskId id, const Task &task) {
-    if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
+bool TaskManager::Edit(TaskId id, const Task &task) {
+    if (tasks_.count(id) == 0) return false;
     const TaskId parent = tasks_.at(id).parent();
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(task, parent)});
+    return true;
 }
 
-void TaskManager::Complete(TaskId id) {
-    if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
+bool TaskManager::Complete(TaskId id) {
+    if (tasks_.count(id) == 0) return false;
     Task task = tasks_.at(id).task();
     Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
-                                                              task.date(), task.label(), Task::Condition::COMPLETED));
+                                                              task.date(), task.label(),
+                                                              Task::Condition::COMPLETED)).value();
     TaskId parent = tasks_.at(id).parent();
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
+    return true;
 }
 
-void TaskManager::Delete(TaskId id) {
+bool TaskManager::Delete(TaskId id) {
+    if (tasks_.count(id) == 0) return false;
     tasks_.erase(id);
+    return true;
 }
 
-void TaskManager::Label(TaskId id, const std::string &label) {
-    if (tasks_.count(id) == 0) throw std::range_error("There is no task with such ID");
+bool TaskManager::Label(TaskId id, const std::string &label) {
+    if (tasks_.count(id) == 0) return false;
     Task task = tasks_.at(id).task();
     Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
-                                                              task.date(), label, task.condition()));
+                                                              task.date(), label, task.condition())).value();
     TaskId parent = tasks_.at(id).parent();
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
+    return true;
 }
 
 TaskManager::ArrayOfIdWithTask TaskManager::ShowChild(TaskId parent, Sort sort) const {

@@ -2,6 +2,7 @@
 
 #include<string>
 #include<ctime>
+#include<optional>
 
 class Task {
 public:
@@ -29,7 +30,7 @@ public:
         Arguments(const std::string &, Priority, time_t, const std::string &, Condition);
     };
 public:
-    static Task Create(const Arguments &);
+    static std::optional<Task> Create(const Arguments &);
 
     std::string title() const { return title_; }
     Priority priority() const { return priority_; }

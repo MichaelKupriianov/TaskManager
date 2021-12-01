@@ -1,8 +1,7 @@
 #include "TaskId.h"
-#include<stdexcept>
 
-TaskId TaskId::Create(int id) {
-    if (id < 0) throw std::range_error("Impossible to use negative ID");
+std::optional<TaskId> TaskId::Create(int id) {
+    if (id < 0) return std::nullopt;
     return TaskId(static_cast<unsigned int>(id));
 }
 

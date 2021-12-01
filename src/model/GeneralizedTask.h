@@ -1,8 +1,7 @@
 #pragma once
 
-#include<string>
 #include"Task.h"
-#include"id/TaskId.h"
+#include"TaskId.h"
 
 class GeneralizedTask {
 public:
