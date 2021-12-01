@@ -15,7 +15,7 @@ public:
     int ReadId() const;
     std::string ReadTitle() const;
     Task::Priority ReadPriority() const;
-    time_t ReadTime() const;
+    time_t ReadDate() const;
     std::string ReadLabel() const;
     bool Confirm() const;
 private:

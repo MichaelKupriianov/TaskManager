@@ -8,7 +8,7 @@ std::optional<Task::Priority> Converter::StringToPriority(const std::string &pri
     return std::nullopt;
 }
 
-std::optional<time_t> Converter::StringToTime(const std::string &date) {
+std::optional<time_t> Converter::StringToDate(const std::string &date) {
     if (date == "") return 0;
     tm time = {};
     std::string pattern;
@@ -54,6 +54,14 @@ std::string Converter::PriorityToString(Task::Priority priority) {
         default:
             return "none";
     }
+}
+
+std::string Converter::DateToString(time_t date) {
+    if (date == 0) return "none";
+    std::string result = ctime(&date);
+    for (int i = 0; i < 9; i++) result.pop_back();
+    for (int i = 0; i < 4; i++) result.erase(result.begin());
+    return result;
 }
 
 std::string Converter::StepTypeToString(TypeOfStep step_type) {

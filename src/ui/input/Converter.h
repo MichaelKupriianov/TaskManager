@@ -9,10 +9,11 @@
 class Converter {
 public:
     static std::optional<Task::Priority> StringToPriority(const std::string &);
-    static std::optional<time_t> StringToTime(const std::string &);
+    static std::optional<time_t> StringToDate(const std::string &);
     static std::optional<TypeOfStep> StringToStepType(const std::string &);
     static std::optional<int> StringToId(const std::string &);
     static std::string PriorityToString(Task::Priority);
+    static std::string DateToString(time_t date);
     static std::string StepTypeToString(TypeOfStep step);
 };
 

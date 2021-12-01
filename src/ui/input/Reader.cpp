@@ -60,20 +60,22 @@ Task::Priority Reader::ReadPriority() const {
     return ReadPriority();
 }
 
-time_t Reader::ReadTime() const {
-    std::cout << "[" << command_ << " Task] time (in 12:12 12/12 or 12/12 format): ";
-    std::string time;
-    getline(std::cin, time);
-    if (std::optional<time_t> result = Converter::StringToTime(time); result.has_value())
+time_t Reader::ReadDate() const {
+    std::cout << "[" << command_ << " Task] due date (in 12:12 12/12 or 12/12 format): ";
+    std::string date;
+    getline(std::cin, date);
+    if (std::optional<time_t> result = Converter::StringToDate(date); result.has_value())
         return result.value();
-    std::cout << "Enter the time in the correct format (or don't enter anything):\n";
-    return ReadTime();
+    std::cout << "Enter the date in the correct format (or don't enter anything):\n";
+    return ReadDate();
 }
 
 std::string Reader::ReadLabel() const {
     std::cout << "[" << command_ << " Task] label: ";
     std::string label;
     getline(std::cin, label);
+    if (!label.empty()) return label;
+    std::cout << "Label should be non-empty\n";
     return label;
 }
 
