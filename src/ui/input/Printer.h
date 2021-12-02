@@ -3,13 +3,17 @@
 #include<vector>
 #include<utility>
 #include"Task.h"
-#include"id/TaskId.h"
+#include"TaskId.h"
 
 class Printer {
 public:
-    static void PrintSomeTasks(const std::vector<std::pair<TaskId, Task>> &);
+    using IdWithTask = std::pair<TaskId, Task>;
+    using ArrayOfIdWithTask = std::vector<IdWithTask>;
+public:
+    static void PrintSomeTasks(const ArrayOfIdWithTask &);
     static void PrintAllTasks(
-            const std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> &);
+            const std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> &);
+    static void PrintException(std::string exception);
 private:
     static void PrintTask(const std::pair<TaskId, Task> &);
 };

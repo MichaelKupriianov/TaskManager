@@ -28,27 +28,35 @@ void Controller::Execute(const Context & context) {
             break;
         case Command::SHOW:
             Show();
+            break;
+        default:
+            break;
     }
 }
 
 void Controller::Add(const Task &task) {
-    task_manager_.Add(task);
+    if (!task_manager_.Add(task))
+        Printer::PrintException("Incorrect parent ID");
 }
 
 void Controller::Edit(TaskId id, const Task &task) {
-    task_manager_.Edit(id, task);
+    if (!task_manager_.Edit(id, task))
+        Printer::PrintException("There are no task with such ID");
 }
 
 void Controller::Complete(TaskId id) {
-    task_manager_.Complete(id);
+    if (!task_manager_.Complete(id))
+        Printer::PrintException("There are no task with such ID");
 }
 
 void Controller::Delete(TaskId id) {
-    task_manager_.Delete(id);
+    if (!task_manager_.Delete(id))
+        Printer::PrintException("There are no task with such ID");
 }
 
 void Controller::Label(TaskId id, const std::string &label) {
-    task_manager_.Label(id, label);
+    if (!task_manager_.Label(id, label))
+        Printer::PrintException("There are no task with such ID");
 }
 
 void Controller::Show() {

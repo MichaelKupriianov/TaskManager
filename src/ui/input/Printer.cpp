@@ -4,7 +4,7 @@
 #include<string>
 #include"Converter.h"
 
-void Printer::PrintSomeTasks(const std::vector<std::pair<TaskId, Task>> &tasks) {
+void Printer::PrintSomeTasks(const ArrayOfIdWithTask &tasks) {
     for (const auto &task: tasks) {
         PrintTask(task);
         std::cout << '\n';
@@ -12,7 +12,7 @@ void Printer::PrintSomeTasks(const std::vector<std::pair<TaskId, Task>> &tasks) 
 }
 
 void Printer::PrintAllTasks(
-        const std::vector<std::pair<std::pair<TaskId, Task>, std::vector<std::pair<TaskId, Task>>>> &tasks) {
+        const std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> &tasks) {
     if (tasks.empty()) {
         std::cout << "There are no outstanding tasks now.\n";
         return;
@@ -24,6 +24,10 @@ void Printer::PrintAllTasks(
             PrintSomeTasks(children);
         } else std::cout << '\n';
     }
+}
+
+void Printer::PrintException(std::string exception) {
+    std::cout << exception << '\n';
 }
 
 void Printer::PrintTask(const std::pair<TaskId, Task> &task) {
