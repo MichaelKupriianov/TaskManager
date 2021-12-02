@@ -12,7 +12,8 @@ public:
     Task::Priority task_priority() const { return task_->priority(); }
     time_t task_date() const { return task_->date(); }
     std::string task_label() const { return task_->label(); }
-    Task::Condition task_state() const { return task_->state(); }
+    Task::Condition task_state() const { return task_->condition(); }
+    Task task() const {return *task_;}
 
     void finished() { finished_ = true; }
     void set_task(const Task::Arguments &);
