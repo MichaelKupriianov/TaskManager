@@ -4,9 +4,12 @@
 #include"SubStepMachine.h"
 
 std::unique_ptr<Step> StepEdit::execute(Context &context) {
-    context.set_id(console_manager_.ReadId());
-    SubStepMachine machine;
-    machine.Run(console_manager_);
-    if (!console_manager_.Confirm()) {}
+    context.set_id(reader_.ReadId());
+    SubStepMachine sub_machine;
+    SubContext sub_context = sub_machine.Run(reader_);
+    if (reader_.Confirm()) {
+        context.set_command(Command::ADD);
+        context.set_task(sub_context.task());
+    }
     return Factory::GetRootStep();
 }

@@ -8,5 +8,5 @@ public:
     static std::unique_ptr<SubStep> GetRootSubStep();
     static std::unique_ptr<SubStep> GetNextSubStep(const SubStepTitle &);
     static std::unique_ptr<SubStep> GetNextSubStep(const SubStepPriority &);
-    static std::unique_ptr<SubStep> GetNextSubStep(const SubStepTime &);
+    static std::unique_ptr<SubStep> GetNextSubStep(const SubStepDate &);
 };

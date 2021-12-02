@@ -8,6 +8,8 @@
 
 class Context {
 public:
+    Context() : command_(Command::NONE) {}
+public:
     Command command() const { return command_; }
     TaskId id() const { return *task_id_; }
     std::string label() const { return label_; }

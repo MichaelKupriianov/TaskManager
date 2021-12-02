@@ -10,7 +10,7 @@ std::unique_ptr<Step> StepRoot::execute(Context &context) {
 
 std::unique_ptr<Step> StepQuit::execute(Context &context) {
     reader_.Quit();
-    context.finished();
+    context.set_command(Command::QUIT);
     return Factory::GetRootStep();
 }
 
@@ -21,23 +21,30 @@ std::unique_ptr<Step> StepHelp::execute(Context &context) {
 
 std::unique_ptr<Step> StepComplete::execute(Context &context) {
     context.set_id(reader_.ReadId());
-    if (!reader_.Confirm()) {}
+    if (reader_.Confirm()) {
+        context.set_command(Command::COMPLETE);
+    }
     return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepDelete::execute(Context &context) {
     context.set_id(reader_.ReadId());
-    if (!reader_.Confirm()) {}
+    if (reader_.Confirm()) {
+        context.set_command(Command::DELETE);
+    }
     return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepLabel::execute(Context &context) {
     context.set_id(reader_.ReadId());
-    std::string label(reader_.ReadLabel());
-    if (!reader_.Confirm()) {}
+    context.set_label(reader_.ReadLabel());
+    if (reader_.Confirm()) {
+        context.set_command(Command::LABEL);
+    }
     return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepShow::execute(Context &context) {
+    context.set_command(Command::SHOW);
     return Factory::GetRootStep();
 }

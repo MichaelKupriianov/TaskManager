@@ -19,7 +19,7 @@ public:
     std::unique_ptr<SubStep> execute(SubContext &, const Reader &) override;
 };
 
-class SubStepTime : public SubStep {
+class SubStepDate : public SubStep {
 public:
     std::unique_ptr<SubStep> execute(SubContext &, const Reader &) override;
 };

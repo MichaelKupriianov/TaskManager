@@ -9,9 +9,9 @@ std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepTitle &) {
 }
 
 std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepPriority &) {
-    return std::unique_ptr<SubStep>(new SubStepTime);
+    return std::unique_ptr<SubStep>(new SubStepDate);
 }
 
-std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepTime &) {
-    return std::unique_ptr<SubStep>(new SubStepTime);
+std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepDate &) {
+    return std::unique_ptr<SubStep>(new SubStepDate);
 }

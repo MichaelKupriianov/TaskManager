@@ -7,8 +7,8 @@
 
 class StepEdit : public Step {
 public:
-    StepEdit() : console_manager_(TypeOfStep::EDIT) {}
+    StepEdit() : reader_(TypeOfStep::EDIT) {}
     std::unique_ptr<Step> execute(Context &) override;
 private:
-    Reader console_manager_;
+    Reader reader_;
 };
