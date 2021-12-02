@@ -4,6 +4,8 @@
 bool TaskManager::Add(const Task &task, TaskId parent) {
     TaskId id(generator_->GenerateId());
     if (tasks_.count(id) == 1) return false;
+    if (parent == id) return false;
+    if (tasks_.count(parent) == 0 && parent.value() != TaskId::NotExistentId().value()) return false;
     tasks_.insert({id, GeneralizedTask::Create(task, parent)});
     return true;
 }
