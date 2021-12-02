@@ -1,6 +1,5 @@
 #include"Step.h"
 #include<string>
-#include<stdexcept>
 #include"Factory.h"
 
 std::unique_ptr<Step> StepRoot::execute(Context &context) {
