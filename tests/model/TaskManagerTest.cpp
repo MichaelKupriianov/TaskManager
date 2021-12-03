@@ -34,6 +34,12 @@ protected:
     std::unique_ptr<Task> task1_, task2_, task3_;
 };
 
+TEST_F(TaskManagerTest, shouldCreateTaskManager) {
+    TaskManager manager;
+    EXPECT_TRUE(manager.Add(*task1_));
+    EXPECT_TRUE(manager_->Add(*task1_));
+}
+
 TEST_F(TaskManagerTest, shouldAddTask) {
     EXPECT_TRUE(manager_->Add(*task1_));
     EXPECT_EQ(manager_->ShowChild().front().second, *task1_);
