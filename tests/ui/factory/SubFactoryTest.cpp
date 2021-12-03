@@ -17,12 +17,12 @@ TEST_F(SubFactoryTest, shouldReturnNextStepAfterTitle) {
 
 TEST_F(SubFactoryTest, shouldReturnNextStepAfterPriprity) {
     SubStepPriority step;
-    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepTime>(std::shared_ptr(
+    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepDate>(std::shared_ptr(
             SubFactory::GetNextSubStep(step))));
 }
 
 TEST_F(SubFactoryTest, shouldReturnNextStepAfterTime) {
-    SubStepTime step;
-    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepTime>(std::shared_ptr(
+    SubStepDate step;
+    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepDate>(std::shared_ptr(
             SubFactory::GetNextSubStep(step))));
 }

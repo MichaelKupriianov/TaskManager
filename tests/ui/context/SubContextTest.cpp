@@ -6,12 +6,14 @@ class SubContextTest : public ::testing::Test {
 
 TEST_F(SubContextTest, shouldWorkWithTask) {
     SubContext context;
-    context.set_task(Task::Arguments::Create("title", Task::Priority::LOU, 1000, "label"));
+    Task::Arguments arguments(Task::Arguments::Create("title", Task::Priority::LOU, 1000, "label"));
+    context.set_task(arguments);
     EXPECT_EQ(context.task_title(), "title");
     EXPECT_EQ(context.task_priority(), Task::Priority::LOU);
     EXPECT_EQ(context.task_date(), 1000);
     EXPECT_EQ(context.task_label(), "label");
     EXPECT_EQ(context.task_state(), Task::Condition::NONE);
+    EXPECT_EQ(context.task(), Task::Create(arguments).value());
 }
 
 TEST_F(SubContextTest, shouldFinished) {
