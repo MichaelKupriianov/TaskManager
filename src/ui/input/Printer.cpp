@@ -1,11 +1,11 @@
 #include"Printer.h"
 #include<iostream>
-#include<ctime>
 #include<string>
 #include"Converter.h"
 
-void Printer::PrintSomeTasks(const ArrayOfIdWithTask &tasks) {
+void Printer::PrintSomeTasks(const ArrayOfIdWithTask &tasks, const std::string &introduction) {
     for (const auto &task: tasks) {
+        std::cout<<introduction;
         PrintTask(task);
         std::cout << '\n';
     }
@@ -20,8 +20,8 @@ void Printer::PrintAllTasks(
     for (const auto &[task, children]: tasks) {
         PrintTask(task);
         if (!children.empty()) {
-            std::cout << ":\n   ";
-            PrintSomeTasks(children);
+            std::cout << "  :\n";
+            PrintSomeTasks(children, "   ");
         } else std::cout << '\n';
     }
 }
