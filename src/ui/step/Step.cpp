@@ -19,26 +19,30 @@ std::unique_ptr<Step> StepHelp::execute(Context &context) {
 }
 
 std::unique_ptr<Step> StepComplete::execute(Context &context) {
-    context.set_id(reader_.ReadId());
+    int id{reader_.ReadId()};
     if (reader_.Confirm()) {
         context.set_command(Command::COMPLETE);
+        context.set_id(id);
     }
     return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepDelete::execute(Context &context) {
-    context.set_id(reader_.ReadId());
+    int id{reader_.ReadId()};
     if (reader_.Confirm()) {
         context.set_command(Command::DELETE);
+        context.set_id(id);
     }
     return Factory::GetRootStep();
 }
 
 std::unique_ptr<Step> StepLabel::execute(Context &context) {
-    context.set_id(reader_.ReadId());
-    context.set_label(reader_.ReadLabel());
+    int id{reader_.ReadId()};
+    std::string label{reader_.ReadLabel()};
     if (reader_.Confirm()) {
         context.set_command(Command::LABEL);
+        context.set_id(id);
+        context.set_label(label);
     }
     return Factory::GetRootStep();
 }
