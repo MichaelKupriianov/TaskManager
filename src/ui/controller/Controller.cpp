@@ -3,7 +3,7 @@
 
 void Controller::Run() {
     while (true) {
-        Context context = step_machine_.Run();
+        Context context{step_machine_.Run()};
         if (context.command() == Command::QUIT) break;
         Execute(context);
     }
