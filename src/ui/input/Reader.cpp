@@ -41,6 +41,18 @@ int Reader::ReadId() const {
     return ReadId();
 }
 
+int Reader::ReadParentId() const {
+    std::cout << "[" << command_ << " Task] Parent ID (leave empty if task has no parent): ";
+    std::string id;
+    getline(std::cin, id);
+    if (id.empty())
+        return -1;
+    if (std::optional<int> result = Converter::StringToId(id); result.has_value())
+        return result.value();
+    std::cout << "Enter the ID in the correct format\n";
+    return ReadId();
+}
+
 std::string Reader::ReadTitle() const {
     std::cout << "[" << command_ << " Task] title: ";
     std::string title;

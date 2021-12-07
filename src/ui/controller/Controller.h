@@ -10,7 +10,7 @@ public:
     void Run();
 private:
     void Execute(const Context &);
-    void Add(const Task &);
+    void Add(const Task &, TaskId id);
     void Edit(TaskId id, const Task &task);
     void Complete(TaskId id);
     void Delete(TaskId id);

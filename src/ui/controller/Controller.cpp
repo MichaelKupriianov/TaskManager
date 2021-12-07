@@ -12,7 +12,7 @@ void Controller::Run() {
 void Controller::Execute(const Context & context) {
     switch (context.command()) {
         case Command::ADD:
-            Add(context.task());
+            Add(context.task(), context.id());
             break;
         case Command::EDIT:
             Edit(context.id(), context.task());
@@ -34,9 +34,9 @@ void Controller::Execute(const Context & context) {
     }
 }
 
-void Controller::Add(const Task &task) {
-    if (!task_manager_.Add(task))
-        Printer::PrintException("Incorrect parent ID");
+void Controller::Add(const Task &task, TaskId id) {
+    if (!task_manager_.Add(task, id))
+        Printer::PrintException("Incorrect parent ID (for example, subtask cannot have child)");
 }
 
 void Controller::Edit(TaskId id, const Task &task) {

@@ -13,6 +13,7 @@ public:
     void Quit() const;
     TypeOfStep ReadCommand() const;
     int ReadId() const;
+    int ReadParentId() const;
     std::string ReadTitle() const;
     Task::Priority ReadPriority() const;
     time_t ReadDate() const;
