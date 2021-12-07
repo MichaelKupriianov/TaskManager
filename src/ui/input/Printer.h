@@ -10,10 +10,10 @@ public:
     using IdWithTask = std::pair<TaskId, Task>;
     using ArrayOfIdWithTask = std::vector<IdWithTask>;
 public:
-    static void PrintSomeTasks(const ArrayOfIdWithTask &, const std::string &);
-    static void PrintAllTasks(
+    void PrintSomeTasks(const ArrayOfIdWithTask &, const std::string &);
+    void PrintAllTasks(
             const std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> &);
-    static void PrintException(std::string exception);
+    void PrintException(const std::string &exception);
 private:
     static void PrintTask(const std::pair<TaskId, Task> &);
 };

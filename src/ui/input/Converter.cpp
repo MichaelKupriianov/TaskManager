@@ -4,12 +4,12 @@ std::optional<Task::Priority> Converter::StringToPriority(const std::string &pri
     if (priority == "high") return Task::Priority::HIGH;
     if (priority == "medium") return Task::Priority::MEDIUM;
     if (priority == "lou") return Task::Priority::LOU;
-    if (priority == "none" || priority == "") return Task::Priority::NONE;
+    if (priority == "none" || priority.empty()) return Task::Priority::NONE;
     return std::nullopt;
 }
 
 std::optional<time_t> Converter::StringToDate(const std::string &date) {
-    if (date == "") return 0;
+    if (date.empty()) return 0;
     tm time = {};
     std::string pattern;
     if (date.size() > 5) pattern = "%H:%M %d/%m";
@@ -64,17 +64,17 @@ std::string Converter::DateToString(time_t date) {
     return result;
 }
 
-std::string Converter::StepTypeToString(TypeOfStep step_type) {
-    switch (step_type) {
-        case TypeOfStep::ADD:
+std::string Converter::CommandToString(Command command) {
+    switch (command) {
+        case Command::ADD:
             return "Add";
-        case TypeOfStep::EDIT:
+        case Command::EDIT:
             return "Edit";
-        case TypeOfStep::COMPLETE:
+        case Command::COMPLETE:
             return "Complete";
-        case TypeOfStep::DELETE:
+        case Command::DELETE:
             return "Delete";
-        case TypeOfStep::LABEL:
+        case Command::LABEL:
             return "Label";
         default:
             return "";

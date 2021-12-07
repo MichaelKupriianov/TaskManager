@@ -1,12 +1,14 @@
 #pragma once
 
+#include<memory>
 #include"StepMachine.h"
 #include"TaskManager.h"
-#include"Command.h"
-#include"Context.h"
+#include"Printer.h"
 
 class Controller {
 public:
+    Controller(std::shared_ptr<StepMachine> &, std::shared_ptr<TaskManager> &, std::shared_ptr<Printer> &);
+
     void Run();
 private:
     void Execute(const Context &);
@@ -17,6 +19,7 @@ private:
     void Label(TaskId id, const std::string &);
     void Show();
 private:
-    StepMachine step_machine_;
-    TaskManager task_manager_;
+    std::shared_ptr<StepMachine> step_machine_;
+    std::shared_ptr<TaskManager> task_manager_;
+    std::shared_ptr<Printer> printer_;
 };

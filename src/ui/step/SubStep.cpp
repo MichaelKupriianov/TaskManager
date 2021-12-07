@@ -3,21 +3,30 @@
 #include"SubFactory.h"
 #include"Task.h"
 
-std::unique_ptr<SubStep> SubStepTitle::execute(SubContext &context, const Reader &reader) {
-    const std::string title(reader.ReadTitle());
+SubStepTitle::SubStepTitle(std::shared_ptr<Reader> &reader, Command command) :
+        reader_{reader}, command_{command} {}
+
+std::unique_ptr<SubStep> SubStepTitle::execute(SubContext &context, std::shared_ptr<SubFactory> &factory) {
+    const std::string title(reader_->ReadTitle(command_));
     context.set_task(Task::Arguments::Create(title));
-    return SubFactory::GetNextSubStep(*this);
+    return factory->GetNextSubStep(*this);
 }
 
-std::unique_ptr<SubStep> SubStepPriority::execute(SubContext &context, const Reader &reader) {
-    Task::Priority priority(reader.ReadPriority());
+SubStepPriority::SubStepPriority(std::shared_ptr<Reader> &reader, Command command) :
+        reader_{reader}, command_{command} {}
+
+std::unique_ptr<SubStep> SubStepPriority::execute(SubContext &context, std::shared_ptr<SubFactory> &factory) {
+    Task::Priority priority(reader_->ReadPriority(command_));
     context.set_task(Task::Arguments::Create(context.task_title(), priority));
-    return SubFactory::GetNextSubStep(*this);
+    return factory->GetNextSubStep(*this);
 }
 
-std::unique_ptr<SubStep> SubStepDate::execute(SubContext &context, const Reader &reader) {
-    const time_t date(reader.ReadDate());
+SubStepDate::SubStepDate(std::shared_ptr<Reader> &reader, Command command) :
+        reader_{reader}, command_{command} {}
+
+std::unique_ptr<SubStep> SubStepDate::execute(SubContext &context, std::shared_ptr<SubFactory> &factory) {
+    const time_t date(reader_->ReadDate(command_));
     context.set_task(Task::Arguments::Create(context.task_title(), context.task_priority(), date));
     context.finished();
-    return SubFactory::GetNextSubStep(*this);
+    return factory->GetNextSubStep(*this);
 }

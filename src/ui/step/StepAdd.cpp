@@ -1,16 +1,21 @@
 #include"StepAdd.h"
-#include"Factory.h"
-#include"Reader.h"
 #include"SubStepMachine.h"
+#include"SubContext.h"
+#include"Factory.h"
+#include"SubFactory.h"
 
-std::unique_ptr<Step> StepAdd::execute(Context &context) {
-    int parent_id{reader_.ReadParentId()};
-    SubStepMachine sub_machine;
-    SubContext sub_context = sub_machine.Run(reader_);
-    if (reader_.Confirm()) {
+StepAdd::StepAdd(std::shared_ptr<Reader> &reader) :
+        reader_{reader}, command_{Command::ADD} {}
+
+std::unique_ptr<Step> StepAdd::execute(Context &context, std::shared_ptr<Factory> &factory) {
+    int parent_id{reader_->ReadParentId(command_)};
+    std::shared_ptr<SubFactory> sub_factory(new SubFactory(reader_, command_));
+    SubStepMachine sub_machine{sub_factory};
+    SubContext sub_context = sub_machine.Run();
+    if (reader_->Confirm()) {
         context.set_command(Command::ADD);
         context.set_id(parent_id);
         context.set_task(sub_context.task());
     }
-    return Factory::GetRootStep();
+    return factory->GetRootStep();
 }

@@ -1,25 +1,44 @@
 #pragma once
 
+#include<memory>
 #include"SubContext.h"
+#include"Command.h"
 #include"Reader.h"
+
+class SubFactory;
 
 class SubStep {
 public:
-    virtual std::unique_ptr<SubStep> execute(SubContext &, const Reader &) = 0;
+    virtual std::unique_ptr<SubStep> execute(SubContext &, std::shared_ptr<SubFactory> &) = 0;
     virtual ~SubStep() = default;
 };
 
 class SubStepTitle : public SubStep {
 public:
-    std::unique_ptr<SubStep> execute(SubContext &, const Reader &) override;
+    SubStepTitle(std::shared_ptr<Reader> &, Command);
+
+    std::unique_ptr<SubStep> execute(SubContext &, std::shared_ptr<SubFactory> &) override;
+private:
+    std::shared_ptr<Reader> reader_;
+    Command command_;
 };
 
 class SubStepPriority : public SubStep {
 public:
-    std::unique_ptr<SubStep> execute(SubContext &, const Reader &) override;
+    SubStepPriority(std::shared_ptr<Reader> &, Command);
+
+    std::unique_ptr<SubStep> execute(SubContext &, std::shared_ptr<SubFactory> &) override;
+private:
+    std::shared_ptr<Reader> reader_;
+    Command command_;
 };
 
 class SubStepDate : public SubStep {
 public:
-    std::unique_ptr<SubStep> execute(SubContext &, const Reader &) override;
+    SubStepDate(std::shared_ptr<Reader> &, Command);
+
+    std::unique_ptr<SubStep> execute(SubContext &, std::shared_ptr<SubFactory> &) override;
+private:
+    std::shared_ptr<Reader> reader_;
+    Command command_;
 };

@@ -1,16 +1,13 @@
 #pragma once
 
 #include<memory>
-#include"SubStep.h"
 #include"SubFactory.h"
-#include"SubContext.h"
-#include"Reader.h"
 
 class SubStepMachine {
 public:
-    SubStepMachine() : state_(SubFactory::GetRootSubStep()) {}
+    explicit SubStepMachine(std::shared_ptr<SubFactory> &);
 
-    SubContext Run(const Reader &);
+    SubContext Run();
 private:
-    std::unique_ptr<SubStep> state_;
+    std::shared_ptr<SubFactory> factory_;
 };

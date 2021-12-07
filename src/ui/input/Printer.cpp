@@ -5,7 +5,7 @@
 
 void Printer::PrintSomeTasks(const ArrayOfIdWithTask &tasks, const std::string &introduction) {
     for (const auto &task: tasks) {
-        std::cout<<introduction;
+        std::cout << introduction;
         PrintTask(task);
         std::cout << '\n';
     }
@@ -26,7 +26,7 @@ void Printer::PrintAllTasks(
     }
 }
 
-void Printer::PrintException(std::string exception) {
+void Printer::PrintException(const std::string &exception) {
     std::cout << exception << '\n';
 }
 

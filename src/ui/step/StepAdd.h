@@ -2,13 +2,15 @@
 
 #include<memory>
 #include"Step.h"
-#include"TypeOfStep.h"
+#include"Command.h"
+#include"Reader.h"
 #include"Context.h"
 
 class StepAdd : public Step {
 public:
-    StepAdd() : reader_(TypeOfStep::ADD) {}
-    std::unique_ptr<Step> execute(Context &) override;
+    explicit StepAdd(std::shared_ptr<Reader> &);
+    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
 private:
-    Reader reader_;
+    std::shared_ptr<Reader> reader_;
+    Command command_;
 };

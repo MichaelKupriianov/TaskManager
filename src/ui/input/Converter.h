@@ -5,6 +5,7 @@
 #include<optional>
 #include"Task.h"
 #include"TypeOfStep.h"
+#include"Command.h"
 
 class Converter {
 public:
@@ -14,6 +15,6 @@ public:
     static std::optional<int> StringToId(const std::string &);
     static std::string PriorityToString(Task::Priority);
     static std::string DateToString(time_t date);
-    static std::string StepTypeToString(TypeOfStep step);
+    static std::string CommandToString(Command command);
 };
 
