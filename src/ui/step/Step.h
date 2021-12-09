@@ -2,74 +2,52 @@
 
 #include<memory>
 #include"Context.h"
-#include"Reader.h"
-#include"Command.h"
+#include"TypeOfCommand.h"
 
-class Factory;
+class Dependency;
 
 class Step {
 public:
-    virtual std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) = 0;
+    virtual std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) = 0;
+
     virtual ~Step() = default;
 };
 
-class StepRoot final : public Step {
+class StepRoot : public Step {
 public:
-    explicit StepRoot(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
-private:
-    std::shared_ptr<Reader> reader_;
+    std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 };
 
 class StepQuit : public Step {
 public:
-    explicit StepQuit(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
-private:
-    std::shared_ptr<Reader> reader_;
-    Command command_;
+    std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 };
 
 class StepHelp : public Step {
 public:
-    explicit StepHelp(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
-private:
-    std::shared_ptr<Reader> reader_;
+    std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 };
 
 class StepComplete : public Step {
 public:
-    explicit StepComplete(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
+    StepComplete();
+    std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 private:
-    std::shared_ptr<Reader> reader_;
-    Command command_;
+    const TypeOfCommand command_;
 };
 
 class StepDelete : public Step {
 public:
-    explicit StepDelete(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
+    StepDelete();
+    std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 private:
-    std::shared_ptr<Reader> reader_;
-    Command command_;
-};
-
-class StepLabel : public Step {
-public:
-    explicit StepLabel(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
-private:
-    std::shared_ptr<Reader> reader_;
-    Command command_;
+    const TypeOfCommand command_;
 };
 
 class StepShow : public Step {
 public:
-    explicit StepShow(std::shared_ptr<Reader> &);
-    std::unique_ptr<Step> execute(Context &, std::shared_ptr<Factory> &) override;
+    StepShow();
+    std::unique_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 private:
-    std::shared_ptr<Reader> reader_;
-    Command command_;
+    const TypeOfCommand command_;
 };

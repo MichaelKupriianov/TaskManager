@@ -1,13 +1,14 @@
 #pragma once
 
 #include<memory>
-#include"Factory.h"
+#include"Dependency.h"
+#include"Command.h"
 
 class StepMachine {
 public:
-    explicit StepMachine(std::shared_ptr<Factory> &);
+    explicit StepMachine(const std::shared_ptr<Dependency> &);
 
-    Context Run();
+    std::shared_ptr<Command> GetCommand();
 private:
-    std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<Dependency> dependency_;
 };

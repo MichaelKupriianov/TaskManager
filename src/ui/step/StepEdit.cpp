@@ -1,21 +1,20 @@
 #include"StepEdit.h"
+#include"Dependency.h"
 #include"SubStepMachine.h"
-#include"SubContext.h"
 #include"SubFactory.h"
-#include"Factory.h"
+#include"Task.h"
 
-StepEdit::StepEdit(std::shared_ptr<Reader> &reader) :
-        reader_{reader}, command_{Command::EDIT} {}
+StepEdit::StepEdit() : command_{TypeOfCommand::EDIT} {}
 
-std::unique_ptr<Step> StepEdit::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    int id{reader_->ReadId(command_)};
-    std::shared_ptr<SubFactory> sub_factory(new SubFactory(reader_, command_));
-    SubStepMachine sub_machine{sub_factory};
-    SubContext sub_context = sub_machine.Run();
-    if (reader_->Confirm()) {
-        context.set_command(Command::EDIT);
-        context.set_id(id);
-        context.set_task(sub_context.task());
+std::unique_ptr<Step> StepEdit::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    TaskId id{dependency->view()->ReadId(command_)};
+    std::shared_ptr<SubFactory> sub_factory{new SubFactory};
+    std::shared_ptr<SubDependency> sub_dependency{new SubDependency{sub_factory, dependency->view(), command_}};
+    SubStepMachine sub_machine{sub_dependency};
+    Task task = sub_machine.GetTask();
+    if (dependency->view()->Confirm()) {
+        context.set_command(std::shared_ptr<Command>(new CommandEdit{
+                id, task, dependency->view()}));
     }
-    return factory->GetRootStep();
+    return dependency->factory()->GetRootStep();
 }

@@ -1,13 +1,14 @@
 #pragma once
 
 #include<memory>
-#include"SubFactory.h"
+#include"SubDependency.h"
+#include"Task.h"
 
 class SubStepMachine {
 public:
-    explicit SubStepMachine(std::shared_ptr<SubFactory> &);
+    explicit SubStepMachine(const std::shared_ptr<SubDependency> &);
 
-    SubContext Run();
+    Task GetTask();
 private:
-    std::shared_ptr<SubFactory> factory_;
+    const std::shared_ptr<SubDependency> dependency_;
 };

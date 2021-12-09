@@ -1,16 +1,15 @@
 #include"StepMachine.h"
-#include"Command.h"
-#include"Context.h"
 #include"Step.h"
+#include"Context.h"
 
-StepMachine::StepMachine(std::shared_ptr<Factory> &factory) :
-        factory_{factory} {}
+StepMachine::StepMachine(const std::shared_ptr<Dependency> &dependency) :
+        dependency_{dependency} {}
 
-Context StepMachine::Run() {
-    std::unique_ptr<Step> step_{factory_->GetRootStep()};
+std::shared_ptr<Command> StepMachine::GetCommand() {
+    std::unique_ptr<Step> step_{dependency_->factory()->GetRootStep()};
     Context context;
-    while (context.command() == Command::NONE) {
-        step_ = std::move(step_->execute(context, factory_));
+    while (!context.command()) {
+        step_ = std::move(step_->execute(context, dependency_));
     }
-    return context;
+    return context.command();
 }

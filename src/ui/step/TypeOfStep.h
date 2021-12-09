@@ -8,6 +8,5 @@ enum class TypeOfStep {
     EDIT,
     COMPLETE,
     DELETE,
-    LABEL,
     SHOW
 };

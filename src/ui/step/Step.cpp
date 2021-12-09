@@ -1,74 +1,45 @@
 #include"Step.h"
-#include<string>
-#include"Factory.h"
+#include"Dependency.h"
 
-StepRoot::StepRoot(std::shared_ptr<Reader> &reader) :
-        reader_{reader} {}
-
-std::unique_ptr<Step> StepRoot::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    TypeOfStep command(reader_->ReadCommand());
-    return factory->CreateStep(command);
+std::unique_ptr<Step> StepRoot::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    TypeOfStep command(dependency->view()->ReadCommand());
+    return dependency->factory()->CreateStep(command);
 }
 
-StepQuit::StepQuit(std::shared_ptr<Reader> &reader) :
-        reader_{reader}, command_{Command::QUIT} {}
-
-std::unique_ptr<Step> StepQuit::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    reader_->Quit();
-    context.set_command(command_);
-    return factory->GetRootStep();
+std::unique_ptr<Step> StepQuit::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    dependency->view()->Quit();
+    context.set_command(std::shared_ptr<Command>{new CommandQuit});
+    return dependency->factory()->GetRootStep();
 }
 
-StepHelp::StepHelp(std::shared_ptr<Reader> &reader) :
-        reader_{reader} {}
-
-std::unique_ptr<Step> StepHelp::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    reader_->Help();
-    return factory->GetRootStep();
+std::unique_ptr<Step> StepHelp::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    dependency->view()->Help();
+    return dependency->factory()->GetRootStep();
 }
 
-StepComplete::StepComplete(std::shared_ptr<Reader> &reader) :
-        reader_{reader}, command_{Command::COMPLETE} {}
+StepComplete::StepComplete() : command_{TypeOfCommand::COMPLETE} {}
 
-std::unique_ptr<Step> StepComplete::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    int id{reader_->ReadId(command_)};
-    if (reader_->Confirm()) {
-        context.set_command(command_);
-        context.set_id(id);
+std::unique_ptr<Step> StepComplete::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    TaskId id{dependency->view()->ReadId(command_)};
+    if (dependency->view()->Confirm()) {
+        context.set_command(std::shared_ptr<Command>{new CommandComplete{id, dependency->view()}});
     }
-    return factory->GetRootStep();
+    return dependency->factory()->GetRootStep();
 }
 
-StepDelete::StepDelete(std::shared_ptr<Reader> &reader) :
-        reader_{reader}, command_{Command::DELETE} {}
+StepDelete::StepDelete() : command_{TypeOfCommand::DELETE} {}
 
-std::unique_ptr<Step> StepDelete::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    int id{reader_->ReadId(command_)};
-    if (reader_->Confirm()) {
-        context.set_command(command_);
-        context.set_id(id);
+std::unique_ptr<Step> StepDelete::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    TaskId id{dependency->view()->ReadId(command_)};
+    if (dependency->view()->Confirm()) {
+        context.set_command(std::shared_ptr<Command>(new CommandDelete{id, dependency->view()}));
     }
-    return factory->GetRootStep();
+    return dependency->factory()->GetRootStep();
 }
 
-StepLabel::StepLabel(std::shared_ptr<Reader> &reader) :
-        reader_{reader}, command_{Command::LABEL} {}
+StepShow::StepShow() : command_{TypeOfCommand::SHOW} {}
 
-std::unique_ptr<Step> StepLabel::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    int id{reader_->ReadId(command_)};
-    std::string label{reader_->ReadLabel(command_)};
-    if (reader_->Confirm()) {
-        context.set_command(command_);
-        context.set_id(id);
-        context.set_label(label);
-    }
-    return factory->GetRootStep();
-}
-
-StepShow::StepShow(std::shared_ptr<Reader> &reader) :
-        reader_{reader}, command_{Command::SHOW} {}
-
-std::unique_ptr<Step> StepShow::execute(Context &context, std::shared_ptr<Factory> &factory) {
-    context.set_command(command_);
-    return factory->GetRootStep();
+std::unique_ptr<Step> StepShow::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+    context.set_command(std::shared_ptr<Command>(new CommandShow{dependency->view()}));
+    return dependency->factory()->GetRootStep();
 }

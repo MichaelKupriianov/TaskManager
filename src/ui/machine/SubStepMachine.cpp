@@ -1,15 +1,15 @@
-#include "SubStepMachine.h"
+#include"SubStepMachine.h"
 #include"SubContext.h"
 #include"SubStep.h"
 
-SubStepMachine::SubStepMachine(std::shared_ptr<SubFactory> &factory) :
-        factory_{factory} {}
+SubStepMachine::SubStepMachine(const std::shared_ptr<SubDependency> &dependency) :
+        dependency_{dependency} {}
 
-SubContext SubStepMachine::Run() {
+Task SubStepMachine::GetTask() {
     SubContext sub_context;
-    std::unique_ptr<SubStep> step{factory_->GetRootSubStep()};
+    std::unique_ptr<SubStep> step{dependency_->factory()->GetRootSubStep()};
     while (!sub_context.if_finished()) {
-        step = std::move(step->execute(sub_context, factory_));
+        step = std::move(step->execute(sub_context, dependency_));
     }
-    return sub_context;
+    return sub_context.task();
 }

@@ -8,10 +8,11 @@ include_directories(src/model/id)
 include_directories(src/ui/)
 include_directories(src/ui/context/)
 include_directories(src/ui/controller/)
+include_directories(src/ui/dependency/)
 include_directories(src/ui/factory/)
-include_directories(src/ui/input/)
 include_directories(src/ui/machine/)
 include_directories(src/ui/step/)
+include_directories(src/ui/view/)
 
 file(GLOB_RECURSE TaskManager_src CONFIGURE_DEPENDS
         "src/*.h"

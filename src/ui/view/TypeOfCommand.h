@@ -1,13 +1,10 @@
 #pragma once
 
-enum class Command {
+enum class TypeOfCommand {
     ADD,
     EDIT,
     COMPLETE,
     DELETE,
-    LABEL,
     SHOW,
-    QUIT,
-    NONE
 };
 
