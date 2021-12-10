@@ -80,3 +80,13 @@ std::string Converter::CommandToString(TypeOfCommand command) {
             return "";
     }
 }
+
+std::string Converter::IdWithTaskToString(const std::pair<TaskId, Task> &task) {
+    std::string result = "";
+    result += "id: " + std::to_string(task.first.value());
+    result += ", title: " + task.second.title();
+    result += ", priority: " + Converter::PriorityToString(task.second.priority());
+    result += ", date: " + Converter::DateToString(task.second.date());
+    if (!task.second.label().empty()) result += ", label: " + task.second.label();
+    return result;
+}

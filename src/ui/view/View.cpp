@@ -93,9 +93,11 @@ bool View::Confirm() {
 
 void View::PrintSomeTasks(const ArrayOfIdWithTask &tasks, const std::string &introduction) {
     for (const auto &task: tasks) {
-        printer_->PrintString(introduction);
-        PrintTask(task);
-        printer_->PrintString("\n");
+        std::string result;
+        result+=introduction;
+        result+=Converter::IdWithTaskToString(task);
+        result+="\n";
+        printer_->PrintString(result);
     }
 }
 
@@ -106,7 +108,7 @@ void View::PrintAllTasks(
         return;
     }
     for (const auto &[task, children]: tasks) {
-        PrintTask(task);
+        printer_->PrintString(Converter::IdWithTaskToString(task));
         if (!children.empty()) {
             printer_->PrintString("  :\n");
             PrintSomeTasks(children, "   ");
@@ -116,12 +118,4 @@ void View::PrintAllTasks(
 
 void View::PrintException(const std::string &exception) {
     printer_->PrintString(exception + '\n');
-}
-
-void View::PrintTask(const std::pair<TaskId, Task> &task) {
-    printer_->PrintString("id: " + std::to_string(task.first.value()));
-    printer_->PrintString(", title: " + task.second.title());
-    printer_->PrintString(", priority: " + Converter::PriorityToString(task.second.priority()));
-    printer_->PrintString(", date: " + Converter::DateToString(task.second.date()));
-    if (!task.second.label().empty()) printer_->PrintString(", label: " + task.second.label());
 }

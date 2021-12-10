@@ -4,6 +4,7 @@
 #include<string>
 #include<optional>
 #include"Task.h"
+#include"TaskId.h"
 #include"TypeOfStep.h"
 #include"TypeOfCommand.h"
 
@@ -16,5 +17,6 @@ public:
     static std::string PriorityToString(Task::Priority);
     static std::string DateToString(time_t date);
     static std::string CommandToString(TypeOfCommand command);
+    static std::string IdWithTaskToString(const std::pair<TaskId, Task> &task);
 };
 

@@ -35,8 +35,6 @@ public:
             const std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> &);
     virtual void PrintException(const std::string &exception);
 private:
-    void PrintTask(const std::pair<TaskId, Task> &);
-private:
     const std::shared_ptr<Reader> reader_;
     const std::shared_ptr<Printer> printer_;
 };
