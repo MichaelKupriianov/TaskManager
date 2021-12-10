@@ -24,6 +24,7 @@ std::optional<TypeOfStep> Converter::StringToStepType(const std::string &command
     if (command == "quit") return TypeOfStep::QUIT;
     if (command == "help") return TypeOfStep::HELP;
     if (command == "add") return TypeOfStep::ADD;
+    if (command == "add subtask") return TypeOfStep::ADDSUB;
     if (command == "edit") return TypeOfStep::EDIT;
     if (command == "complete") return TypeOfStep::COMPLETE;
     if (command == "delete") return TypeOfStep::DELETE;
@@ -66,13 +67,15 @@ std::string Converter::DateToString(time_t date) {
 std::string Converter::CommandToString(TypeOfCommand command) {
     switch (command) {
         case TypeOfCommand::ADD:
-            return "Add";
+            return "[Add Task]";
+        case TypeOfCommand::ADDSUB:
+            return "[Add SubTask]";
         case TypeOfCommand::EDIT:
-            return "Edit";
+            return "[Edit Task]";
         case TypeOfCommand::COMPLETE:
-            return "Complete";
+            return "[Complete Task]";
         case TypeOfCommand::DELETE:
-            return "Delete";
+            return "[Delete Task]";
         default:
             return "";
     }

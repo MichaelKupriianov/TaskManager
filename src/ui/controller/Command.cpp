@@ -1,10 +1,19 @@
 #include "Command.h"
 
-CommandAdd::CommandAdd(const Task &task, TaskId parent_id, const std::shared_ptr<View> &view)
-        : task_{task}, parent_id_{parent_id}, view_{view} {}
+CommandAdd::CommandAdd(const Task &task, const std::shared_ptr<View> &view)
+        : task_{task}, view_{view} {}
 
 bool CommandAdd::execute(const std::shared_ptr<TaskManager> &manager) {
-    if (!manager->Add(task_, parent_id_))
+    if (!manager->AddTask(task_))
+        view_->PrintException("Incorrect parent ID (for example, subtask cannot have child)");
+    return true;
+}
+
+CommandAddSub::CommandAddSub(const Task &task, TaskId parent, const std::shared_ptr<View> &view)
+        : task_{task}, parent_id_(parent), view_{view} {}
+
+bool CommandAddSub::execute(const std::shared_ptr<TaskManager> &manager) {
+    if (!manager->AddSubtask(task_, parent_id_))
         view_->PrintException("Incorrect parent ID (for example, subtask cannot have child)");
     return true;
 }

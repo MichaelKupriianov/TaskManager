@@ -15,7 +15,16 @@ public:
 
 class CommandAdd : public Command {
 public:
-    explicit CommandAdd(const Task &, TaskId, const std::shared_ptr<View> &);
+    explicit CommandAdd(const Task &, const std::shared_ptr<View> &);
+    bool execute(const std::shared_ptr<TaskManager> &) override;
+private:
+    const Task task_;
+    const std::shared_ptr<View> view_;
+};
+
+class CommandAddSub : public Command {
+public:
+    explicit CommandAddSub(const Task &, TaskId, const std::shared_ptr<View> &);
     bool execute(const std::shared_ptr<TaskManager> &) override;
 private:
     const Task task_;

@@ -5,7 +5,6 @@
 class TaskId {
 public:
     static std::optional<TaskId> Create(int);
-    static TaskId NotExistentId() { return TaskId(-1); }
 
     unsigned int value() const { return value_; }
 public:

@@ -2,6 +2,7 @@
 
 enum class TypeOfCommand {
     ADD,
+    ADDSUB,
     EDIT,
     COMPLETE,
     DELETE,

@@ -1,5 +1,6 @@
 #include"Factory.h"
 #include"StepAdd.h"
+#include"StepAddSub.h"
 #include"StepEdit.h"
 
 std::unique_ptr<Step> Factory::CreateStep(TypeOfStep step) {
@@ -12,6 +13,8 @@ std::unique_ptr<Step> Factory::CreateStep(TypeOfStep step) {
             return std::unique_ptr<Step>{new StepHelp};
         case TypeOfStep::ADD:
             return std::unique_ptr<Step>{new StepAdd};
+        case TypeOfStep::ADDSUB:
+            return std::unique_ptr<Step>{new StepAddSub};
         case TypeOfStep::EDIT:
             return std::unique_ptr<Step>{new StepEdit};
         case TypeOfStep::COMPLETE:

@@ -4,6 +4,7 @@
 #include<utility>
 #include<memory>
 #include<vector>
+#include<optional>
 #include"Task.h"
 #include"GeneralizedTask.h"
 #include"IdGenerator.h"
@@ -20,7 +21,8 @@ public:
     TaskManager() : generator_(new IdGenerator) {}
     explicit TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
 
-    bool Add(const Task &, TaskId = TaskId::NotExistentId());
+    bool AddTask(const Task &);
+    bool AddSubtask(const Task &, TaskId);
     bool Edit(TaskId, const Task &);
     bool Complete(TaskId);
     bool Delete(TaskId);
@@ -29,7 +31,7 @@ public:
     using IdWithTask = std::pair<TaskId, Task>;
     using ArrayOfIdWithTask = std::vector<IdWithTask>;
 public:
-    ArrayOfIdWithTask ShowChild(TaskId = TaskId::NotExistentId(),
+    ArrayOfIdWithTask ShowChild(std::optional<TaskId> = std::nullopt,
                                 Sort = Sort::ID) const;
     std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> ShowAll(
             Sort = Sort::ID) const;

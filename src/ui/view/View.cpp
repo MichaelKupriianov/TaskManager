@@ -8,6 +8,7 @@ View::View(const std::shared_ptr<Reader> &reader, const std::shared_ptr<Printer>
 void View::Help() {
     printer_->PrintString("You can use such command:\n");
     printer_->PrintString("add - Add new task\n");
+    printer_->PrintString("add subtask - Add new subtask\n");
     printer_->PrintString("edit - Edit existent task\n");
     printer_->PrintString("complete - Complete existent task\n");
     printer_->PrintString("delete - Delete existent task\n");
@@ -30,7 +31,7 @@ TypeOfStep View::ReadCommand() {
 }
 
 TaskId View::ReadId(TypeOfCommand command) {
-    printer_->PrintString("[" + Converter::CommandToString(command) + " Task] ID: ");
+    printer_->PrintString(Converter::CommandToString(command) + " ID: ");
     std::string id{reader_->ReadString()};
     if (std::optional<int> result{Converter::StringToId(id)}; result.has_value())
         return TaskId::Create(result.value()).value();
@@ -39,11 +40,8 @@ TaskId View::ReadId(TypeOfCommand command) {
 }
 
 TaskId View::ReadParentId(TypeOfCommand command) {
-    printer_->PrintString("[" + Converter::CommandToString(command) +
-                          " Task] Parent ID (leave empty if task has no parent): ");
+    printer_->PrintString(Converter::CommandToString(command) + " Parent ID: ");
     std::string id{reader_->ReadString()};
-    if (id.empty())
-        return TaskId::NotExistentId();
     if (std::optional<int> result{Converter::StringToId(id)}; result.has_value())
         return TaskId::Create(result.value()).value();
     printer_->PrintString("Enter the ID in the correct format\n");
@@ -51,7 +49,7 @@ TaskId View::ReadParentId(TypeOfCommand command) {
 }
 
 std::string View::ReadTitle(TypeOfCommand command) {
-    printer_->PrintString("[" + Converter::CommandToString(command) + " Task] title: ");
+    printer_->PrintString(Converter::CommandToString(command) + " title: ");
     std::string title{reader_->ReadString()};
     if (!title.empty()) return title;
     printer_->PrintString("Title should be non-empty\n");
@@ -59,8 +57,7 @@ std::string View::ReadTitle(TypeOfCommand command) {
 }
 
 Task::Priority View::ReadPriority(TypeOfCommand command) {
-    printer_->PrintString("[" + Converter::CommandToString(command) +
-                          " Task] priority (high, medium, lou or none): ");
+    printer_->PrintString(Converter::CommandToString(command) + " priority (high, medium, lou or none): ");
     std::string priority{reader_->ReadString()};
     if (std::optional<Task::Priority> result{Converter::StringToPriority(priority)}; result.has_value())
         return result.value();
@@ -69,8 +66,8 @@ Task::Priority View::ReadPriority(TypeOfCommand command) {
 }
 
 time_t View::ReadDate(TypeOfCommand command) {
-    printer_->PrintString("[" + Converter::CommandToString(command) +
-                          " Task] due date (in 12:12 12/12 or 12/12 format): ");
+    printer_->PrintString(Converter::CommandToString(command) +
+                          " due date (in 12:12 12/12 or 12/12 format): ");
     std::string date{reader_->ReadString()};
     if (std::optional<time_t> result{Converter::StringToDate(date)}; result.has_value())
         return result.value();
@@ -79,7 +76,7 @@ time_t View::ReadDate(TypeOfCommand command) {
 }
 
 std::string View::ReadLabel(TypeOfCommand command) {
-    printer_->PrintString("[" + Converter::CommandToString(command) + " Task] label: ");
+    printer_->PrintString(Converter::CommandToString(command) + " label: ");
     std::string label{reader_->ReadString()};
     if (!label.empty()) return label;
     printer_->PrintString("Label should be non-empty\n");

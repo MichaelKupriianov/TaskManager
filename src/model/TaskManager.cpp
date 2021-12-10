@@ -1,24 +1,24 @@
 #include"TaskManager.h"
 #include<algorithm>
 
-bool TaskManager::Add(const Task &task, TaskId parent) {
-    if (parent == TaskId::NotExistentId()) {
-        TaskId id{generator_->GenerateId()};
-        tasks_.insert({id, GeneralizedTask::Create(task, parent)});
-        return true;
-    }
-    else {
-        if (tasks_.count(parent) == 0) return false;
-        if (tasks_.at(parent).parent().value() != TaskId::NotExistentId().value()) return false;
-        TaskId id(generator_->GenerateId());
-        tasks_.insert({id, GeneralizedTask::Create(task, parent)});
-        return true;
-    }
+bool TaskManager::AddTask(const Task &task) {
+    TaskId id{generator_->GenerateId()};
+    if (tasks_.count(id)) return false;
+    tasks_.insert({id, GeneralizedTask::Create(task, std::nullopt)});
+    return true;
+}
+
+bool TaskManager::AddSubtask(const Task &task, TaskId parent) {
+    if (tasks_.count(parent) == 0) return false;
+    if (tasks_.at(parent).parent()) return false;
+    TaskId id{generator_->GenerateId()};
+    tasks_.insert({id, GeneralizedTask::Create(task, parent)});
+    return true;
 }
 
 bool TaskManager::Edit(TaskId id, const Task &task) {
     if (tasks_.count(id) == 0) return false;
-    const TaskId parent = tasks_.at(id).parent();
+    const std::optional<TaskId> parent{tasks_.at(id).parent()};
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(task, parent)});
     return true;
@@ -30,7 +30,7 @@ bool TaskManager::Complete(TaskId id) {
     Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
                                                               task.date(), task.label(),
                                                               Task::Condition::COMPLETED)).value();
-    TaskId parent = tasks_.at(id).parent();
+    const std::optional<TaskId> parent{tasks_.at(id).parent()};
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
     return true;
@@ -47,13 +47,13 @@ bool TaskManager::Label(TaskId id, const std::string &label) {
     Task task = tasks_.at(id).task();
     Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
                                                               task.date(), label, task.condition())).value();
-    TaskId parent = tasks_.at(id).parent();
+    std::optional<TaskId> parent{tasks_.at(id).parent()};
     tasks_.erase(id);
     tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
     return true;
 }
 
-TaskManager::ArrayOfIdWithTask TaskManager::ShowChild(TaskId parent, Sort sort) const {
+TaskManager::ArrayOfIdWithTask TaskManager::ShowChild(std::optional<TaskId> parent, Sort sort) const {
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
         if (task.parent() == parent && task.task().condition() == Task::Condition::NONE)
@@ -70,7 +70,7 @@ TaskManager::ArrayOfIdWithTask TaskManager::ShowChild(TaskId parent, Sort sort) 
 std::vector<std::pair<TaskManager::IdWithTask, TaskManager::ArrayOfIdWithTask>> TaskManager::ShowAll(
         Sort sort) const {
     std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> result;
-    ArrayOfIdWithTask parents = ShowChild(TaskId::NotExistentId(), sort);
+    ArrayOfIdWithTask parents = ShowChild(std::nullopt, sort);
     for (const auto &parent: parents) {
         result.emplace_back(parent, ShowChild(parent.first, sort));
     }

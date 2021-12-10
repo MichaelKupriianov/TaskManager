@@ -5,6 +5,7 @@ enum class TypeOfStep {
     HELP,
     QUIT,
     ADD,
+    ADDSUB,
     EDIT,
     COMPLETE,
     DELETE,
