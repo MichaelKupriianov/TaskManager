@@ -22,6 +22,7 @@ file(GLOB_RECURSE ui_tests_src CONFIGURE_DEPENDS
         "../src/ui/*.h"
         "../src/ui/*cpp"
         "ui/*.cpp"
+        "ui/*.h"
         )
 
 add_executable(ui_tests ${ui_tests_src})
@@ -42,3 +43,7 @@ add_executable(integration_tests ${integration_tests_src} MainTest.cpp)
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
 
 gtest_discover_tests(integration_tests)
+
+include_directories(ui/controller/)
+include_directories(ui/factory/)
+include_directories(ui/view/)

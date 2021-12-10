@@ -6,7 +6,7 @@
 
 StepAddSub::StepAddSub() : command_{TypeOfCommand::ADDSUB} {}
 
-std::unique_ptr<Step> StepAddSub::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+std::shared_ptr<Step> StepAddSub::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
     TaskId parent_id{dependency->view()->ReadParentId(command_)};
     std::shared_ptr<SubFactory> sub_factory{new SubFactory};
     std::shared_ptr<SubDependency> sub_dependency{new SubDependency{sub_factory, dependency->view(), command_}};

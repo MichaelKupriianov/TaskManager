@@ -20,20 +20,21 @@ public:
 public:
     TaskManager() : generator_(new IdGenerator) {}
     explicit TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
+    ~TaskManager() = default;
 
-    bool AddTask(const Task &);
-    bool AddSubtask(const Task &, TaskId);
-    bool Edit(TaskId, const Task &);
-    bool Complete(TaskId);
-    bool Delete(TaskId);
-    bool Label(TaskId, const std::string &);
+    virtual bool AddTask(const Task &);
+    virtual bool AddSubtask(const Task &, TaskId);
+    virtual bool Edit(TaskId, const Task &);
+    virtual bool Complete(TaskId);
+    virtual bool Delete(TaskId);
+    virtual bool Label(TaskId, const std::string &);
 public:
     using IdWithTask = std::pair<TaskId, Task>;
     using ArrayOfIdWithTask = std::vector<IdWithTask>;
 public:
-    ArrayOfIdWithTask ShowChild(std::optional<TaskId> = std::nullopt,
+    virtual ArrayOfIdWithTask ShowChild(std::optional<TaskId> = std::nullopt,
                                 Sort = Sort::ID) const;
-    std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> ShowAll(
+    virtual std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> ShowAll(
             Sort = Sort::ID) const;
 private:
     static bool ComparatorPriority(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);

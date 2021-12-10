@@ -6,7 +6,7 @@
 
 StepEdit::StepEdit() : command_{TypeOfCommand::EDIT} {}
 
-std::unique_ptr<Step> StepEdit::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
+std::shared_ptr<Step> StepEdit::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
     TaskId id{dependency->view()->ReadId(command_)};
     std::shared_ptr<SubFactory> sub_factory{new SubFactory};
     std::shared_ptr<SubDependency> sub_dependency{new SubDependency{sub_factory, dependency->view(), command_}};

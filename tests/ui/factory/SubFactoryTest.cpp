@@ -5,24 +5,28 @@ class SubFactoryTest : public ::testing::Test {
 };
 
 TEST_F(SubFactoryTest, shouldReturnRootStep) {
+    SubFactory factory;
     EXPECT_TRUE(std::dynamic_pointer_cast<SubStepTitle>(std::shared_ptr(
-            SubFactory::GetRootSubStep())));
+            factory.GetRootSubStep())));
 }
 
 TEST_F(SubFactoryTest, shouldReturnNextStepAfterTitle) {
+    SubFactory factory;
     SubStepTitle step;
     EXPECT_TRUE(std::dynamic_pointer_cast<SubStepPriority>(std::shared_ptr(
-            SubFactory::GetNextSubStep(step))));
+            factory.GetNextSubStep(step))));
 }
 
 TEST_F(SubFactoryTest, shouldReturnNextStepAfterPriprity) {
+    SubFactory factory;
     SubStepPriority step;
     EXPECT_TRUE(std::dynamic_pointer_cast<SubStepDate>(std::shared_ptr(
-            SubFactory::GetNextSubStep(step))));
+            factory.GetNextSubStep(step))));
 }
 
 TEST_F(SubFactoryTest, shouldReturnNextStepAfterTime) {
+    SubFactory factory;
     SubStepDate step;
     EXPECT_TRUE(std::dynamic_pointer_cast<SubStepDate>(std::shared_ptr(
-            SubFactory::GetNextSubStep(step))));
+            factory.GetNextSubStep(step))));
 }
