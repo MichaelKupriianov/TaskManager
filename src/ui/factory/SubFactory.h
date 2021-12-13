@@ -9,4 +9,5 @@ public:
     std::unique_ptr<SubStep> GetNextSubStep(const SubStepTitle &);
     std::unique_ptr<SubStep> GetNextSubStep(const SubStepPriority &);
     std::unique_ptr<SubStep> GetNextSubStep(const SubStepDate &);
+    std::unique_ptr<SubStep> GetNextSubStep(const SubStepLabel &);
 };

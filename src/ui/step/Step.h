@@ -43,11 +43,3 @@ public:
 private:
     const TypeOfCommand command_;
 };
-
-class StepShow : public Step {
-public:
-    StepShow();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
-private:
-    const TypeOfCommand command_;
-};

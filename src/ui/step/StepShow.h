@@ -2,20 +2,28 @@
 
 #include<memory>
 #include"Step.h"
-#include"TypeOfCommand.h"
 #include"Context.h"
+#include"TypeOfCommand.h"
 
-class StepAdd : public Step {
+class StepShow : public Step {
 public:
-    StepAdd();
+    StepShow();
     std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 private:
     const TypeOfCommand command_;
 };
 
-class StepAddSub : public Step {
+class StepShowTask : public Step {
 public:
-    StepAddSub();
+    StepShowTask();
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
+private:
+    const TypeOfCommand command_;
+};
+
+class StepShowLabel : public Step {
+public:
+    StepShowLabel();
     std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
 private:
     const TypeOfCommand command_;

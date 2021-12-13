@@ -9,5 +9,7 @@ enum class TypeOfStep {
     EDIT,
     COMPLETE,
     DELETE,
-    SHOW
+    SHOW,
+    SHOWTASK,
+    SHOWLABEL
 };

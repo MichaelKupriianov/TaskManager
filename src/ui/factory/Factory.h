@@ -3,8 +3,8 @@
 #include<memory>
 #include"Step.h"
 #include"StepAdd.h"
-#include"StepAddSub.h"
 #include"StepEdit.h"
+#include"StepShow.h"
 #include"TypeOfStep.h"
 
 class Factory {

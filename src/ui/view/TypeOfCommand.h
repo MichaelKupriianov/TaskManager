@@ -7,5 +7,7 @@ enum class TypeOfCommand {
     COMPLETE,
     DELETE,
     SHOW,
+    SHOWTASK,
+    SHOWLABEL
 };
 

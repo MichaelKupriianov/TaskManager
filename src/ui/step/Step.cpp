@@ -36,10 +36,3 @@ std::shared_ptr<Step> StepDelete::execute(Context &context, const std::shared_pt
     }
     return dependency->factory()->GetRootStep();
 }
-
-StepShow::StepShow() : command_{TypeOfCommand::SHOW} {}
-
-std::shared_ptr<Step> StepShow::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
-    context.set_command(std::shared_ptr<Command>(new CommandShow{dependency->view()}));
-    return dependency->factory()->GetRootStep();
-}

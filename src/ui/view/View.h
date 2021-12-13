@@ -4,12 +4,15 @@
 #include<ctime>
 #include<memory>
 #include<vector>
+#include<optional>
 #include"Task.h"
 #include"TaskId.h"
 #include"TypeOfStep.h"
 #include"TypeOfCommand.h"
+#include"SortBy.h"
 #include"Reader.h"
 #include"Printer.h"
+#include"Converter.h"
 
 class View {
 public:
@@ -26,13 +29,17 @@ public:
     virtual time_t ReadDate(TypeOfCommand);
     virtual std::string ReadLabel(TypeOfCommand);
     virtual bool Confirm();
+    virtual bool ReadIfPrintSubtasks(TypeOfCommand);
+    virtual SortBy ReadSortBy(TypeOfCommand);
 public:
     using IdWithTask = std::pair<TaskId, Task>;
-    using ArrayOfIdWithTask = std::vector<IdWithTask>;
+    using ArrayTasks = std::vector<IdWithTask>;
+    using TaskWithSubtasks = std::pair<IdWithTask, ArrayTasks>;
 public:
-    virtual void PrintSomeTasks(const ArrayOfIdWithTask &, const std::string &);
+    virtual void PrintArrayOfTasks(const ArrayTasks &);
+    virtual void PrintTaskWithSubtasks(const TaskWithSubtasks &);
     virtual void PrintAllTasks(
-            const std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> &);
+            const std::vector<TaskWithSubtasks> &);
     virtual void PrintException(const std::string &exception);
 private:
     const std::shared_ptr<Reader> reader_;

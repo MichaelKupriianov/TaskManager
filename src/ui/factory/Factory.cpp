@@ -20,6 +20,10 @@ std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
             return std::shared_ptr<Step>{new StepDelete};
         case TypeOfStep::SHOW:
             return std::shared_ptr<Step>{new StepShow};
+        case TypeOfStep::SHOWTASK:
+            return std::shared_ptr<Step>{new StepShowTask};
+        case TypeOfStep::SHOWLABEL:
+            return std::shared_ptr<Step>{new StepShowLabel};
         default:
             return nullptr;
     }

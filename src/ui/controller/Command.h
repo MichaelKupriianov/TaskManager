@@ -4,6 +4,7 @@
 #include"Task.h"
 #include"TaskId.h"
 #include"TaskManager.h"
+#include"SortBy.h"
 #include"View.h"
 
 class Command {
@@ -11,6 +12,11 @@ public:
     virtual bool execute(const std::shared_ptr<TaskManager> &) = 0;
 
     virtual ~Command() = default;
+};
+
+class CommandQuit : public Command {
+public:
+    bool execute(const std::shared_ptr<TaskManager> &) override;
 };
 
 class CommandAdd : public Command {
@@ -62,13 +68,30 @@ private:
 
 class CommandShow : public Command {
 public:
-    explicit CommandShow(const std::shared_ptr<View> &);
+    explicit CommandShow(bool, SortBy, const std::shared_ptr<View> &);
     bool execute(const std::shared_ptr<TaskManager> &) override;
 private:
     const std::shared_ptr<View> view_;
+    const bool if_print_subtasks_;
+    const SortBy sort_by_;
 };
 
-class CommandQuit : public Command {
+class CommandShowTask : public Command {
 public:
+    explicit CommandShowTask(TaskId, SortBy, const std::shared_ptr<View> &);
     bool execute(const std::shared_ptr<TaskManager> &) override;
+private:
+    const std::shared_ptr<View> view_;
+    const TaskId id_;
+    const SortBy sort_by_;
+};
+
+class CommandShowLabel : public Command {
+public:
+    explicit CommandShowLabel(const std::string &, SortBy, const std::shared_ptr<View> &);
+    bool execute(const std::shared_ptr<TaskManager> &) override;
+private:
+    const std::shared_ptr<View> view_;
+    const std::string label_;
+    const SortBy sort_by_;
 };

@@ -42,37 +42,60 @@ bool TaskManager::Delete(TaskId id) {
     return true;
 }
 
-bool TaskManager::Label(TaskId id, const std::string &label) {
-    if (tasks_.count(id) == 0) return false;
-    Task task = tasks_.at(id).task();
-    Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
-                                                              task.date(), label, task.condition())).value();
-    std::optional<TaskId> parent{tasks_.at(id).parent()};
-    tasks_.erase(id);
-    tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
-    return true;
+TaskManager::ArrayTasks TaskManager::ShowLabel(const std::string &label, SortBy sort) const {
+    std::vector<std::unique_ptr<IdWithTask>> for_sorting;
+    for (const auto &[id, task]: tasks_)
+        if (task.task().label() == label && task.task().condition() == Task::Condition::NONE)
+            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
+
+    if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
+    if (sort == SortBy::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
+    if (sort == SortBy::DATE) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorDate);
+
+    ArrayTasks result;
+    for (const auto &task: for_sorting)
+        result.emplace_back(*task);
+    return result;
 }
 
-TaskManager::ArrayOfIdWithTask TaskManager::ShowChild(std::optional<TaskId> parent, Sort sort) const {
+TaskManager::ArrayTasks TaskManager::ShowParents(SortBy sort) const {
+    std::vector<std::unique_ptr<IdWithTask>> for_sorting;
+    for (const auto &[id, task]: tasks_)
+        if (task.parent() == std::nullopt && task.task().condition() == Task::Condition::NONE)
+            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
+
+    if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
+    if (sort == SortBy::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
+    if (sort == SortBy::DATE) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorDate);
+
+    ArrayTasks result;
+    for (const auto &task: for_sorting)
+        result.emplace_back(*task);
+    return result;
+}
+
+std::optional<TaskManager::TaskWithSubtasks> TaskManager::ShowTask(TaskId parent, SortBy sort) const {
+    if (!tasks_.count(parent)) return std::nullopt;
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
         if (task.parent() == parent && task.task().condition() == Task::Condition::NONE)
             for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
-    if (sort == Sort::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
-    if (sort == Sort::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
-    if (sort == Sort::DATE) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorDate);
-    ArrayOfIdWithTask result;
+
+    if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
+    if (sort == SortBy::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
+    if (sort == SortBy::DATE) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorDate);
+
+    TaskWithSubtasks result{{parent, tasks_.at(parent).task()}, {}};
     for (const auto &t: for_sorting)
-        result.emplace_back(*t);
+        result.second.emplace_back(*t);
     return result;
 }
 
-std::vector<std::pair<TaskManager::IdWithTask, TaskManager::ArrayOfIdWithTask>> TaskManager::ShowAll(
-        Sort sort) const {
-    std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> result;
-    ArrayOfIdWithTask parents = ShowChild(std::nullopt, sort);
+std::vector<TaskManager::TaskWithSubtasks> TaskManager::ShowAll(SortBy sort) const {
+    std::vector<TaskWithSubtasks> result;
+    ArrayTasks parents = ShowParents(sort);
     for (const auto &parent: parents) {
-        result.emplace_back(parent, ShowChild(parent.first, sort));
+        result.emplace_back(ShowTask(parent.first, sort).value());
     }
     return result;
 }

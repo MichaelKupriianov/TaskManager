@@ -9,14 +9,9 @@
 #include"GeneralizedTask.h"
 #include"IdGenerator.h"
 #include"TaskId.h"
+#include"SortBy.h"
 
 class TaskManager {
-public:
-    enum class Sort {
-        PRIORITY,
-        DATE,
-        ID
-    };
 public:
     TaskManager() : generator_(new IdGenerator) {}
     explicit TaskManager(std::unique_ptr<IdGenerator> gen) : generator_(std::move(gen)) {}
@@ -27,15 +22,15 @@ public:
     virtual bool Edit(TaskId, const Task &);
     virtual bool Complete(TaskId);
     virtual bool Delete(TaskId);
-    virtual bool Label(TaskId, const std::string &);
 public:
     using IdWithTask = std::pair<TaskId, Task>;
-    using ArrayOfIdWithTask = std::vector<IdWithTask>;
+    using ArrayTasks = std::vector<IdWithTask>;
+    using TaskWithSubtasks = std::pair<IdWithTask, ArrayTasks>;
 public:
-    virtual ArrayOfIdWithTask ShowChild(std::optional<TaskId> = std::nullopt,
-                                Sort = Sort::ID) const;
-    virtual std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> ShowAll(
-            Sort = Sort::ID) const;
+    virtual ArrayTasks ShowLabel(const std::string &label, SortBy) const;
+    virtual ArrayTasks ShowParents(SortBy) const;
+    virtual std::optional<TaskWithSubtasks> ShowTask(TaskId, SortBy) const;
+    virtual std::vector<TaskWithSubtasks> ShowAll(SortBy) const;
 private:
     static bool ComparatorPriority(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
     static bool ComparatorDate(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);

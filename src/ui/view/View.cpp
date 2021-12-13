@@ -1,6 +1,4 @@
 #include"View.h"
-#include<optional>
-#include"Converter.h"
 
 View::View(const std::shared_ptr<Reader> &reader, const std::shared_ptr<Printer> &printer)
         : reader_{reader}, printer_{printer} {}
@@ -14,6 +12,8 @@ void View::Help() {
     printer_->PrintString("delete - Delete existent task\n");
     printer_->PrintString("label - Edit label of existent task\n");
     printer_->PrintString("show - Show all tasks\n");
+    printer_->PrintString("show task - Show task with its subtasks\n");
+    printer_->PrintString("show label - Show task with some specific label\n");
     printer_->PrintString("quit - finish work\n\n");
 }
 
@@ -76,11 +76,10 @@ time_t View::ReadDate(TypeOfCommand command) {
 }
 
 std::string View::ReadLabel(TypeOfCommand command) {
-    printer_->PrintString(Converter::CommandToString(command) + " label: ");
+    printer_->PrintString(Converter::CommandToString(command) +
+                          " label (if there is no label, leave empty): ");
     std::string label{reader_->ReadString()};
-    if (!label.empty()) return label;
-    printer_->PrintString("Label should be non-empty\n");
-    return ReadLabel(command);
+    return label;
 }
 
 bool View::Confirm() {
@@ -91,28 +90,49 @@ bool View::Confirm() {
     return Confirm();
 }
 
-void View::PrintSomeTasks(const ArrayOfIdWithTask &tasks, const std::string &introduction) {
+bool View::ReadIfPrintSubtasks(TypeOfCommand command) {
+    printer_->PrintString(Converter::CommandToString(command) + " Print subtasks? (y/n): ");
+    std::string answer{reader_->ReadString()};
+    if (answer == "y") return true;
+    if (answer == "n") return false;
+    return ReadIfPrintSubtasks(command);
+}
+
+SortBy View::ReadSortBy(TypeOfCommand command) {
+    printer_->PrintString(Converter::CommandToString(command) +
+                          " sort by? (id, date or priority): ");
+    std::string answer{reader_->ReadString()};
+    if (std::optional<SortBy> result{Converter::StringToSortBy(answer)}; result.has_value())
+        return result.value();
+    return ReadSortBy(command);
+}
+
+void View::PrintArrayOfTasks(const ArrayTasks &tasks) {
     for (const auto &task: tasks) {
-        std::string result;
-        result+=introduction;
-        result+=Converter::IdWithTaskToString(task);
-        result+="\n";
+        std::string result = Converter::TaskToString(task) + '\n';
         printer_->PrintString(result);
     }
 }
 
-void View::PrintAllTasks(
-        const std::vector<std::pair<IdWithTask, ArrayOfIdWithTask>> &tasks) {
+void View::PrintTaskWithSubtasks(const TaskWithSubtasks &task) {
+    std::string result = Converter::TaskToString(task.first) + "  :\n";
+    printer_->PrintString(result);
+    for (const auto &subtask: task.second) {
+        result = "   " + Converter::TaskToString(subtask) + '\n';
+        printer_->PrintString(result);
+    }
+}
+
+void View::PrintAllTasks(const std::vector<TaskWithSubtasks> &tasks) {
     if (tasks.empty()) {
         printer_->PrintString("There are no outstanding tasks now.\n");
         return;
     }
-    for (const auto &[task, children]: tasks) {
-        printer_->PrintString(Converter::IdWithTaskToString(task));
-        if (!children.empty()) {
-            printer_->PrintString("  :\n");
-            PrintSomeTasks(children, "   ");
-        } else printer_->PrintString("\n");
+    for (const auto &[task, subtasks]: tasks) {
+        if (!subtasks.empty())
+            PrintTaskWithSubtasks({task, subtasks});
+        else
+            printer_->PrintString(Converter::TaskToString(task) + '\n');
     }
 }
 

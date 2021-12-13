@@ -1,5 +1,9 @@
 #include "Command.h"
 
+bool CommandQuit::execute(const std::shared_ptr<TaskManager> &) {
+    return false;
+}
+
 CommandAdd::CommandAdd(const Task &task, const std::shared_ptr<View> &view)
         : task_{task}, view_{view} {}
 
@@ -45,13 +49,32 @@ bool CommandDelete::execute(const std::shared_ptr<TaskManager> &manager) {
     return true;
 }
 
-CommandShow::CommandShow(const std::shared_ptr<View> &view) : view_{view} {}
+CommandShow::CommandShow(bool if_print_subtasks, SortBy sort_by,
+                         const std::shared_ptr<View> &view)
+        : if_print_subtasks_{if_print_subtasks}, sort_by_{sort_by}, view_{view} {}
 
 bool CommandShow::execute(const std::shared_ptr<TaskManager> &manager) {
-    view_->PrintAllTasks(manager->ShowAll());
+    if (if_print_subtasks_) view_->PrintAllTasks(manager->ShowAll(sort_by_));
+    else view_->PrintArrayOfTasks(manager->ShowParents(sort_by_));
     return true;
 }
 
-bool CommandQuit::execute(const std::shared_ptr<TaskManager> &) {
-    return false;
+CommandShowTask::CommandShowTask(TaskId id, SortBy sort_by, const std::shared_ptr<View> &view)
+        : id_{id}, sort_by_{sort_by}, view_{view} {}
+
+bool CommandShowTask::execute(const std::shared_ptr<TaskManager> &manager) {
+    if (manager->ShowTask(id_, sort_by_).has_value())
+        view_->PrintTaskWithSubtasks(manager->ShowTask(id_, sort_by_).value());
+    else
+        view_->PrintException("There are no task with such ID");
+    return true;
+}
+
+CommandShowLabel::CommandShowLabel(const std::string &label, SortBy sort_by,
+                                   const std::shared_ptr<View> &view)
+        : label_{label}, sort_by_{sort_by}, view_{view} {}
+
+bool CommandShowLabel::execute(const std::shared_ptr<TaskManager> &manager) {
+    view_->PrintArrayOfTasks(manager->ShowLabel(label_, sort_by_));
+    return true;
 }

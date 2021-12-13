@@ -13,5 +13,9 @@ std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepPriority &) {
 }
 
 std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepDate &) {
-    return std::unique_ptr<SubStep>(new SubStepDate);
+    return std::unique_ptr<SubStep>(new SubStepLabel);
+}
+
+std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepLabel &) {
+    return std::unique_ptr<SubStep>(new SubStepLabel);
 }

@@ -25,3 +25,8 @@ class SubStepDate : public SubStep {
 public:
     std::unique_ptr<SubStep> execute(SubContext &, const std::shared_ptr<SubDependency> &) override;
 };
+
+class SubStepLabel : public SubStep {
+public:
+    std::unique_ptr<SubStep> execute(SubContext &, const std::shared_ptr<SubDependency> &) override;
+};
