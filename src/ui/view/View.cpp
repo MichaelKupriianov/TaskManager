@@ -10,7 +10,6 @@ void View::Help() {
     printer_->PrintString("edit - Edit existent task\n");
     printer_->PrintString("complete - Complete existent task\n");
     printer_->PrintString("delete - Delete existent task\n");
-    printer_->PrintString("label - Edit label of existent task\n");
     printer_->PrintString("show - Show all tasks\n");
     printer_->PrintString("show task - Show task with its subtasks\n");
     printer_->PrintString("show label - Show task with some specific label\n");
@@ -115,7 +114,9 @@ void View::PrintArrayOfTasks(const ArrayTasks &tasks) {
 }
 
 void View::PrintTaskWithSubtasks(const TaskWithSubtasks &task) {
-    std::string result = Converter::TaskToString(task.first) + "  :\n";
+    std::string result = Converter::TaskToString(task.first);
+    if (task.second.empty()) result += "\n";
+    else result += "  :\n";
     printer_->PrintString(result);
     for (const auto &subtask: task.second) {
         result = "   " + Converter::TaskToString(subtask) + '\n';

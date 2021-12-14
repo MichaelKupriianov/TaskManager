@@ -11,7 +11,6 @@ public:
     std::string task_title() const { return task_->title(); }
     Task::Priority task_priority() const { return task_->priority(); }
     time_t task_date() const { return task_->date(); }
-    std::string task_label() const { return task_->label(); }
     Task task() const {return *task_;}
 
     void finished() { finished_ = true; }

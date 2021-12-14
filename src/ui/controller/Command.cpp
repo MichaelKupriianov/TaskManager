@@ -8,8 +8,7 @@ CommandAdd::CommandAdd(const Task &task, const std::shared_ptr<View> &view)
         : task_{task}, view_{view} {}
 
 bool CommandAdd::execute(const std::shared_ptr<TaskManager> &manager) {
-    if (!manager->AddTask(task_))
-        view_->PrintException("Incorrect parent ID (for example, subtask cannot have child)");
+    manager->AddTask(task_);
     return true;
 }
 
