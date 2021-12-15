@@ -3,8 +3,8 @@
 #include<ctime>
 #include<string>
 #include<optional>
-#include"Task.h"
-#include"TaskId.h"
+#include"Task.pb.h"
+#include"TaskId.pb.h"
 #include"TypeOfStep.h"
 #include"TypeOfCommand.h"
 #include"SortBy.h"
@@ -17,7 +17,7 @@ public:
     static std::optional<int> StringToId(const std::string &);
     static std::optional<SortBy> StringToSortBy(const std::string &);
     static std::string PriorityToString(Task::Priority);
-    static std::string DateToString(time_t date);
+    static std::string DateToString(google::protobuf::Timestamp date);
     static std::string CommandToString(TypeOfCommand command);
     static std::string TaskToString(const std::pair<TaskId, Task> &task);
 };

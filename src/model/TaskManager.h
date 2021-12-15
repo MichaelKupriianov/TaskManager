@@ -5,11 +5,12 @@
 #include<memory>
 #include<vector>
 #include<optional>
-#include"Task.h"
+#include"Task.pb.h"
+#include"TaskId.pb.h"
 #include"GeneralizedTask.h"
 #include"IdGenerator.h"
-#include"TaskId.h"
 #include"SortBy.h"
+#include"Comparison.h"
 
 class TaskManager {
 public:

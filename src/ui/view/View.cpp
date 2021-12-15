@@ -32,8 +32,11 @@ TypeOfStep View::ReadCommand() {
 TaskId View::ReadId(TypeOfCommand command) {
     printer_->PrintString(Converter::CommandToString(command) + " ID: ");
     std::string id{reader_->ReadString()};
-    if (std::optional<int> result{Converter::StringToId(id)}; result.has_value())
-        return TaskId::Create(result.value()).value();
+    if (std::optional<int> result{Converter::StringToId(id)}; result.has_value()) {
+        TaskId id;
+        id.set_value(result.value());
+        return id;
+    }
     printer_->PrintString("Enter the ID in the correct format\n");
     return ReadId(command);
 }
@@ -41,8 +44,11 @@ TaskId View::ReadId(TypeOfCommand command) {
 TaskId View::ReadParentId(TypeOfCommand command) {
     printer_->PrintString(Converter::CommandToString(command) + " Parent ID: ");
     std::string id{reader_->ReadString()};
-    if (std::optional<int> result{Converter::StringToId(id)}; result.has_value())
-        return TaskId::Create(result.value()).value();
+    if (std::optional<int> result{Converter::StringToId(id)}; result.has_value()) {
+        TaskId id;
+        id.set_value(result.value());
+        return id;
+    }
     printer_->PrintString("Enter the ID in the correct format\n");
     return ReadId(command);
 }
@@ -56,7 +62,7 @@ std::string View::ReadTitle(TypeOfCommand command) {
 }
 
 Task::Priority View::ReadPriority(TypeOfCommand command) {
-    printer_->PrintString(Converter::CommandToString(command) + " priority (high, medium, lou or none): ");
+    printer_->PrintString(Converter::CommandToString(command) + " priority (high, medium, low or none): ");
     std::string priority{reader_->ReadString()};
     if (std::optional<Task::Priority> result{Converter::StringToPriority(priority)}; result.has_value())
         return result.value();
@@ -64,12 +70,15 @@ Task::Priority View::ReadPriority(TypeOfCommand command) {
     return ReadPriority(command);
 }
 
-time_t View::ReadDate(TypeOfCommand command) {
+google::protobuf::Timestamp View::ReadDate(TypeOfCommand command) {
     printer_->PrintString(Converter::CommandToString(command) +
                           " due date (in 12:12 12/12 or 12/12 format): ");
     std::string date{reader_->ReadString()};
-    if (std::optional<time_t> result{Converter::StringToDate(date)}; result.has_value())
-        return result.value();
+    if (std::optional<time_t> result{Converter::StringToDate(date)}; result.has_value()) {
+        google::protobuf::Timestamp date;
+        date.set_seconds(result.value());
+        return date;
+    }
     printer_->PrintString("Enter the date in the correct format (or don't enter anything):\n");
     return ReadDate(command);
 }

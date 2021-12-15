@@ -1,10 +1,10 @@
 #include "Converter.h"
 
 std::optional<Task::Priority> Converter::StringToPriority(const std::string &priority) {
-    if (priority == "high") return Task::Priority::HIGH;
-    if (priority == "medium") return Task::Priority::MEDIUM;
-    if (priority == "lou") return Task::Priority::LOU;
-    if (priority == "none" || priority.empty()) return Task::Priority::NONE;
+    if (priority == "high") return Task_Priority_HIGH;
+    if (priority == "medium") return Task_Priority_MEDIUM;
+    if (priority == "low") return Task_Priority_LOW;
+    if (priority == "none" || priority.empty()) return Task_Priority_NONE;
     return std::nullopt;
 }
 
@@ -62,20 +62,21 @@ std::optional<SortBy> Converter::StringToSortBy(const std::string &sort) {
 
 std::string Converter::PriorityToString(Task::Priority priority) {
     switch (priority) {
-        case Task::Priority::HIGH:
+        case Task_Priority_HIGH:
             return "high";
-        case Task::Priority::MEDIUM:
+        case Task_Priority_MEDIUM:
             return "medium";
-        case Task::Priority::LOU:
-            return "lou";
+        case Task_Priority_LOW:
+            return "low";
         default:
             return "none";
     }
 }
 
-std::string Converter::DateToString(time_t date) {
-    if (date == 0) return "none";
-    std::string result = ctime(&date);
+std::string Converter::DateToString(google::protobuf::Timestamp date) {
+    if (date.seconds() == 0) return "none";
+    time_t time{date.seconds()};
+    std::string result = ctime(&time);
     for (int i = 0; i < 9; i++) result.pop_back();
     for (int i = 0; i < 4; i++) result.erase(result.begin());
     return result;

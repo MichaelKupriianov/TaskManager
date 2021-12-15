@@ -8,6 +8,7 @@ bool TaskManager::AddTask(const Task &task) {
     return true;
 }
 
+
 bool TaskManager::AddSubtask(const Task &task, TaskId parent) {
     if (tasks_.count(parent) == 0) return false;
     if (tasks_.at(parent).parent()) return false;
@@ -26,13 +27,7 @@ bool TaskManager::Edit(TaskId id, const Task &task) {
 
 bool TaskManager::Complete(TaskId id) {
     if (tasks_.count(id) == 0) return false;
-    Task task = tasks_.at(id).task();
-    Task modified_task = Task::Create(Task::Arguments::Create(task.title(), task.priority(),
-                                                              task.date(), task.label(),
-                                                              Task::Condition::COMPLETED)).value();
-    const std::optional<TaskId> parent{tasks_.at(id).parent()};
-    tasks_.erase(id);
-    tasks_.insert({id, GeneralizedTask::Create(modified_task, parent)});
+    tasks_.at(id).task()->set_condition(Task_Condition_COMPLETED);
     return true;
 }
 
@@ -45,8 +40,8 @@ bool TaskManager::Delete(TaskId id) {
 TaskManager::ArrayTasks TaskManager::ShowLabel(const std::string &label, SortBy sort) const {
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
-        if (task.task().label() == label && task.task().condition() == Task::Condition::NONE)
-            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
+        if (task.task()->label() == label && task.task()->condition() == Task_Condition_IN_PROGRESS)
+            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, *task.task()));
 
     if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
     if (sort == SortBy::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
@@ -61,8 +56,8 @@ TaskManager::ArrayTasks TaskManager::ShowLabel(const std::string &label, SortBy 
 TaskManager::ArrayTasks TaskManager::ShowParents(SortBy sort) const {
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
-        if (task.parent() == std::nullopt && task.task().condition() == Task::Condition::NONE)
-            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
+        if (task.parent() == std::nullopt && task.task()->condition() == Task_Condition_IN_PROGRESS)
+            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, *task.task()));
 
     if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
     if (sort == SortBy::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
@@ -78,14 +73,15 @@ std::optional<TaskManager::TaskWithSubtasks> TaskManager::ShowTask(TaskId parent
     if (!tasks_.count(parent)) return std::nullopt;
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
-        if (task.parent() == parent && task.task().condition() == Task::Condition::NONE)
-            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, task.task()));
+        if (task.parent() == parent && task.task()->condition() == Task_Condition_IN_PROGRESS)
+            for_sorting.emplace_back(std::make_unique<IdWithTask>(id, *task.task()));
 
     if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
     if (sort == SortBy::PRIORITY) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorPriority);
     if (sort == SortBy::DATE) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorDate);
 
-    TaskWithSubtasks result{{parent, tasks_.at(parent).task()}, {}};
+    TaskWithSubtasks result{{parent, *tasks_.at(parent).task()},
+                            {}};
     for (const auto &t: for_sorting)
         result.second.emplace_back(*t);
     return result;
@@ -112,6 +108,6 @@ TaskManager::ComparatorPriority(const std::unique_ptr<IdWithTask> &first, const 
 }
 
 bool TaskManager::ComparatorDate(const std::unique_ptr<IdWithTask> &first, const std::unique_ptr<IdWithTask> &second) {
-    if (first->second.date() < second->second.date()) return true;
+    if (first->second.date().seconds() < second->second.date().seconds()) return true;
     return false;
 }

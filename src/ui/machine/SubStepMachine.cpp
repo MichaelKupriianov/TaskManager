@@ -5,7 +5,7 @@
 SubStepMachine::SubStepMachine(const std::shared_ptr<SubDependency> &dependency) :
         dependency_{dependency} {}
 
-Task SubStepMachine::GetTask() {
+std::shared_ptr<Task> SubStepMachine::GetTask() {
     SubContext sub_context;
     std::unique_ptr<SubStep> step{dependency_->factory()->GetRootSubStep()};
     while (!sub_context.if_finished()) {

@@ -2,7 +2,7 @@
 #include"Dependency.h"
 #include"SubStepMachine.h"
 #include"SubFactory.h"
-#include"Task.h"
+#include"Task.pb.h"
 
 StepAdd::StepAdd() : command_{TypeOfCommand::ADD} {}
 
@@ -10,7 +10,7 @@ std::shared_ptr<Step> StepAdd::execute(Context &context, const std::shared_ptr<D
     std::shared_ptr<SubFactory> sub_factory{new SubFactory};
     std::shared_ptr<SubDependency> sub_dependency{new SubDependency{sub_factory, dependency->view(), command_}};
     SubStepMachine sub_machine{sub_dependency};
-    Task task = sub_machine.GetTask();
+    Task task = *sub_machine.GetTask();
     if (dependency->view()->Confirm()) {
         context.set_command(std::shared_ptr<Command>(new CommandAdd{
                 task, dependency->view()}));
@@ -25,7 +25,7 @@ std::shared_ptr<Step> StepAddSub::execute(Context &context, const std::shared_pt
     std::shared_ptr<SubFactory> sub_factory{new SubFactory};
     std::shared_ptr<SubDependency> sub_dependency{new SubDependency{sub_factory, dependency->view(), command_}};
     SubStepMachine sub_machine{sub_dependency};
-    Task task = sub_machine.GetTask();
+    Task task = *sub_machine.GetTask();
     if (dependency->view()->Confirm()) {
         context.set_command(std::shared_ptr<Command>(new CommandAddSub{
                 task, parent_id, dependency->view()}));

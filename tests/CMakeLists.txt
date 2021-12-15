@@ -38,12 +38,10 @@ file(GLOB_RECURSE integration_tests_src CONFIGURE_DEPENDS
         "../src/ui/*cpp"
         )
 
-add_executable(integration_tests ${integration_tests_src} MainTest.cpp)
+add_executable(integration_tests ${PROTO_src} ${PROTO_hdr} ${integration_tests_src} MainTest.cpp)
 
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
 
 gtest_discover_tests(integration_tests)
 
-include_directories(ui/controller/)
-include_directories(ui/factory/)
-include_directories(ui/view/)
+target_link_libraries(integration_tests ${Protobuf_LIBRARIES})

@@ -1,20 +1,21 @@
 #pragma once
 
 #include<memory>
-#include"Task.h"
-#include"TaskId.h"
+#include"Task.pb.h"
+#include"TaskId.pb.h"
+#include"Comparison.h"
 
 class GeneralizedTask {
 public:
     static GeneralizedTask Create(const Task &, std::optional<TaskId>);
 public:
     std::optional<TaskId> parent() const { return parent_; }
-    Task task() const { return task_; }
+    std::shared_ptr<Task> task() const { return task_; }
 private:
-    GeneralizedTask(const Task &task, std::optional<TaskId> id) : task_(task), parent_(id) {}
+    GeneralizedTask(const Task &task, std::optional<TaskId> id) : task_(new Task(task)), parent_(id) {}
 private:
-    const Task task_;
-    const std::optional<TaskId> parent_;
+    std::shared_ptr<Task> task_;
+    std::optional<TaskId> parent_;
 };
 
 bool operator==(const GeneralizedTask &, const GeneralizedTask &);

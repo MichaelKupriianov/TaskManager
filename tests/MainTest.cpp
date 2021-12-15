@@ -263,7 +263,7 @@ TEST_F(MainTest, Scenario_3) {
             .WillOnce(Return("add_subtask"))
             .WillOnce(Return("0"))
             .WillOnce(Return("second"))
-            .WillOnce(Return("lou"))
+            .WillOnce(Return("low"))
             .WillOnce(Return("0:0 1/1"))
             .WillOnce(Return("label_2"))
             .WillOnce(Return("y"))
@@ -308,7 +308,7 @@ TEST_F(MainTest, Scenario_3) {
 
     const std::string zero{"id: 0, title: zero, priority: none, date: none, label: label_1"};
     const std::string first{"id: 1, title: first, priority: high, date: Dec 31 23:59, label: label_1"};
-    const std::string second{"id: 2, title: second, priority: lou, date: Jan  1 00:00, label: label_2"};
+    const std::string second{"id: 2, title: second, priority: low, date: Jan  1 00:00, label: label_2"};
     const std::string third{"id: 3, title: third, priority: medium, date: Jun  6 06:06, label: label_2"};
 
     InSequence s;

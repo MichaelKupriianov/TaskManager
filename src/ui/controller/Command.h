@@ -1,8 +1,8 @@
 #pragma once
 
 #include<memory>
-#include"Task.h"
-#include"TaskId.h"
+#include"Task.pb.h"
+#include"TaskId.pb.h"
 #include"TaskManager.h"
 #include"SortBy.h"
 #include"View.h"

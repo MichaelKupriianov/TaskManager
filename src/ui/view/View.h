@@ -5,8 +5,8 @@
 #include<memory>
 #include<vector>
 #include<optional>
-#include"Task.h"
-#include"TaskId.h"
+#include"Task.pb.h"
+#include"TaskId.pb.h"
 #include"TypeOfStep.h"
 #include"TypeOfCommand.h"
 #include"SortBy.h"
@@ -26,7 +26,7 @@ public:
     virtual TaskId ReadParentId(TypeOfCommand);
     virtual std::string ReadTitle(TypeOfCommand);
     virtual Task::Priority ReadPriority(TypeOfCommand);
-    virtual time_t ReadDate(TypeOfCommand);
+    virtual google::protobuf::Timestamp ReadDate(TypeOfCommand);
     virtual std::string ReadLabel(TypeOfCommand);
     virtual bool Confirm();
     virtual bool ReadIfPrintSubtasks(TypeOfCommand);
