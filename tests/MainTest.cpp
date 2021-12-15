@@ -56,7 +56,7 @@ TEST_F(MainTest, Scenario_1) {
             .WillOnce(Return(""))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("add subtask"))
+            .WillOnce(Return("add_subtask"))
             .WillOnce(Return("0"))
             .WillOnce(Return("second"))
             .WillOnce(Return("medium"))
@@ -76,7 +76,7 @@ TEST_F(MainTest, Scenario_1) {
             .WillOnce(Return("label"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("show label"))
+            .WillOnce(Return("show_label"))
             .WillOnce(Return("label"))
             .WillOnce(Return(""))
 
@@ -137,7 +137,7 @@ TEST_F(MainTest, Scenario_2) {
             .WillOnce(Return(""))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("add subtask"))
+            .WillOnce(Return("add_subtask"))
             .WillOnce(Return("213jhb"))
             .WillOnce(Return("1"))
             .WillOnce(Return(""))
@@ -252,7 +252,7 @@ TEST_F(MainTest, Scenario_3) {
             .WillOnce(Return("label_1"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("add subtask"))
+            .WillOnce(Return("add_subtask"))
             .WillOnce(Return("0"))
             .WillOnce(Return("first"))
             .WillOnce(Return("high"))
@@ -260,7 +260,7 @@ TEST_F(MainTest, Scenario_3) {
             .WillOnce(Return("label_1"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("add subtask"))
+            .WillOnce(Return("add_subtask"))
             .WillOnce(Return("0"))
             .WillOnce(Return("second"))
             .WillOnce(Return("lou"))
@@ -268,7 +268,7 @@ TEST_F(MainTest, Scenario_3) {
             .WillOnce(Return("label_2"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("add subtask"))
+            .WillOnce(Return("add_subtask"))
             .WillOnce(Return("0"))
             .WillOnce(Return("third"))
             .WillOnce(Return("medium"))
@@ -276,27 +276,27 @@ TEST_F(MainTest, Scenario_3) {
             .WillOnce(Return("label_2"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("show task"))
+            .WillOnce(Return("show_task"))
             .WillOnce(Return("0"))
             .WillOnce(Return(""))
 
-            .WillOnce(Return("show task"))
+            .WillOnce(Return("show_task"))
             .WillOnce(Return("0"))
             .WillOnce(Return("date"))
 
-            .WillOnce(Return("show task"))
+            .WillOnce(Return("show_task"))
             .WillOnce(Return("0"))
             .WillOnce(Return("priority"))
 
-            .WillOnce(Return("show task"))
+            .WillOnce(Return("show_task"))
             .WillOnce(Return("1"))
             .WillOnce(Return(""))
 
-            .WillOnce(Return("show label"))
+            .WillOnce(Return("show_label"))
             .WillOnce(Return("label_1"))
             .WillOnce(Return(""))
 
-            .WillOnce(Return("show label"))
+            .WillOnce(Return("show_label"))
             .WillOnce(Return("label_2"))
             .WillOnce(Return(""))
 
@@ -382,7 +382,7 @@ TEST_F(MainTest, Scenario_4) {
             .WillOnce(Return(""))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("add subtask"))
+            .WillOnce(Return("add_subtask"))
             .WillOnce(Return("1"))
             .WillOnce(Return("second"))
             .WillOnce(Return(""))
@@ -406,7 +406,7 @@ TEST_F(MainTest, Scenario_4) {
             .WillOnce(Return("1"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("show task"))
+            .WillOnce(Return("show_task"))
             .WillOnce(Return("1"))
             .WillOnce(Return(""))
 
