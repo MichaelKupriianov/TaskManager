@@ -30,13 +30,13 @@ std::optional<TypeOfStep> Converter::StringToStepType(const std::string &command
     if (command == "quit") return TypeOfStep::QUIT;
     if (command == "help") return TypeOfStep::HELP;
     if (command == "add") return TypeOfStep::ADD;
-    if (command == "add subtask") return TypeOfStep::ADDSUB;
+    if (command == "add_subtask") return TypeOfStep::ADD_SUB;
     if (command == "edit") return TypeOfStep::EDIT;
     if (command == "complete") return TypeOfStep::COMPLETE;
     if (command == "delete") return TypeOfStep::DELETE;
     if (command == "show") return TypeOfStep::SHOW;
-    if (command == "show task") return TypeOfStep::SHOWTASK;
-    if (command == "show label") return TypeOfStep::SHOWLABEL;
+    if (command == "show_task") return TypeOfStep::SHOW_TASK;
+    if (command == "show_label") return TypeOfStep::SHOW_LABEL;
     return std::nullopt;
 }
 
@@ -85,7 +85,7 @@ std::string Converter::CommandToString(TypeOfCommand command) {
     switch (command) {
         case TypeOfCommand::ADD:
             return "[Add Task]";
-        case TypeOfCommand::ADDSUB:
+        case TypeOfCommand::ADD_SUB:
             return "[Add SubTask]";
         case TypeOfCommand::EDIT:
             return "[Edit Task]";
@@ -95,9 +95,9 @@ std::string Converter::CommandToString(TypeOfCommand command) {
             return "[Delete Task]";
         case TypeOfCommand::SHOW:
             return "[Show]";
-        case TypeOfCommand::SHOWTASK:
+        case TypeOfCommand::SHOW_TASK:
             return "[Show Task]";
-        case TypeOfCommand::SHOWLABEL:
+        case TypeOfCommand::SHOW_LABEL:
             return "[Show by label]";
         default:
             return "";

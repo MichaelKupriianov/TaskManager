@@ -13,7 +13,7 @@ std::shared_ptr<Step> StepShow::execute(Context &context,
     return dependency->factory()->GetRootStep();
 }
 
-StepShowTask::StepShowTask() : command_{TypeOfCommand::SHOWTASK} {}
+StepShowTask::StepShowTask() : command_{TypeOfCommand::SHOW_TASK} {}
 
 std::shared_ptr<Step> StepShowTask::execute(Context &context,
                                             const std::shared_ptr<Dependency> &dependency) {
@@ -24,7 +24,7 @@ std::shared_ptr<Step> StepShowTask::execute(Context &context,
     return dependency->factory()->GetRootStep();
 }
 
-StepShowLabel::StepShowLabel() : command_{TypeOfCommand::SHOWLABEL} {}
+StepShowLabel::StepShowLabel() : command_{TypeOfCommand::SHOW_LABEL} {}
 
 std::shared_ptr<Step> StepShowLabel::execute(Context &context,
                                              const std::shared_ptr<Dependency> &dependency) {

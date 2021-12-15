@@ -10,7 +10,7 @@ std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
             return std::shared_ptr<Step>{new StepHelp};
         case TypeOfStep::ADD:
             return std::shared_ptr<Step>{new StepAdd};
-        case TypeOfStep::ADDSUB:
+        case TypeOfStep::ADD_SUB:
             return std::shared_ptr<Step>{new StepAddSub};
         case TypeOfStep::EDIT:
             return std::shared_ptr<Step>{new StepEdit};
@@ -20,9 +20,9 @@ std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
             return std::shared_ptr<Step>{new StepDelete};
         case TypeOfStep::SHOW:
             return std::shared_ptr<Step>{new StepShow};
-        case TypeOfStep::SHOWTASK:
+        case TypeOfStep::SHOW_TASK:
             return std::shared_ptr<Step>{new StepShowTask};
-        case TypeOfStep::SHOWLABEL:
+        case TypeOfStep::SHOW_LABEL:
             return std::shared_ptr<Step>{new StepShowLabel};
         default:
             return nullptr;

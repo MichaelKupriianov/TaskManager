@@ -6,13 +6,13 @@ View::View(const std::shared_ptr<Reader> &reader, const std::shared_ptr<Printer>
 void View::Help() {
     printer_->PrintString("You can use such command:\n");
     printer_->PrintString("add - Add new task\n");
-    printer_->PrintString("add subtask - Add new subtask\n");
+    printer_->PrintString("add_subtask - Add new subtask\n");
     printer_->PrintString("edit - Edit existent task\n");
     printer_->PrintString("complete - Complete existent task\n");
     printer_->PrintString("delete - Delete existent task\n");
     printer_->PrintString("show - Show all tasks\n");
-    printer_->PrintString("show task - Show task with its subtasks\n");
-    printer_->PrintString("show label - Show task with some specific label\n");
+    printer_->PrintString("show_task - Show task with its subtasks\n");
+    printer_->PrintString("show_label - Show task with some specific label\n");
     printer_->PrintString("quit - finish work\n\n");
 }
 

@@ -18,7 +18,7 @@ std::shared_ptr<Step> StepAdd::execute(Context &context, const std::shared_ptr<D
     return dependency->factory()->GetRootStep();
 }
 
-StepAddSub::StepAddSub() : command_{TypeOfCommand::ADDSUB} {}
+StepAddSub::StepAddSub() : command_{TypeOfCommand::ADD_SUB} {}
 
 std::shared_ptr<Step> StepAddSub::execute(Context &context, const std::shared_ptr<Dependency> &dependency) {
     TaskId parent_id{dependency->view()->ReadParentId(command_)};

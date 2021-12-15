@@ -5,11 +5,11 @@ enum class TypeOfStep {
     HELP,
     QUIT,
     ADD,
-    ADDSUB,
+    ADD_SUB,
     EDIT,
     COMPLETE,
     DELETE,
     SHOW,
-    SHOWTASK,
-    SHOWLABEL
+    SHOW_TASK,
+    SHOW_LABEL
 };
