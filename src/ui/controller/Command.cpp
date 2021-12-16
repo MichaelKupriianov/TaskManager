@@ -16,7 +16,7 @@ CommandAddSub::CommandAddSub(const Task &task, TaskId parent, const std::shared_
         : task_{task}, parent_id_(parent), view_{view} {}
 
 bool CommandAddSub::execute(const std::shared_ptr<TaskManager> &manager) {
-    if (!manager->AddSubtask(task_, parent_id_))
+    if (!manager->AddSubTask(task_, parent_id_))
         view_->PrintException("Incorrect parent ID (for example, subtask cannot have child)");
     return true;
 }

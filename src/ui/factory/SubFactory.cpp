@@ -1,21 +1,21 @@
 #include "SubFactory.h"
 
-std::unique_ptr<SubStep> SubFactory::GetRootSubStep() {
-    return std::unique_ptr<SubStep>(new SubStepTitle);
+std::shared_ptr<SubStep> SubFactory::GetRootSubStep() {
+    return std::shared_ptr<SubStep>(new SubStepTitle);
 }
 
-std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepTitle &) {
-    return std::unique_ptr<SubStep>(new SubStepPriority);
+std::shared_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepTitle &) {
+    return std::shared_ptr<SubStep>(new SubStepPriority);
 }
 
-std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepPriority &) {
-    return std::unique_ptr<SubStep>(new SubStepDate);
+std::shared_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepPriority &) {
+    return std::shared_ptr<SubStep>(new SubStepDate);
 }
 
-std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepDate &) {
-    return std::unique_ptr<SubStep>(new SubStepLabel);
+std::shared_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepDate &) {
+    return std::shared_ptr<SubStep>(new SubStepLabel);
 }
 
-std::unique_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepLabel &) {
-    return std::unique_ptr<SubStep>(new SubStepLabel);
+std::shared_ptr<SubStep> SubFactory::GetNextSubStep(const SubStepLabel &) {
+    return std::shared_ptr<SubStep>(new SubStepLabel);
 }

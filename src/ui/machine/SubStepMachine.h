@@ -8,7 +8,9 @@ class SubStepMachine {
 public:
     explicit SubStepMachine(const std::shared_ptr<SubDependency> &);
 
-    std::shared_ptr<Task> GetTask();
+    virtual std::shared_ptr<Task> GetTask();
+
+    virtual ~SubStepMachine() = default;
 private:
     const std::shared_ptr<SubDependency> dependency_;
 };

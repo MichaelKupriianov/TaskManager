@@ -1,7 +1,7 @@
 #include"Controller.h"
 #include"Command.h"
 
-Controller::Controller(std::shared_ptr<StepMachine> &machine, std::shared_ptr<TaskManager> &manager)
+Controller::Controller(const std::shared_ptr<StepMachine> &machine, const std::shared_ptr<TaskManager> &manager)
         : step_machine_{machine}, task_manager_{manager} {}
 
 void Controller::Run() {

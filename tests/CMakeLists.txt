@@ -25,9 +25,10 @@ file(GLOB_RECURSE ui_tests_src CONFIGURE_DEPENDS
         "ui/*.h"
         )
 
-add_executable(ui_tests ${ui_tests_src})
+add_executable(ui_tests ${PROTO_src} ${PROTO_hdr} ${ui_tests_src})
 
 target_link_libraries(ui_tests GTest::gtest GTest::gmock GTest::gmock_main)
+target_link_libraries(ui_tests ${Protobuf_LIBRARIES})
 
 gtest_discover_tests(ui_tests)
 
@@ -41,7 +42,14 @@ file(GLOB_RECURSE integration_tests_src CONFIGURE_DEPENDS
 add_executable(integration_tests ${PROTO_src} ${PROTO_hdr} ${integration_tests_src} MainTest.cpp)
 
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
+target_link_libraries(integration_tests ${Protobuf_LIBRARIES})
 
 gtest_discover_tests(integration_tests)
 
-target_link_libraries(integration_tests ${Protobuf_LIBRARIES})
+include_directories(ui/context)
+include_directories(ui/controller)
+include_directories(ui/dependency)
+include_directories(ui/factory)
+include_directories(ui/machine)
+include_directories(ui/step)
+include_directories(ui/view)

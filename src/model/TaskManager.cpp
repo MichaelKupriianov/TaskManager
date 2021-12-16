@@ -9,7 +9,7 @@ bool TaskManager::AddTask(const Task &task) {
 }
 
 
-bool TaskManager::AddSubtask(const Task &task, TaskId parent) {
+bool TaskManager::AddSubTask(const Task &task, TaskId parent) {
     if (tasks_.count(parent) == 0) return false;
     if (tasks_.at(parent).parent()) return false;
     TaskId id{generator_->GenerateId()};

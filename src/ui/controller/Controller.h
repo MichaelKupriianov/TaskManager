@@ -6,7 +6,7 @@
 
 class Controller {
 public:
-    Controller(std::shared_ptr<StepMachine> &, std::shared_ptr<TaskManager> &);
+    Controller(const std::shared_ptr<StepMachine> &, const std::shared_ptr<TaskManager> &);
 
     void Run();
 private:

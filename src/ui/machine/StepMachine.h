@@ -8,7 +8,9 @@ class StepMachine {
 public:
     explicit StepMachine(const std::shared_ptr<Dependency> &);
 
-    std::shared_ptr<Command> GetCommand();
+    virtual std::shared_ptr<Command> GetCommand();
+
+    virtual ~StepMachine() = default;
 private:
     const std::shared_ptr<Dependency> dependency_;
 };

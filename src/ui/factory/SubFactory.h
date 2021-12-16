@@ -5,9 +5,10 @@
 
 class SubFactory {
 public:
-    std::unique_ptr<SubStep> GetRootSubStep();
-    std::unique_ptr<SubStep> GetNextSubStep(const SubStepTitle &);
-    std::unique_ptr<SubStep> GetNextSubStep(const SubStepPriority &);
-    std::unique_ptr<SubStep> GetNextSubStep(const SubStepDate &);
-    std::unique_ptr<SubStep> GetNextSubStep(const SubStepLabel &);
+    virtual std::shared_ptr<SubStep> GetRootSubStep();
+    virtual std::shared_ptr<SubStep> GetNextSubStep(const SubStepTitle &);
+    virtual std::shared_ptr<SubStep> GetNextSubStep(const SubStepPriority &);
+    virtual std::shared_ptr<SubStep> GetNextSubStep(const SubStepDate &);
+    virtual std::shared_ptr<SubStep> GetNextSubStep(const SubStepLabel &);
+    virtual ~SubFactory() = default;
 };

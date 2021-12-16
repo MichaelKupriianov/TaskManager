@@ -19,7 +19,7 @@ public:
     ~TaskManager() = default;
 
     virtual bool AddTask(const Task &);
-    virtual bool AddSubtask(const Task &, TaskId);
+    virtual bool AddSubTask(const Task &, TaskId);
     virtual bool Edit(TaskId, const Task &);
     virtual bool Complete(TaskId);
     virtual bool Delete(TaskId);

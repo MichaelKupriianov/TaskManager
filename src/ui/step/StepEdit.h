@@ -8,7 +8,7 @@
 class StepEdit : public Step {
 public:
     StepEdit();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
 private:
     const TypeOfCommand command_;
 };

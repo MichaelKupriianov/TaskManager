@@ -8,7 +8,7 @@
 class StepShow : public Step {
 public:
     StepShow();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
 private:
     const TypeOfCommand command_;
 };
@@ -16,7 +16,7 @@ private:
 class StepShowTask : public Step {
 public:
     StepShowTask();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
 private:
     const TypeOfCommand command_;
 };
@@ -24,7 +24,7 @@ private:
 class StepShowLabel : public Step {
 public:
     StepShowLabel();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &dependency) override;
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
 private:
     const TypeOfCommand command_;
 };

@@ -5,20 +5,20 @@ class ConverterTest : public ::testing::Test {
 };
 
 TEST_F(ConverterTest, shouldConvertStringToPriority) {
-    EXPECT_EQ(Converter::StringToPriority("high"), Task::Priority::HIGH);
-    EXPECT_EQ(Converter::StringToPriority("medium"), Task::Priority::MEDIUM);
-    EXPECT_EQ(Converter::StringToPriority("lou"), Task::Priority::LOU);
-    EXPECT_EQ(Converter::StringToPriority("none"), Task::Priority::NONE);
-    EXPECT_EQ(Converter::StringToPriority(""), Task::Priority::NONE);
+    EXPECT_EQ(Converter::StringToPriority("high"), Task_Priority_HIGH);
+    EXPECT_EQ(Converter::StringToPriority("medium"), Task_Priority_MEDIUM);
+    EXPECT_EQ(Converter::StringToPriority("low"), Task_Priority_LOW);
+    EXPECT_EQ(Converter::StringToPriority("none"), Task_Priority_NONE);
+    EXPECT_EQ(Converter::StringToPriority(""), Task_Priority_NONE);
     EXPECT_EQ(Converter::StringToPriority("priority"), std::nullopt);
 }
 
 TEST_F(ConverterTest, shouldConvertStringToDate) {
     EXPECT_EQ(Converter::StringToDate(""), 0);
     EXPECT_EQ(Converter::StringToDate("23:00 11/11"), 61594808400);
-    EXPECT_EQ(Converter::StringToDate("11:00 3/5"), 61578176400);
-    EXPECT_EQ(Converter::StringToDate("10:12 7/7"), 61583789520);
-    EXPECT_EQ(Converter::StringToDate("4/4"), 61575631200);
+    EXPECT_EQ(Converter::StringToDate("11:00 3/5"), 61578172800);
+    EXPECT_EQ(Converter::StringToDate("10:12 7/7"), 61583785920);
+    EXPECT_EQ(Converter::StringToDate("4/4"), 61575627600);
     EXPECT_EQ(Converter::StringToDate("5/11"), 61594207200);
     EXPECT_EQ(Converter::StringToDate("25:00 3/5"), std::nullopt);
     EXPECT_EQ(Converter::StringToDate("40/13"), std::nullopt);
@@ -47,19 +47,26 @@ TEST_F(ConverterTest, shouldConvertStringToId) {
 }
 
 TEST_F(ConverterTest, shouldConvertPriorityToString) {
-    EXPECT_EQ(Converter::PriorityToString(Task::Priority::HIGH), "high");
-    EXPECT_EQ(Converter::PriorityToString(Task::Priority::MEDIUM), "medium");
-    EXPECT_EQ(Converter::PriorityToString(Task::Priority::LOU), "lou");
-    EXPECT_EQ(Converter::PriorityToString(Task::Priority::NONE), "none");
+    EXPECT_EQ(Converter::PriorityToString(Task_Priority_HIGH), "high");
+    EXPECT_EQ(Converter::PriorityToString(Task_Priority_MEDIUM), "medium");
+    EXPECT_EQ(Converter::PriorityToString(Task_Priority_LOW), "low");
+    EXPECT_EQ(Converter::PriorityToString(Task_Priority_NONE), "none");
 }
 
 TEST_F(ConverterTest, shouldConvertDateToString) {
-    EXPECT_EQ(Converter::DateToString(0), "none");
-    EXPECT_EQ(Converter::DateToString(61594808400), "Nov 11 23:00");
-    EXPECT_EQ(Converter::DateToString(61578176400), "May  3 12:00");
-    EXPECT_EQ(Converter::DateToString(61583789520), "Jul  7 11:12");
-    EXPECT_EQ(Converter::DateToString(61575631200), "Apr  4 01:00");
-    EXPECT_EQ(Converter::DateToString(61594207200), "Nov  5 00:00");
+    google::protobuf::Timestamp date;
+    date.set_seconds(0);
+    EXPECT_EQ(Converter::DateToString(date), "none");
+    date.set_seconds(61594808400);
+    EXPECT_EQ(Converter::DateToString(date), "Nov 11 23:00");
+    date.set_seconds(61578176400);
+    EXPECT_EQ(Converter::DateToString(date), "May  3 12:00");
+    date.set_seconds(61583789520);
+    EXPECT_EQ(Converter::DateToString(date), "Jul  7 11:12");
+    date.set_seconds(61575631200);
+    EXPECT_EQ(Converter::DateToString(date), "Apr  4 01:00");
+    date.set_seconds(61594207200);
+    EXPECT_EQ(Converter::DateToString(date), "Nov  5 00:00");
 }
 
 //TEST_F(ConverterTest, shouldConvertTypeOfStepToString) {

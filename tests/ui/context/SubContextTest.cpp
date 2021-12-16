@@ -1,19 +1,20 @@
 #include"gtest/gtest.h"
 #include"SubContext.h"
+#include"Comparison.h"
 
 class SubContextTest : public ::testing::Test {
 };
 
 TEST_F(SubContextTest, shouldWorkWithTask) {
     SubContext context;
-    Task::Arguments arguments(Task::Arguments::Create("title", Task::Priority::LOU, 1000, "label"));
-    context.set_task(arguments);
-    EXPECT_EQ(context.task_title(), "title");
-    EXPECT_EQ(context.task_priority(), Task::Priority::LOU);
-    EXPECT_EQ(context.task_date(), 1000);
-    EXPECT_EQ(context.task_label(), "label");
-    EXPECT_EQ(context.task_state(), Task::Condition::NONE);
-    EXPECT_EQ(context.task(), Task::Create(arguments).value());
+    context.task()->set_title("title");
+    context.task()->set_priority(Task_Priority_LOW);
+    context.task()->set_label("qwerty");
+    EXPECT_EQ(context.task()->title(), "title");
+    EXPECT_EQ(context.task()->priority(), Task_Priority_LOW);
+    EXPECT_FALSE(context.task()->has_date());
+    EXPECT_EQ(context.task()->label(), "qwerty");
+    EXPECT_EQ(context.task()->condition(), Task_Condition_IN_PROGRESS);
 }
 
 TEST_F(SubContextTest, shouldFinished) {

@@ -1,4 +1,5 @@
 #include"Factory.h"
+#include<cassert>
 
 std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
     switch (step) {
@@ -25,7 +26,7 @@ std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
         case TypeOfStep::SHOW_LABEL:
             return std::shared_ptr<Step>{new StepShowLabel};
         default:
-            return nullptr;
+            assert(false);
     }
 }
 
