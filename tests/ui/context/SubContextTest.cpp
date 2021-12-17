@@ -14,7 +14,6 @@ TEST_F(SubContextTest, shouldWorkWithTask) {
     EXPECT_EQ(context.task()->priority(), Task_Priority_LOW);
     EXPECT_FALSE(context.task()->has_date());
     EXPECT_EQ(context.task()->label(), "qwerty");
-    EXPECT_EQ(context.task()->condition(), Task_Condition_IN_PROGRESS);
 }
 
 TEST_F(SubContextTest, shouldFinished) {

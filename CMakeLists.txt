@@ -24,15 +24,15 @@ message("PROTO_SOURCES ${PROTO_SOURCES}")
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-protobuf_generate_cpp(PROTO_src PROTO_hdr src/model/Task.proto src/model/TaskId.proto)
-message("${PROTO_hdr}")
+protobuf_generate_cpp(proto_src proto_hdr src/model/Task.proto src/model/TaskId.proto src/persistence/TransportationTask.proto)
+message("${proto_hdr}")
 
 file(GLOB_RECURSE TaskManager_src CONFIGURE_DEPENDS
         "src/*.h"
         "src/*.cpp"
         )
 
-add_executable(TaskManager ${PROTO_src} ${PROTO_hdr} ${TaskManager_src})
+add_executable(TaskManager ${proto_src} ${proto_hdr} ${TaskManager_src})
 
 target_link_libraries(TaskManager ${Protobuf_LIBRARIES})
 

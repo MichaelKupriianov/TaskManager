@@ -1,13 +1,5 @@
 #include"gtest/gtest.h"
 #include"gmock/gmock.h"
-#include<memory>
-#include"Reader.h"
-#include"Printer.h"
-#include"View.h"
-#include"Factory.h"
-#include"Dependency.h"
-#include"StepMachine.h"
-#include"TaskManager.h"
 #include"Controller.h"
 
 using ::testing::Return;
