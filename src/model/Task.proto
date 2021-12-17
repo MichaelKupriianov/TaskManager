@@ -9,14 +9,8 @@ message Task {
     LOW = 2;
     NONE = 3;
   }
-  enum Condition {
-    IN_PROGRESS = 0;
-    COMPLETED = 1;
-  }
-
   string title = 1;
   Priority priority = 2;
   google.protobuf.Timestamp date = 3;
   string label = 4;
-  Condition condition = 5;
 }

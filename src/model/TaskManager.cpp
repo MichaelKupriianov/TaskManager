@@ -27,20 +27,30 @@ bool TaskManager::Edit(TaskId id, const Task &task) {
 
 bool TaskManager::Complete(TaskId id) {
     if (tasks_.count(id) == 0) return false;
-    tasks_.at(id).task()->set_condition(Task_Condition_COMPLETED);
+    completed_tasks_.insert({id, tasks_.at(id)});
+    tasks_.erase(id);
+    for(const auto &[child_id, task] : tasks_)
+        if (task.parent()==id) {
+            completed_tasks_.insert({child_id, tasks_.at(child_id)});
+            tasks_.erase(child_id);
+        }
     return true;
 }
 
 bool TaskManager::Delete(TaskId id) {
     if (tasks_.count(id) == 0) return false;
     tasks_.erase(id);
+    for(const auto &[child_id, task] : tasks_)
+        if (task.parent()==id) {
+            tasks_.erase(child_id);
+        }
     return true;
 }
 
 TaskManager::ArrayTasks TaskManager::ShowLabel(const std::string &label, SortBy sort) const {
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
-        if (task.task()->label() == label && task.task()->condition() == Task_Condition_IN_PROGRESS)
+        if (task.task()->label() == label)
             for_sorting.emplace_back(std::make_unique<IdWithTask>(id, *task.task()));
 
     if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
@@ -56,7 +66,7 @@ TaskManager::ArrayTasks TaskManager::ShowLabel(const std::string &label, SortBy 
 TaskManager::ArrayTasks TaskManager::ShowParents(SortBy sort) const {
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
-        if (task.parent() == std::nullopt && task.task()->condition() == Task_Condition_IN_PROGRESS)
+        if (task.parent() == std::nullopt)
             for_sorting.emplace_back(std::make_unique<IdWithTask>(id, *task.task()));
 
     if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);
@@ -73,7 +83,7 @@ std::optional<TaskManager::TaskWithSubtasks> TaskManager::ShowTask(TaskId parent
     if (!tasks_.count(parent)) return std::nullopt;
     std::vector<std::unique_ptr<IdWithTask>> for_sorting;
     for (const auto &[id, task]: tasks_)
-        if (task.parent() == parent && task.task()->condition() == Task_Condition_IN_PROGRESS)
+        if (task.parent() == parent)
             for_sorting.emplace_back(std::make_unique<IdWithTask>(id, *task.task()));
 
     if (sort == SortBy::ID) std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);

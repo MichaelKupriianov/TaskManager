@@ -38,5 +38,6 @@ private:
     static bool ComparatorId(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
 private:
     std::map<TaskId, GeneralizedTask> tasks_;
+    std::map<TaskId, GeneralizedTask> completed_tasks_;
     std::unique_ptr<IdGenerator> generator_;
 };
