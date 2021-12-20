@@ -17,10 +17,10 @@ gtest_discover_tests(model_tests)
 
 
 file(GLOB_RECURSE persistence_tests_src CONFIGURE_DEPENDS
-        "../src/model/*.h"
-        "../src/model/*.cpp"
         "../src/persistence/*.h"
         "../src/persistence/*cpp"
+        "../src/model/Comparison.h"
+        "../src/model/Comparison.cpp"
         "persistence/*.cpp"
         )
 
@@ -52,6 +52,8 @@ file(GLOB_RECURSE integration_tests_src CONFIGURE_DEPENDS
         "../src/model/*.cpp"
         "../src/ui/*.h"
         "../src/ui/*cpp"
+        "../src/persistence/*.h"
+        "../src/persistence/*.cpp"
         )
 
 add_executable(integration_tests ${proto_src} ${proto_hdr} ${integration_tests_src} MainTest.cpp)

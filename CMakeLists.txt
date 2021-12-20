@@ -24,7 +24,7 @@ message("PROTO_SOURCES ${PROTO_SOURCES}")
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-protobuf_generate_cpp(proto_src proto_hdr src/model/Task.proto src/model/TaskId.proto src/persistence/TransportationTask.proto)
+protobuf_generate_cpp(proto_src proto_hdr src/model/Task.proto)
 message("${proto_hdr}")
 
 file(GLOB_RECURSE TaskManager_src CONFIGURE_DEPENDS

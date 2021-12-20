@@ -20,13 +20,17 @@ public:
 class MainTest : public ::testing::Test {
 public:
     void SetUp() override {
+        auto generator = std::make_shared<IdGenerator>();
+        auto persister = std::make_shared<Persister>();
+        auto task_manager = std::make_shared<TaskManager>(generator, persister);
+
         reader_ = std::make_shared<MockReader>();
         printer_ = std::make_shared<MockPrinter>();
         auto view = std::make_shared<View>(reader_, printer_);
         auto factory = std::make_shared<Factory>();
         auto dependency = std::make_shared<Dependency>(factory, view);
         auto step_machine = std::make_shared<StepMachine>(dependency);
-        auto task_manager = std::make_shared<TaskManager>();
+
         controller_ = std::make_shared<Controller>(step_machine, task_manager);
     }
 

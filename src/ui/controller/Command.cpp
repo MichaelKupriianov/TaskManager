@@ -77,3 +77,23 @@ bool CommandShowLabel::execute(const std::shared_ptr<TaskManager> &manager) {
     view_->PrintArrayOfTasks(manager->ShowLabel(label_, sort_by_));
     return true;
 }
+
+CommandSave::CommandSave(const std::string &filename,
+                                   const std::shared_ptr<View> &view)
+        : filename_{filename}, view_{view} {}
+
+bool CommandSave::execute(const std::shared_ptr<TaskManager> &manager) {
+    if (!manager->Save(filename_))
+        view_->PrintException("Cannot save to the specified file");
+    return true;
+}
+
+CommandLoad::CommandLoad(const std::string &filename,
+                         const std::shared_ptr<View> &view)
+        : filename_{filename}, view_{view} {}
+
+bool CommandLoad::execute(const std::shared_ptr<TaskManager> &manager) {
+    if (!manager->Load(filename_))
+        view_->PrintException("Cannot load for the specified file");
+    return true;
+}
