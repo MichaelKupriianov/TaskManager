@@ -6,13 +6,17 @@ enable_testing()
 
 
 file(GLOB_RECURSE model_tests_src CONFIGURE_DEPENDS
+        "../src/persistence/*.h"
+        "../src/persistence/*cpp"
         "../src/model/*.h"
         "../src/model/*.cpp"
         "model/*.cpp"
         )
-add_executable(model_tests ${model_tests_src})
+
+add_executable(model_tests ${proto_src} ${proto_hdr} ${model_tests_src})
 
 target_link_libraries(model_tests GTest::gtest GTest::gmock GTest::gmock_main)
+target_link_libraries(model_tests ${Protobuf_LIBRARIES})
 gtest_discover_tests(model_tests)
 
 
@@ -36,6 +40,8 @@ file(GLOB_RECURSE ui_tests_src CONFIGURE_DEPENDS
         "../src/model/*.cpp"
         "../src/ui/*.h"
         "../src/ui/*cpp"
+        "../src/persistence/*.h"
+        "../src/persistence/*cpp"
         "ui/*.cpp"
         "ui/*.h"
         )

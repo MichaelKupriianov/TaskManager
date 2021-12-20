@@ -14,13 +14,18 @@ public:
     void SetUp() override {
         task_ = std::make_shared<Task>();
         id_ = std::make_shared<TaskId>();
-        manager_ = std::make_shared<TaskManager>();
+
+        auto generator = std::make_shared<IdGenerator>();
+        auto persister = std::make_shared<Persister>();
+        manager_ = std::make_shared<TaskManager>(generator, persister);
+
         auto reader = std::make_shared<Reader>();
         auto printer = std::make_shared<Printer>();
         view_ = std::make_shared<View>(reader, printer);
         auto factory = std::make_shared<Factory>();
         auto dependency = std::make_shared<Dependency>(factory, view_);
         machine_ = std::make_shared<StepMachineMock>(dependency);
+
         controller_ = std::make_shared<Controller>(machine_, manager_);
     }
 

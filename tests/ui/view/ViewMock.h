@@ -22,4 +22,7 @@ public:
     MOCK_METHOD(bool, ReadIfPrintSubtasks, (TypeOfCommand), (override));
     MOCK_METHOD(SortBy, ReadSortBy, (TypeOfCommand), (override));
     MOCK_METHOD(void, PrintException, (const std::string &), (override));
+    MOCK_METHOD(void, PrintArrayOfTasks, (const ArrayTasks &), (override));
+    MOCK_METHOD(void, PrintTaskWithSubtasks, (const TaskWithSubtasks &), (override));
+    MOCK_METHOD(void, PrintAllTasks, (const std::vector<TaskWithSubtasks> &), (override));
 };

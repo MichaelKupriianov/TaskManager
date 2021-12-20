@@ -6,6 +6,9 @@
 
 class TaskManagerMock : public TaskManager {
 public:
+    TaskManagerMock(const std::shared_ptr<IdGenerator> &generator, const std::shared_ptr<Persister> &persister)
+            : TaskManager(generator, persister) {}
+
     MOCK_METHOD(bool, AddTask, (const Task &), (override));
     MOCK_METHOD(bool, AddSubTask, (const Task &, TaskId), (override));
     MOCK_METHOD(bool, Edit, (TaskId, const Task &), (override));

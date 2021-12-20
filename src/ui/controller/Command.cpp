@@ -62,8 +62,8 @@ CommandShowTask::CommandShowTask(TaskId id, SortBy sort_by, const std::shared_pt
         : id_{id}, sort_by_{sort_by}, view_{view} {}
 
 bool CommandShowTask::execute(const std::shared_ptr<TaskManager> &manager) {
-    if (manager->ShowTask(id_, sort_by_).has_value())
-        view_->PrintTaskWithSubtasks(manager->ShowTask(id_, sort_by_).value());
+    if (auto result = manager->ShowTask(id_, sort_by_); result.has_value())
+        view_->PrintTaskWithSubtasks(result.value());
     else
         view_->PrintException("There are no task with such ID");
     return true;
