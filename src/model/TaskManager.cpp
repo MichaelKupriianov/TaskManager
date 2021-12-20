@@ -42,10 +42,10 @@ bool TaskManager::Complete(TaskId id) {
 
 bool TaskManager::Delete(TaskId id) {
     if (tasks_.count(id) == 0) return false;
-    tasks_.erase(id);
     for (const auto &[child_id, task]: tasks_)
         if (task.has_parent() && task.parent() == id)
             tasks_.erase(child_id);
+    tasks_.erase(id);
     return true;
 }
 

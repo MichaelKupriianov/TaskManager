@@ -9,8 +9,10 @@ class Persister {
 public:
     using Tasks = std::vector<std::pair<TaskId, GeneralizedTask>>;
 public:
-    bool Save(const Tasks &, const std::string &);
-    std::optional<Tasks> Load(const std::string &);
+    virtual bool Save(const Tasks &, const std::string &);
+    virtual std::optional<Tasks> Load(const std::string &);
+
+    virtual ~Persister() = default;
 };
 
 

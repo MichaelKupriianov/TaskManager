@@ -107,7 +107,7 @@ std::string Converter::CommandToString(TypeOfCommand command) {
         case TypeOfCommand::LOAD:
             return "[Load]";
         default:
-            return "";
+            assert(false);
     }
 }
 
