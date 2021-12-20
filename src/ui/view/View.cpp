@@ -13,6 +13,8 @@ void View::Help() {
     printer_->PrintString("show - Show all tasks\n");
     printer_->PrintString("show_task - Show task with its subtasks\n");
     printer_->PrintString("show_label - Show task with some specific label\n");
+    printer_->PrintString("save - Save introduced tasks to a file\n");
+    printer_->PrintString("load - Load tasks for a file\n");
     printer_->PrintString("quit - finish work\n\n");
 }
 
@@ -113,6 +115,14 @@ SortBy View::ReadSortBy(TypeOfCommand command) {
     if (std::optional<SortBy> result{Converter::StringToSortBy(answer)}; result.has_value())
         return result.value();
     return ReadSortBy(command);
+}
+
+std::string View::ReadFilename(TypeOfCommand command) {
+    printer_->PrintString(Converter::CommandToString(command) + " filename: ");
+    std::string title{reader_->ReadString()};
+    if (!title.empty()) return title;
+    printer_->PrintString("Filename should be non-empty\n");
+    return ReadTitle(command);
 }
 
 void View::PrintArrayOfTasks(const ArrayTasks &tasks) {

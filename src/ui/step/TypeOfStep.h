@@ -11,5 +11,7 @@ enum class TypeOfStep {
     DELETE,
     SHOW,
     SHOW_TASK,
-    SHOW_LABEL
+    SHOW_LABEL,
+    SAVE,
+    LOAD
 };

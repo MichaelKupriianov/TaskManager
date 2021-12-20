@@ -37,6 +37,8 @@ std::optional<TypeOfStep> Converter::StringToStepType(const std::string &command
     if (command == "show") return TypeOfStep::SHOW;
     if (command == "show_task") return TypeOfStep::SHOW_TASK;
     if (command == "show_label") return TypeOfStep::SHOW_LABEL;
+    if (command == "save") return TypeOfStep::SAVE;
+    if (command == "load") return TypeOfStep::LOAD;
     return std::nullopt;
 }
 
@@ -100,6 +102,10 @@ std::string Converter::CommandToString(TypeOfCommand command) {
             return "[Show Task]";
         case TypeOfCommand::SHOW_LABEL:
             return "[Show by label]";
+        case TypeOfCommand::SAVE:
+            return "[Save]";
+        case TypeOfCommand::LOAD:
+            return "[Load]";
         default:
             return "";
     }

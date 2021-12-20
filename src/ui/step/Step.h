@@ -48,3 +48,21 @@ public:
 private:
     const TypeOfCommand command_;
 };
+
+class StepSave : public Step {
+public:
+    StepSave();
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
+    virtual ~StepSave() = default;
+private:
+    const TypeOfCommand command_;
+};
+
+class StepLoad : public Step {
+public:
+    StepLoad();
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
+    virtual ~StepLoad() = default;
+private:
+    const TypeOfCommand command_;
+};

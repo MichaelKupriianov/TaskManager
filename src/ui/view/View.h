@@ -30,6 +30,7 @@ public:
     virtual bool Confirm();
     virtual bool ReadIfPrintSubtasks(TypeOfCommand);
     virtual SortBy ReadSortBy(TypeOfCommand);
+    virtual std::string ReadFilename(TypeOfCommand);
 public:
     using IdWithTask = std::pair<TaskId, Task>;
     using ArrayTasks = std::vector<IdWithTask>;

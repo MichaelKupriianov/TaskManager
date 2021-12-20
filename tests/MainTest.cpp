@@ -83,7 +83,7 @@ TEST_F(MainTest, Scenario_1) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("There is no such command\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
-    EXPECT_CALL(*printer_, PrintString(_)).Times(10);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(12);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(5);
@@ -448,6 +448,101 @@ TEST_F(MainTest, Scenario_4) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(2);
     EXPECT_CALL(*printer_, PrintString("There are no outstanding tasks now.\n")).Times(1);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
+
+    controller_->Run();
+}
+
+TEST_F(MainTest, Scenario_5) {
+    EXPECT_CALL(*reader_, ReadString())
+            .WillOnce(Return("add"))
+            .WillOnce(Return("first"))
+            .WillOnce(Return(""))
+            .WillOnce(Return(""))
+            .WillOnce(Return(""))
+            .WillOnce(Return("y"))
+
+            .WillOnce(Return("save"))
+            .WillOnce(Return("first"))
+            .WillOnce(Return("y"))
+
+            .WillOnce(Return("add"))
+            .WillOnce(Return("second"))
+            .WillOnce(Return(""))
+            .WillOnce(Return(""))
+            .WillOnce(Return(""))
+            .WillOnce(Return("y"))
+
+            .WillOnce(Return("show"))
+            .WillOnce(Return("y"))
+            .WillOnce(Return(""))
+
+            .WillOnce(Return("save"))
+            .WillOnce(Return("second"))
+            .WillOnce(Return("y"))
+
+            .WillOnce(Return("load"))
+            .WillOnce(Return("first"))
+            .WillOnce(Return("y"))
+
+            .WillOnce(Return("show"))
+            .WillOnce(Return("y"))
+            .WillOnce(Return(""))
+
+            .WillOnce(Return("load"))
+            .WillOnce(Return("second"))
+            .WillOnce(Return("y"))
+
+            .WillOnce(Return("show"))
+            .WillOnce(Return("y"))
+            .WillOnce(Return(""))
+
+            .WillOnce(Return("quit"));
+
+
+    InSequence s;
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(5);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(5);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString(
+            "id: 0, title: first, priority: none, date: none\n")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(
+            "id: 1, title: second, priority: none, date: none\n")).Times(1);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString(
+            "id: 0, title: first, priority: none, date: none\n")).Times(1);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+
+    EXPECT_CALL(*printer_, PrintString(
+            "id: 0, title: first, priority: none, date: none\n")).Times(1);
+    EXPECT_CALL(*printer_, PrintString(
+            "id: 1, title: second, priority: none, date: none\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);

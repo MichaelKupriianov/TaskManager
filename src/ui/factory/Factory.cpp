@@ -25,6 +25,10 @@ std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
             return std::shared_ptr<Step>{new StepShowTask};
         case TypeOfStep::SHOW_LABEL:
             return std::shared_ptr<Step>{new StepShowLabel};
+        case TypeOfStep::SAVE:
+            return std::shared_ptr<Step>{new StepSave};
+        case TypeOfStep::LOAD:
+            return std::shared_ptr<Step>{new StepLoad};
         default:
             assert(false);
     }
