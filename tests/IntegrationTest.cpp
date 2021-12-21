@@ -17,7 +17,7 @@ public:
     MOCK_METHOD(void, PrintString, (const std::string &), (override));
 };
 
-class MainTest : public ::testing::Test {
+class IntegrationTest : public ::testing::Test {
 public:
     void SetUp() override {
         auto generator = std::make_shared<IdGenerator>();
@@ -40,7 +40,7 @@ protected:
     std::shared_ptr<Controller> controller_;
 };
 
-TEST_F(MainTest, Scenario_1) {
+TEST_F(IntegrationTest, Scenario_1) {
     EXPECT_CALL(*reader_, ReadString())
             .WillOnce(Return("aaa"))
             .WillOnce(Return("help"))
@@ -113,7 +113,7 @@ TEST_F(MainTest, Scenario_1) {
     controller_->Run();
 }
 
-TEST_F(MainTest, Scenario_2) {
+TEST_F(IntegrationTest, Scenario_2) {
     EXPECT_CALL(*reader_, ReadString())
             .WillOnce(Return("add"))
             .WillOnce(Return(""))
@@ -232,7 +232,7 @@ TEST_F(MainTest, Scenario_2) {
     controller_->Run();
 }
 
-TEST_F(MainTest, Scenario_3) {
+TEST_F(IntegrationTest, Scenario_3) {
     EXPECT_CALL(*reader_, ReadString())
             .WillOnce(Return("add"))
             .WillOnce(Return("first"))
@@ -369,7 +369,7 @@ TEST_F(MainTest, Scenario_3) {
     controller_->Run();
 }
 
-TEST_F(MainTest, Scenario_4) {
+TEST_F(IntegrationTest, Scenario_4) {
     EXPECT_CALL(*reader_, ReadString())
             .WillOnce(Return("add"))
             .WillOnce(Return("first"))
@@ -455,7 +455,7 @@ TEST_F(MainTest, Scenario_4) {
     controller_->Run();
 }
 
-TEST_F(MainTest, Scenario_5) {
+TEST_F(IntegrationTest, Scenario_5) {
     EXPECT_CALL(*reader_, ReadString())
             .WillOnce(Return("add"))
             .WillOnce(Return("first"))
