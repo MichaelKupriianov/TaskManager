@@ -1,5 +1,5 @@
-#include"Factory.h"
-#include<cassert>
+#include "Factory.h"
+#include <cassert>
 
 std::shared_ptr<Step> Factory::CreateStep(TypeOfStep step) {
     switch (step) {

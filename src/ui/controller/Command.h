@@ -1,10 +1,10 @@
 #pragma once
 
-#include<memory>
-#include"Task.pb.h"
-#include"TaskManager.h"
-#include"SortBy.h"
-#include"View.h"
+#include <memory>
+#include "Task.pb.h"
+#include "model/TaskManager.h"
+#include "api/TasksSortBy.h"
+#include "view/View.h"
 
 class Command {
 public:
@@ -73,34 +73,34 @@ private:
 
 class CommandShow : public Command {
 public:
-    explicit CommandShow(bool, SortBy, const std::shared_ptr<View> &);
+    explicit CommandShow(bool, TasksSortBy, const std::shared_ptr<View> &);
     virtual bool execute(const std::shared_ptr<TaskManager> &) override;
     virtual ~CommandShow() = default;
 private:
     const bool if_print_subtasks_;
-    const SortBy sort_by_;
+    const TasksSortBy sort_by_;
     const std::shared_ptr<View> view_;
 };
 
 class CommandShowTask : public Command {
 public:
-    explicit CommandShowTask(TaskId, SortBy, const std::shared_ptr<View> &);
+    explicit CommandShowTask(TaskId, TasksSortBy, const std::shared_ptr<View> &);
     virtual bool execute(const std::shared_ptr<TaskManager> &) override;
     virtual ~CommandShowTask() = default;
 private:
     const TaskId id_;
-    const SortBy sort_by_;
+    const TasksSortBy sort_by_;
     const std::shared_ptr<View> view_;
 };
 
 class CommandShowLabel : public Command {
 public:
-    explicit CommandShowLabel(const std::string &, SortBy, const std::shared_ptr<View> &);
+    explicit CommandShowLabel(const std::string &, TasksSortBy, const std::shared_ptr<View> &);
     virtual bool execute(const std::shared_ptr<TaskManager> &) override;
     virtual ~CommandShowLabel() = default;
 private:
     const std::string label_;
-    const SortBy sort_by_;
+    const TasksSortBy sort_by_;
     const std::shared_ptr<View> view_;
 };
 

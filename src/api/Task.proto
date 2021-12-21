@@ -13,7 +13,7 @@ message Task {
     LOW = 2;
     NONE = 3;
   }
-  enum Condition {
+  enum Status {
     IN_PROGRESS = 0;
     COMPLETED = 1;
   }
@@ -21,10 +21,10 @@ message Task {
   Priority priority = 2;
   google.protobuf.Timestamp date = 3;
   string label = 4;
-  Condition condition = 5;
+  Status status = 5;
 }
 
-message GeneralizedTask {
+message FamilyTask {
   Task task = 1;
   TaskId parent = 2;
 }

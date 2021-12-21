@@ -1,7 +1,7 @@
 #pragma once
 
-#include<memory>
-#include"SubStep.h"
+#include <memory>
+#include "step/SubStep.h"
 
 class SubFactory {
 public:

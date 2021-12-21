@@ -1,11 +1,11 @@
 #pragma once
 
-#include<memory>
-#include"Step.h"
-#include"StepAdd.h"
-#include"StepEdit.h"
-#include"StepShow.h"
-#include"TypeOfStep.h"
+#include <memory>
+#include "step/Step.h"
+#include "step/StepAdd.h"
+#include "step/StepEdit.h"
+#include "step/StepShow.h"
+#include "step/TypeOfStep.h"
 
 class Factory {
 public:

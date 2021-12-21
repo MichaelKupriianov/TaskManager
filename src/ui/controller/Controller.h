@@ -1,8 +1,8 @@
 #pragma once
 
-#include<memory>
-#include"StepMachine.h"
-#include"TaskManager.h"
+#include <memory>
+#include "machine/StepMachine.h"
+#include "model/TaskManager.h"
 
 class Controller {
 public:

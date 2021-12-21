@@ -1,8 +1,8 @@
-#include"SubStepMachine.h"
-#include"SubContext.h"
-#include"SubStep.h"
+#include "machine/SubStepMachine.h"
+#include "context/SubContext.h"
+#include "step/SubStep.h"
 
-SubStepMachine::SubStepMachine(const std::shared_ptr<SubDependency> &dependency) :
+SubStepMachine::SubStepMachine(const std::shared_ptr<DependencyForSubSteps> &dependency) :
         dependency_{dependency} {}
 
 std::shared_ptr<Task> SubStepMachine::GetTask() {

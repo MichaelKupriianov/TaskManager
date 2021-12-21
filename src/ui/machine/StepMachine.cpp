@@ -1,8 +1,8 @@
-#include"StepMachine.h"
-#include"Step.h"
-#include"Context.h"
+#include "StepMachine.h"
+#include "step/Step.h"
+#include "context/Context.h"
 
-StepMachine::StepMachine(const std::shared_ptr<Dependency> &dependency) :
+StepMachine::StepMachine(const std::shared_ptr<DependencyForSteps> &dependency) :
         dependency_{dependency} {}
 
 std::shared_ptr<Command> StepMachine::GetCommand() {

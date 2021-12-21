@@ -1,6 +1,6 @@
 #pragma once
 
-enum class SortBy {
+enum class TasksSortBy {
     ID,
     DATE,
     PRIORITY

@@ -1,8 +1,8 @@
-#include"Persister.h"
-#include<fstream>
-#include<google/protobuf/io/coded_stream.h>
-#include<google/protobuf/io/zero_copy_stream_impl.h>
-#include<google/protobuf/util/delimited_message_util.h>
+#include "Persister.h"
+#include <fstream>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <google/protobuf/util/delimited_message_util.h>
 
 bool Persister::Save(const Tasks &tasks, const std::string &filename) {
     std::ofstream file(filename);
@@ -22,7 +22,7 @@ std::optional<Persister::Tasks> Persister::Load(const std::string &filename) {
 
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> input =
             std::make_unique<google::protobuf::io::IstreamInputStream>(&file);
-    GeneralizedTask task;
+    FamilyTask task;
     TaskId id;
 
     while (google::protobuf::util::ParseDelimitedFromZeroCopyStream(&id, input.get(), nullptr)) {

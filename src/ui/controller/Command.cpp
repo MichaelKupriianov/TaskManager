@@ -48,7 +48,7 @@ bool CommandDelete::execute(const std::shared_ptr<TaskManager> &manager) {
     return true;
 }
 
-CommandShow::CommandShow(bool if_print_subtasks, SortBy sort_by,
+CommandShow::CommandShow(bool if_print_subtasks, TasksSortBy sort_by,
                          const std::shared_ptr<View> &view)
         : if_print_subtasks_{if_print_subtasks}, sort_by_{sort_by}, view_{view} {}
 
@@ -58,7 +58,7 @@ bool CommandShow::execute(const std::shared_ptr<TaskManager> &manager) {
     return true;
 }
 
-CommandShowTask::CommandShowTask(TaskId id, SortBy sort_by, const std::shared_ptr<View> &view)
+CommandShowTask::CommandShowTask(TaskId id, TasksSortBy sort_by, const std::shared_ptr<View> &view)
         : id_{id}, sort_by_{sort_by}, view_{view} {}
 
 bool CommandShowTask::execute(const std::shared_ptr<TaskManager> &manager) {
@@ -69,7 +69,7 @@ bool CommandShowTask::execute(const std::shared_ptr<TaskManager> &manager) {
     return true;
 }
 
-CommandShowLabel::CommandShowLabel(const std::string &label, SortBy sort_by,
+CommandShowLabel::CommandShowLabel(const std::string &label, TasksSortBy sort_by,
                                    const std::shared_ptr<View> &view)
         : label_{label}, sort_by_{sort_by}, view_{view} {}
 

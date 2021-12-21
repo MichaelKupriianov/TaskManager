@@ -1,4 +1,4 @@
-#include"Controller.h"
+#include "controller/Controller.h"
 
 int main() {
     std::shared_ptr<IdGenerator> generator{new IdGenerator};
@@ -9,7 +9,7 @@ int main() {
     std::shared_ptr<Printer> printer{new Printer};
     std::shared_ptr<View> view{new View{reader, printer}};
     std::shared_ptr<Factory> factory{new Factory};
-    std::shared_ptr<Dependency> dependency{new Dependency{factory, view}};
+    std::shared_ptr<DependencyForSteps> dependency{new DependencyForSteps{factory, view}};
     std::shared_ptr<StepMachine> machine{new StepMachine{dependency}};
 
     Controller controller{machine, manager};

@@ -1,6 +1,6 @@
-#include"gtest/gtest.h"
-#include"gmock/gmock.h"
-#include"Controller.h"
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "controller/Controller.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -28,7 +28,7 @@ public:
         printer_ = std::make_shared<MockPrinter>();
         auto view = std::make_shared<View>(reader_, printer_);
         auto factory = std::make_shared<Factory>();
-        auto dependency = std::make_shared<Dependency>(factory, view);
+        auto dependency = std::make_shared<DependencyForSteps>(factory, view);
         auto step_machine = std::make_shared<StepMachine>(dependency);
 
         controller_ = std::make_shared<Controller>(step_machine, task_manager);

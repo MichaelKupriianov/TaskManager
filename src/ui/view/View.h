@@ -1,36 +1,35 @@
 #pragma once
 
-#include<string>
-#include<ctime>
-#include<memory>
-#include<vector>
-#include<optional>
-#include"Task.pb.h"
-#include"TypeOfStep.h"
-#include"TypeOfCommand.h"
-#include"SortBy.h"
-#include"Reader.h"
-#include"Printer.h"
-#include"Converter.h"
+#include <string>
+#include <ctime>
+#include <memory>
+#include <vector>
+#include <optional>
+#include "Task.pb.h"
+#include "step/TypeOfStep.h"
+#include "api/TasksSortBy.h"
+#include "Reader.h"
+#include "Printer.h"
+#include "Convert.h"
 
 class View {
 public:
     View(const std::shared_ptr<Reader> &, const std::shared_ptr<Printer> &);
     virtual ~View() = default;
 public:
-    virtual void Help();
-    virtual void Quit();
+    virtual void PrintHelp();
+    virtual void PrintQuit();
     virtual TypeOfStep ReadCommand();
-    virtual TaskId ReadId(TypeOfCommand);
-    virtual TaskId ReadParentId(TypeOfCommand);
-    virtual std::string ReadTitle(TypeOfCommand);
-    virtual Task::Priority ReadPriority(TypeOfCommand);
-    virtual google::protobuf::Timestamp ReadDate(TypeOfCommand);
-    virtual std::string ReadLabel(TypeOfCommand);
+    virtual TaskId ReadId(TypeOfStep);
+    virtual TaskId ReadParentId(TypeOfStep);
+    virtual std::string ReadTitle(TypeOfStep);
+    virtual Task::Priority ReadPriority(TypeOfStep);
+    virtual google::protobuf::Timestamp ReadDate(TypeOfStep);
+    virtual std::string ReadLabel(TypeOfStep);
     virtual bool Confirm();
-    virtual bool ReadIfPrintSubtasks(TypeOfCommand);
-    virtual SortBy ReadSortBy(TypeOfCommand);
-    virtual std::string ReadFilename(TypeOfCommand);
+    virtual bool ReadIfPrintSubtasks(TypeOfStep);
+    virtual TasksSortBy ReadSortBy(TypeOfStep);
+    virtual std::string ReadFilename(TypeOfStep);
 public:
     using IdWithTask = std::pair<TaskId, Task>;
     using ArrayTasks = std::vector<IdWithTask>;

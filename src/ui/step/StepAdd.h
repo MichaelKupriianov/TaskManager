@@ -1,22 +1,21 @@
 #pragma once
 
-#include<memory>
-#include"Step.h"
-#include"TypeOfCommand.h"
-#include"Context.h"
+#include <memory>
+#include "Step.h"
+#include "context/Context.h"
 
 class StepAdd : public Step {
 public:
     StepAdd();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
 private:
-    const TypeOfCommand command_;
+    const TypeOfStep command_;
 };
 
 class StepAddSub : public Step {
 public:
     StepAddSub();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<Dependency> &) override;
+    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
 private:
-    const TypeOfCommand command_;
+    const TypeOfStep command_;
 };
