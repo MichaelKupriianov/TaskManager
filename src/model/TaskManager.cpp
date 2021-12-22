@@ -134,14 +134,6 @@ std::vector<TaskManager::TaskWithSubtasks> TaskManager::ShowAll(TasksSortBy sort
     return result;
 }
 
-FamilyTask TaskManager::CreateFamilyTask(const Task &task, std::optional<TaskId> parent) {
-    FamilyTask generalized_task;
-    generalized_task.set_allocated_task(new Task(task));
-    if (parent.has_value())
-        generalized_task.set_allocated_parent(new TaskId(parent.value()));
-    return generalized_task;
-}
-
 bool TaskManager::ComparatorId(const std::unique_ptr<IdWithTask> &first,
                                const std::unique_ptr<IdWithTask> &second) {
     if (first->first < second->first) return true;

@@ -9,6 +9,7 @@
 #include "IdGenerator.h"
 #include "api/TasksSortBy.h"
 #include "api/ComparisonProtoObjects.h"
+#include "api/CreateProtoObjects.h"
 #include "persistence/Persister.h"
 
 class TaskManager {
@@ -34,8 +35,6 @@ public:
     virtual bool Save(const std::string &);
     virtual bool Load(const std::string &);
 private:
-    static FamilyTask CreateFamilyTask(const Task &, std::optional<TaskId>);
-
     static bool ComparatorPriority(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
     static bool ComparatorDate(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);
     static bool ComparatorId(const std::unique_ptr<IdWithTask> &, const std::unique_ptr<IdWithTask> &);

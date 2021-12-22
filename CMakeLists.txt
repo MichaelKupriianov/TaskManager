@@ -19,15 +19,12 @@ include_directories(src)
 include_directories(src/ui)
 include_directories(tests)
 
-file(GLOB_RECURSE model_src src/model/* src/api/* src/persistence/*.h)
+file(GLOB_RECURSE model_src src/model/* src/api/* src/persistence/*)
 file(GLOB_RECURSE ui_src src/ui/* src/api/* src/model/*.h src/persistence/*.h)
-file(GLOB_RECURSE persistence_src src/persistence/*)
+file(GLOB_RECURSE model_tests_src "tests/model/*" "tests/persistence/*")
+file(GLOB_RECURSE ui_tests_src "tests/ui/*")
 
-file(GLOB_RECURSE model_tests_src "model/*.cpp")
-file(GLOB_RECURSE ui_tests_src "ui/*")
-
-
-add_executable(TaskManager ${proto_src} ${proto_hdr} ${model_src} ${ui_src} ${persistence_src} src/main.cpp)
+add_executable(TaskManager ${proto_src} ${proto_hdr} ${model_src} ${ui_src} src/main.cpp)
 target_link_libraries(TaskManager ${Protobuf_LIBRARIES})
 
 add_executable(model_tests ${proto_src} ${proto_hdr} ${model_src} ${model_tests_src})
@@ -35,18 +32,12 @@ target_link_libraries(model_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(model_tests ${Protobuf_LIBRARIES})
 gtest_discover_tests(model_tests)
 
-add_executable(persistence_tests ${proto_src} ${proto_hdr} ${persistence_src} tests/persistence/PersisterTest.cpp)
-target_link_libraries(persistence_tests GTest::gtest GTest::gmock GTest::gmock_main)
-target_link_libraries(persistence_tests ${Protobuf_LIBRARIES})
-gtest_discover_tests(persistence_tests)
-
 add_executable(ui_tests ${proto_src} ${proto_hdr} ${ui_src} ${ui_tests_src})
 target_link_libraries(ui_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(ui_tests ${Protobuf_LIBRARIES})
 gtest_discover_tests(ui_tests)
 
-add_executable(integration_tests ${proto_src} ${proto_hdr} ${model_src} ${persistence_src} ${ui_src}
-        tests/IntegrationTest.cpp)
+add_executable(integration_tests ${proto_src} ${proto_hdr} ${model_src} ${ui_src} tests/IntegrationTest.cpp)
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(integration_tests ${Protobuf_LIBRARIES})
 gtest_discover_tests(integration_tests)
