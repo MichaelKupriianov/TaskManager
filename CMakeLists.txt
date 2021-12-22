@@ -16,7 +16,6 @@ protobuf_generate_cpp(proto_src proto_hdr src/api/Task.proto)
 message("${proto_hdr}")
 
 include_directories(src)
-include_directories(src/ui)
 include_directories(tests)
 
 file(GLOB_RECURSE model_src src/model/* src/api/* src/persistence/*)

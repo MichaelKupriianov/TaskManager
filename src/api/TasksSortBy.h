@@ -1,7 +1,9 @@
 #pragma once
 
-enum class TasksSortBy {
-    ID,
-    DATE,
-    PRIORITY
-};
+namespace api {
+    enum class TasksSortBy {
+        ID,
+        DATE,
+        PRIORITY
+    };
+}

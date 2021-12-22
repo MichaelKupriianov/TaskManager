@@ -26,8 +26,7 @@ std::shared_ptr<Step> StepComplete::execute(Context &context,
                                             const std::shared_ptr<DependencyForSteps> &dependency) {
     TaskId id{dependency->view()->ReadId(command_)};
     if (dependency->view()->Confirm())
-        context.set_command(std::shared_ptr<Command>{
-                new CommandComplete{id, dependency->view()}});
+        context.set_command(std::make_shared<CommandComplete>(id, dependency->view()));
     return dependency->factory()->GetRootStep();
 }
 

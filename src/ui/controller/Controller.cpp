@@ -1,12 +1,20 @@
 #include "Controller.h"
-#include "Command.h"
+#include "ui/command/Command.h"
+#include "ui/Context.h"
 
-Controller::Controller(const std::shared_ptr<StepMachine> &machine, const std::shared_ptr<TaskManager> &manager)
-        : step_machine_{machine}, task_manager_{manager} {}
+namespace ui {
+    Controller::Controller(const std::shared_ptr<StateMachine>& machine,
+                           const std::shared_ptr<command::Dependency>& dependency)
+            : step_machine_{machine}, dependency_(dependency) {}
 
-void Controller::Run() {
-    while (true) {
-        std::shared_ptr<Command> command{step_machine_->GetCommand()};
-        if (!command->execute(task_manager_)) break;
+    void Controller::Run() {
+        Context context;
+        while (true) {
+            step_machine_->GetCommand(context);
+            command::Result result{context.command()->execute(dependency_)};
+            if (result.finished) break;
+            context.set_result(std::make_shared<command::Result>(result));
+            context.set_command(std::nullopt);
+        }
     }
 }
