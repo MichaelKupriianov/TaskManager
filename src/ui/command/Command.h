@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "Task.pb.h"
-#include "Dependency.h"
+#include "Resources.h"
 #include "Result.h"
 #include "api/TasksSortBy.h"
 
@@ -10,20 +10,20 @@ namespace ui::command {
 
     class Command {
     public:
-        virtual Result execute(const std::shared_ptr<Dependency>&) = 0;
+        virtual Result execute(const std::shared_ptr<Resources>&) = 0;
         virtual ~Command() = default;
     };
 
     class Quit : public Command {
     public:
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Quit() override = default;
     };
 
     class Add : public Command {
     public:
         explicit Add(const api::Task&);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Add() override = default;
     private:
         const api::Task task_;
@@ -32,7 +32,7 @@ namespace ui::command {
     class AddSub : public Command {
     public:
         explicit AddSub(const api::Task&, api::TaskId);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~AddSub() override = default;
     private:
         const api::Task task_;
@@ -42,7 +42,7 @@ namespace ui::command {
     class Edit : public Command {
     public:
         explicit Edit(api::TaskId, const api::Task&);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Edit() override = default;
     private:
         const api::TaskId id_;
@@ -52,7 +52,7 @@ namespace ui::command {
     class Complete : public Command {
     public:
         explicit Complete(api::TaskId);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Complete() override = default;
     private:
         const api::TaskId id_;
@@ -61,7 +61,7 @@ namespace ui::command {
     class Delete : public Command {
     public:
         explicit Delete(api::TaskId);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Delete() override = default;
     private:
         const api::TaskId id_;
@@ -70,7 +70,7 @@ namespace ui::command {
     class Show : public Command {
     public:
         explicit Show(bool, api::TasksSortBy);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Show() override = default;
     private:
         const bool if_print_subtasks_;
@@ -80,7 +80,7 @@ namespace ui::command {
     class ShowTask : public Command {
     public:
         explicit ShowTask(api::TaskId, api::TasksSortBy);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~ShowTask() override = default;
     private:
         const api::TaskId id_;
@@ -90,7 +90,7 @@ namespace ui::command {
     class ShowLabel : public Command {
     public:
         explicit ShowLabel(const std::string&, api::TasksSortBy);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~ShowLabel() override = default;
     private:
         const std::string label_;
@@ -100,7 +100,7 @@ namespace ui::command {
     class Save : public Command {
     public:
         explicit Save(const std::string&);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Save() override = default;
     private:
         const std::string filename_;
@@ -109,7 +109,7 @@ namespace ui::command {
     class Load : public Command {
     public:
         explicit Load(const std::string&);
-        Result execute(const std::shared_ptr<Dependency>&) override;
+        Result execute(const std::shared_ptr<Resources>&) override;
         ~Load() override = default;
     private:
         const std::string filename_;

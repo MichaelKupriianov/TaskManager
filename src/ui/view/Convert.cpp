@@ -1,15 +1,16 @@
 #include "Convert.h"
 
-namespace convert {
-    std::optional<Task::Priority> StringToPriority(const std::string &priority) {
-        if (priority == "high") return Task_Priority_HIGH;
-        if (priority == "medium") return Task_Priority_MEDIUM;
-        if (priority == "low") return Task_Priority_LOW;
-        if (priority == "none" || priority.empty()) return Task_Priority_NONE;
+namespace ui::convert {
+
+    std::optional<api::Task::Priority> StringToPriority(const std::string& priority) {
+        if (priority == "high") return api::Task_Priority_HIGH;
+        if (priority == "medium") return api::Task_Priority_MEDIUM;
+        if (priority == "low") return api::Task_Priority_LOW;
+        if (priority == "none" || priority.empty()) return api::Task_Priority_NONE;
         return std::nullopt;
     }
 
-    std::optional<time_t> StringToDate(const std::string &date) {
+    std::optional<time_t> StringToDate(const std::string& date) {
         if (date.empty())
             return 0;
 
@@ -43,25 +44,25 @@ namespace convert {
         return result;
     }
 
-    std::optional<TypeOfStep> StringToStepType(const std::string &command) {
-        if (command == "quit") return TypeOfStep::QUIT;
-        if (command == "help") return TypeOfStep::HELP;
-        if (command == "add") return TypeOfStep::ADD;
-        if (command == "add_subtask") return TypeOfStep::ADD_SUB;
-        if (command == "edit") return TypeOfStep::EDIT;
-        if (command == "complete") return TypeOfStep::COMPLETE;
-        if (command == "delete") return TypeOfStep::DELETE;
-        if (command == "show") return TypeOfStep::SHOW;
-        if (command == "show_task") return TypeOfStep::SHOW_TASK;
-        if (command == "show_label") return TypeOfStep::SHOW_LABEL;
-        if (command == "save") return TypeOfStep::SAVE;
-        if (command == "load") return TypeOfStep::LOAD;
+    std::optional<step::Type> StringToStepType(const std::string& command) {
+        if (command == "quit") return step::Type::QUIT;
+        if (command == "help") return step::Type::HELP;
+        if (command == "add") return step::Type::ADD;
+        if (command == "add_subtask") return step::Type::ADD_SUB;
+        if (command == "edit") return step::Type::EDIT;
+        if (command == "complete") return step::Type::COMPLETE;
+        if (command == "delete") return step::Type::DELETE;
+        if (command == "show") return step::Type::SHOW;
+        if (command == "show_task") return step::Type::SHOW_TASK;
+        if (command == "show_label") return step::Type::SHOW_LABEL;
+        if (command == "save") return step::Type::SAVE;
+        if (command == "load") return step::Type::LOAD;
         return std::nullopt;
     }
 
-    std::optional<int> StringToId(const std::string &id) {
-        for (int i = 0; i < id.size(); i++)
-            if (id[i] < '0' || id[i] > '9') return std::nullopt;
+    std::optional<int> StringToId(const std::string& id) {
+        for (auto symbol: id)
+            if (symbol < '0' || symbol > '9') return std::nullopt;
         try {
             int result = std::stoi(id);
             if (result < 0) return std::nullopt;
@@ -72,27 +73,27 @@ namespace convert {
         }
     }
 
-    std::optional<TasksSortBy> StringToSortBy(const std::string &sort) {
-        if (sort == "id" || sort == "") return TasksSortBy::ID;
-        if (sort == "date") return TasksSortBy::DATE;
-        if (sort == "priority") return TasksSortBy::PRIORITY;
+    std::optional<api::TasksSortBy> StringToSortBy(const std::string& sort) {
+        if (sort == "id" || sort.empty()) return api::TasksSortBy::ID;
+        if (sort == "date") return api::TasksSortBy::DATE;
+        if (sort == "priority") return api::TasksSortBy::PRIORITY;
         return std::nullopt;
     }
 
-    std::string PriorityToString(Task::Priority priority) {
+    std::string PriorityToString(api::Task::Priority priority) {
         switch (priority) {
-            case Task_Priority_HIGH:
+            case api::Task_Priority_HIGH:
                 return "high";
-            case Task_Priority_MEDIUM:
+            case api::Task_Priority_MEDIUM:
                 return "medium";
-            case Task_Priority_LOW:
+            case api::Task_Priority_LOW:
                 return "low";
             default:
                 return "none";
         }
     }
 
-    std::string DateToString(google::protobuf::Timestamp date) {
+    std::string DateToString(const google::protobuf::Timestamp& date) {
         if (date.seconds() == 0) return "none";
         time_t time{date.seconds()};
         std::string result = ctime(&time);
@@ -101,35 +102,35 @@ namespace convert {
         return result;
     }
 
-    std::string CommandToString(TypeOfStep command) {
+    std::string CommandToString(step::Type command) {
         switch (command) {
-            case TypeOfStep::ADD:
+            case step::Type::ADD:
                 return "[Add Task]";
-            case TypeOfStep::ADD_SUB:
+            case step::Type::ADD_SUB:
                 return "[Add SubTask]";
-            case TypeOfStep::EDIT:
+            case step::Type::EDIT:
                 return "[Edit Task]";
-            case TypeOfStep::COMPLETE:
+            case step::Type::COMPLETE:
                 return "[Complete Task]";
-            case TypeOfStep::DELETE:
+            case step::Type::DELETE:
                 return "[Delete Task]";
-            case TypeOfStep::SHOW:
+            case step::Type::SHOW:
                 return "[Show]";
-            case TypeOfStep::SHOW_TASK:
+            case step::Type::SHOW_TASK:
                 return "[Show Task]";
-            case TypeOfStep::SHOW_LABEL:
+            case step::Type::SHOW_LABEL:
                 return "[Show by label]";
-            case TypeOfStep::SAVE:
+            case step::Type::SAVE:
                 return "[Save]";
-            case TypeOfStep::LOAD:
+            case step::Type::LOAD:
                 return "[Load]";
             default:
                 assert(false);
         }
     }
 
-    std::string TaskToString(const std::pair<TaskId, Task> &task) {
-        std::string result = "";
+    std::string TaskToString(const std::pair<api::TaskId, api::Task>& task) {
+        std::string result;
         result += "id: " + std::to_string(task.first.value());
         result += ", title: " + task.second.title();
         result += ", priority: " + convert::PriorityToString(task.second.priority());

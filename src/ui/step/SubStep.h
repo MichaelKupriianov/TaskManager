@@ -1,36 +1,38 @@
 #pragma once
 
 #include <memory>
-#include "context/SubContext.h"
+#include "ui/Context.h"
 
-class DependencyForSubSteps;
+namespace ui::step {
+    class Resources;
 
-class SubStep {
-public:
-    virtual std::shared_ptr<SubStep> execute(SubContext &, const std::shared_ptr<DependencyForSubSteps> &) = 0;
-    virtual ~SubStep() = default;
-};
+    class SubStep {
+    public:
+        virtual std::shared_ptr<SubStep> execute(SubContext&, const std::shared_ptr<Resources>&) = 0;
+        virtual ~SubStep() = default;
+    };
 
-class SubStepTitle : public SubStep {
-public:
-    std::shared_ptr<SubStep> execute(SubContext &, const std::shared_ptr<DependencyForSubSteps> &) override;
-    virtual ~SubStepTitle() = default;
-};
+    class SubStepTitle : public SubStep {
+    public:
+        std::shared_ptr<SubStep> execute(SubContext&, const std::shared_ptr<Resources>&) override;
+        ~SubStepTitle() override = default;
+    };
 
-class SubStepPriority : public SubStep {
-public:
-    std::shared_ptr<SubStep> execute(SubContext &, const std::shared_ptr<DependencyForSubSteps> &) override;
-    virtual ~SubStepPriority() = default;
-};
+    class SubStepPriority : public SubStep {
+    public:
+        std::shared_ptr<SubStep> execute(SubContext&, const std::shared_ptr<Resources>&) override;
+        ~SubStepPriority() override = default;
+    };
 
-class SubStepDate : public SubStep {
-public:
-    std::shared_ptr<SubStep> execute(SubContext &, const std::shared_ptr<DependencyForSubSteps> &) override;
-    virtual ~SubStepDate() = default;
-};
+    class SubStepDate : public SubStep {
+    public:
+        std::shared_ptr<SubStep> execute(SubContext&, const std::shared_ptr<Resources>&) override;
+        ~SubStepDate() override = default;
+    };
 
-class SubStepLabel : public SubStep {
-public:
-    std::shared_ptr<SubStep> execute(SubContext &, const std::shared_ptr<DependencyForSubSteps> &) override;
-    virtual ~SubStepLabel() = default;
-};
+    class SubStepLabel : public SubStep {
+    public:
+        std::shared_ptr<SubStep> execute(SubContext&, const std::shared_ptr<Resources>&) override;
+        ~SubStepLabel() override = default;
+    };
+}

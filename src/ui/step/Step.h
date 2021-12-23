@@ -1,68 +1,75 @@
 #pragma once
 
 #include <memory>
-#include "context/Context.h"
-#include "step/TypeOfStep.h"
+#include "ui/Context.h"
+#include "Type.h"
 
-class DependencyForSteps;
+namespace ui::step {
+    class Resources;
 
-class Step {
-public:
-    virtual std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &dependency) = 0;
+    class Step {
+    public:
+        virtual std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) = 0;
+        virtual ~Step() = default;
+    };
 
-    virtual ~Step() = default;
-};
+    class Root : public Step {
+    public:
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Root() override  = default;
+    };
 
-class StepRoot : public Step {
-public:
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepRoot() = default;
-};
+    class Quit : public Step {
+    public:
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Quit() override = default;
+    };
 
-class StepQuit : public Step {
-public:
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepQuit() = default;
-};
+    class Help : public Step {
+    public:
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Help() override = default;
+    };
 
-class StepHelp : public Step {
-public:
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepHelp() = default;
-};
+    class Print : public Step {
+    public:
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Print() override  = default;
+    };
 
-class StepComplete : public Step {
-public:
-    StepComplete();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepComplete() = default;
-private:
-    const TypeOfStep command_;
-};
+    class Complete : public Step {
+    public:
+        Complete();
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Complete() override = default;
+    private:
+        const Type type_;
+    };
 
-class StepDelete : public Step {
-public:
-    StepDelete();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepDelete() = default;
-private:
-    const TypeOfStep command_;
-};
+    class Delete : public Step {
+    public:
+        Delete();
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Delete() override = default;
+    private:
+        const Type type_;
+    };
 
-class StepSave : public Step {
-public:
-    StepSave();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepSave() = default;
-private:
-    const TypeOfStep command_;
-};
+    class Save : public Step {
+    public:
+        Save();
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Save() override = default;
+    private:
+        const Type type_;
+    };
 
-class StepLoad : public Step {
-public:
-    StepLoad();
-    std::shared_ptr<Step> execute(Context &, const std::shared_ptr<DependencyForSteps> &) override;
-    virtual ~StepLoad() = default;
-private:
-    const TypeOfStep command_;
-};
+    class Load : public Step {
+    public:
+        Load();
+        std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+        ~Load() override = default;
+    private:
+        const Type type_;
+    };
+}

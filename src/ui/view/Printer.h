@@ -2,9 +2,11 @@
 
 #include <string>
 
-class Printer {
-public:
-    virtual void PrintString(const std::string &);
+namespace ui {
+    class Printer {
+    public:
+        virtual void PrintString(const std::string&);
 
-    virtual ~Printer() = default;
-};
+        virtual ~Printer() = default;
+    };
+}

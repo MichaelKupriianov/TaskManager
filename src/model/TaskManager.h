@@ -30,8 +30,8 @@ namespace model {
         virtual std::optional<api::TaskWithSubtasks> ShowTask(api::TaskId, api::TasksSortBy) const;
         virtual api::AllTasks ShowAll(api::TasksSortBy) const;
 
-        virtual bool Save(const std::string&);
-        virtual bool Load(const std::string&);
+        virtual api::ArrayFamilyTasks Save();
+        virtual void Load(const api::ArrayFamilyTasks&);
     private:
         static bool ComparatorPriority(const std::unique_ptr<api::IdWithTask>&,
                                        const std::unique_ptr<api::IdWithTask>&);

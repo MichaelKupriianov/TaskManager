@@ -1,15 +1,19 @@
-#include "ui/StateMachine.h"
+#include "StateMachine.h"
 #include "step/Step.h"
 
 namespace ui {
-    StateMachine::StateMachine(const std::shared_ptr<step::Dependency>& dependency) :
+    StateMachine::StateMachine(const std::shared_ptr<step::Resources>& dependency) :
             dependency_{dependency} {}
 
-    std::shared_ptr<command::Command> StateMachine::GetCommand(Context& context) {
-        std::shared_ptr<Step> step_{dependency_->factory->GetRootStep()};
-
+    void StateMachine::Run(Context& context) {
+        auto step = dependency_->factory->GetInitialStep();
         while (!context.has_command())
-            step_ = step_->execute(context, dependency_);
-        return context.command();
+            step = step->execute(context, dependency_);
+    }
+
+    void StateMachine::Run(SubContext& context) {
+        auto step = dependency_->factory->GetInitialSubStep();
+        while (!context.if_finished())
+            step = step->execute(context, dependency_);
     }
 }

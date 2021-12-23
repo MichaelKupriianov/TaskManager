@@ -1,174 +1,177 @@
 #include "View.h"
 
-View::View(const std::shared_ptr<Reader> &reader, const std::shared_ptr<Printer> &printer)
-        : reader_{reader}, printer_{printer} {}
+namespace ui {
 
-void View::PrintHelp() {
-    printer_->PrintString("You can use such command:\n");
-    printer_->PrintString("add - Add new task\n");
-    printer_->PrintString("add_subtask - Add new subtask\n");
-    printer_->PrintString("edit - Edit existent task\n");
-    printer_->PrintString("complete - Complete existent task\n");
-    printer_->PrintString("delete - Delete existent task\n");
-    printer_->PrintString("show - Show all tasks\n");
-    printer_->PrintString("show_task - Show task with its subtasks\n");
-    printer_->PrintString("show_label - Show task with some specific label\n");
-    printer_->PrintString("save - Save introduced tasks to a file\n");
-    printer_->PrintString("load - Load tasks for a file\n");
-    printer_->PrintString("quit - finish work\n\n");
-}
+    View::View(const std::shared_ptr<Reader>& reader, const std::shared_ptr<Printer>& printer)
+            : reader_{reader}, printer_{printer} {}
 
-void View::PrintQuit() {
-    printer_->PrintString("Good luck!\n");
-}
-
-TypeOfStep View::ReadCommand() {
-    printer_->PrintString("> ");
-    std::string command{reader_->ReadString()};
-
-    if (std::optional<TypeOfStep> result{convert::StringToStepType(command)}; result.has_value())
-        return result.value();
-    printer_->PrintString("There is no such command\n");
-    return ReadCommand();
-}
-
-TaskId View::ReadId(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) + " ID: ");
-    std::string id{reader_->ReadString()};
-
-    if (std::optional<int> result{convert::StringToId(id)}; result.has_value()) {
-        TaskId id;
-        id.set_value(result.value());
-        return id;
+    void View::PrintHelp() {
+        printer_->PrintString("You can use such command:\n");
+        printer_->PrintString("add - Add new task\n");
+        printer_->PrintString("add_subtask - Add new subtask\n");
+        printer_->PrintString("edit - Edit existent task\n");
+        printer_->PrintString("complete - Complete existent task\n");
+        printer_->PrintString("delete - Delete existent task\n");
+        printer_->PrintString("show - Show all tasks\n");
+        printer_->PrintString("show_task - Show task with its subtasks\n");
+        printer_->PrintString("show_label - Show task with some specific label\n");
+        printer_->PrintString("save - Save introduced tasks to a file\n");
+        printer_->PrintString("load - Load tasks for a file\n");
+        printer_->PrintString("quit - finish work\n\n");
     }
-    printer_->PrintString("Enter the ID in the correct format\n");
-    return ReadId(command);
-}
 
-TaskId View::ReadParentId(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) + " Parent ID: ");
-    std::string id{reader_->ReadString()};
-
-    if (std::optional<int> result{convert::StringToId(id)}; result.has_value()) {
-        TaskId id;
-        id.set_value(result.value());
-        return id;
+    void View::PrintQuit() {
+        printer_->PrintString("Good luck!\n");
     }
-    printer_->PrintString("Enter the ID in the correct format\n");
-    return ReadId(command);
-}
 
-std::string View::ReadTitle(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) + " title: ");
-    std::string title{reader_->ReadString()};
+    step::Type View::ReadCommand() {
+        printer_->PrintString("> ");
+        std::string command{reader_->ReadString()};
 
-    if (!title.empty()) return title;
-    printer_->PrintString("Title should be non-empty\n");
-    return ReadTitle(command);
-}
-
-Task::Priority View::ReadPriority(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) + " priority (high, medium, low or none): ");
-    std::string priority{reader_->ReadString()};
-
-    if (std::optional<Task::Priority> result{convert::StringToPriority(priority)}; result.has_value())
-        return result.value();
-    printer_->PrintString("There is no such priority\n");
-    return ReadPriority(command);
-}
-
-google::protobuf::Timestamp View::ReadDate(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) +
-                          " due date (in 12:12 12/12 or 12/12 format): ");
-    std::string date{reader_->ReadString()};
-
-    if (std::optional<time_t> result{convert::StringToDate(date)}; result.has_value()) {
-        google::protobuf::Timestamp date;
-        date.set_seconds(result.value());
-        return date;
+        if (std::optional<step::Type> result{convert::StringToStepType(command)}; result.has_value())
+            return result.value();
+        printer_->PrintString("There is no such command\n");
+        return ReadCommand();
     }
-    printer_->PrintString("Enter the date in the correct format (or don't enter anything):\n");
-    return ReadDate(command);
-}
 
-std::string View::ReadLabel(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) +
-                          " label (if there is no label, leave empty): ");
-    std::string label{reader_->ReadString()};
-    return label;
-}
+    api::TaskId View::ReadId(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) + " ID: ");
+        std::string string_id{reader_->ReadString()};
 
-bool View::Confirm() {
-    printer_->PrintString("Confirm? (y/n): ");
-    std::string answer{reader_->ReadString()};
-
-    if (answer == "y") return true;
-    if (answer == "n") return false;
-    return Confirm();
-}
-
-bool View::ReadIfPrintSubtasks(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) + " Print subtasks? (y/n): ");
-    std::string answer{reader_->ReadString()};
-
-    if (answer == "y") return true;
-    if (answer == "n") return false;
-    return ReadIfPrintSubtasks(command);
-}
-
-TasksSortBy View::ReadSortBy(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) +
-                          " sort by? (id, date or priority): ");
-    std::string answer{reader_->ReadString()};
-
-    if (std::optional<TasksSortBy> result{convert::StringToSortBy(answer)}; result.has_value())
-        return result.value();
-    return ReadSortBy(command);
-}
-
-std::string View::ReadFilename(TypeOfStep command) {
-    printer_->PrintString(convert::CommandToString(command) + " filename: ");
-    std::string title{reader_->ReadString()};
-
-    if (!title.empty()) return title;
-    printer_->PrintString("Filename should be non-empty\n");
-    return ReadTitle(command);
-}
-
-void View::PrintArrayOfTasks(const ArrayTasks &tasks) {
-    for (const auto &task: tasks) {
-        std::string result = convert::TaskToString(task) + '\n';
-        printer_->PrintString(result);
+        if (std::optional<int> result{convert::StringToId(string_id)}; result.has_value()) {
+            api::TaskId id;
+            id.set_value(result.value());
+            return id;
+        }
+        printer_->PrintString("Enter the ID in the correct format\n");
+        return ReadId(command);
     }
-}
 
-void View::PrintTaskWithSubtasks(const TaskWithSubtasks &task) {
-    std::string result = convert::TaskToString(task.first);
-    if (task.second.empty())
-        result += "\n";
-    else
-        result += "  :\n";
+    api::TaskId View::ReadParentId(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) + " Parent ID: ");
+        std::string parent_id{reader_->ReadString()};
 
-    printer_->PrintString(result);
-    for (const auto &subtask: task.second) {
-        result = "   " + convert::TaskToString(subtask) + '\n';
-        printer_->PrintString(result);
+        if (std::optional<int> result{convert::StringToId(parent_id)}; result.has_value()) {
+            api::TaskId id;
+            id.set_value(result.value());
+            return id;
+        }
+        printer_->PrintString("Enter the ID in the correct format\n");
+        return ReadId(command);
     }
-}
 
-void View::PrintAllTasks(const std::vector<TaskWithSubtasks> &tasks) {
-    if (tasks.empty()) {
-        printer_->PrintString("There are no outstanding tasks now.\n");
-        return;
+    std::string View::ReadTitle(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) + " title: ");
+        std::string title{reader_->ReadString()};
+
+        if (!title.empty()) return title;
+        printer_->PrintString("Title should be non-empty\n");
+        return ReadTitle(command);
     }
-    for (const auto &[task, subtasks]: tasks) {
-        if (!subtasks.empty())
-            PrintTaskWithSubtasks({task, subtasks});
+
+    api::Task::Priority View::ReadPriority(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) + " priority (high, medium, low or none): ");
+        std::string priority{reader_->ReadString()};
+
+        if (std::optional<api::Task::Priority> result{convert::StringToPriority(priority)}; result.has_value())
+            return result.value();
+        printer_->PrintString("There is no such priority\n");
+        return ReadPriority(command);
+    }
+
+    google::protobuf::Timestamp View::ReadDate(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) +
+                              " due date (in 12:12 12/12 or 12/12 format): ");
+        std::string string_date{reader_->ReadString()};
+
+        if (std::optional<time_t> result{convert::StringToDate(string_date)}; result.has_value()) {
+            google::protobuf::Timestamp date;
+            date.set_seconds(result.value());
+            return date;
+        }
+        printer_->PrintString("Enter the date in the correct format (or don't enter anything):\n");
+        return ReadDate(command);
+    }
+
+    std::string View::ReadLabel(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) +
+                              " label (if there is no label, leave empty): ");
+        std::string label{reader_->ReadString()};
+        return label;
+    }
+
+    bool View::Confirm() {
+        printer_->PrintString("Confirm? (y/n): ");
+        std::string answer{reader_->ReadString()};
+
+        if (answer == "y") return true;
+        if (answer == "n") return false;
+        return Confirm();
+    }
+
+    bool View::ReadIfPrintSubtasks(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) + " Print subtasks? (y/n): ");
+        std::string answer{reader_->ReadString()};
+
+        if (answer == "y") return true;
+        if (answer == "n") return false;
+        return ReadIfPrintSubtasks(command);
+    }
+
+    api::TasksSortBy View::ReadSortBy(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) +
+                              " sort by? (id, date or priority): ");
+        std::string answer{reader_->ReadString()};
+
+        if (std::optional<api::TasksSortBy> result{convert::StringToSortBy(answer)}; result.has_value())
+            return result.value();
+        return ReadSortBy(command);
+    }
+
+    std::string View::ReadFilename(step::Type command) {
+        printer_->PrintString(convert::CommandToString(command) + " filename: ");
+        std::string title{reader_->ReadString()};
+
+        if (!title.empty()) return title;
+        printer_->PrintString("Filename should be non-empty\n");
+        return ReadTitle(command);
+    }
+
+    void View::PrintArrayOfTasks(const api::ArrayTasks& tasks) {
+        for (const auto& task: tasks) {
+            std::string result = convert::TaskToString(task) + '\n';
+            printer_->PrintString(result);
+        }
+    }
+
+    void View::PrintTaskWithSubtasks(const api::TaskWithSubtasks& task) {
+        std::string result = convert::TaskToString(task.first);
+        if (task.second.empty())
+            result += "\n";
         else
-            printer_->PrintString(convert::TaskToString(task) + '\n');
-    }
-}
+            result += "  :\n";
 
-void View::PrintException(const std::string &exception) {
-    printer_->PrintString(exception + '\n');
+        printer_->PrintString(result);
+        for (const auto& subtask: task.second) {
+            result = "   " + convert::TaskToString(subtask) + '\n';
+            printer_->PrintString(result);
+        }
+    }
+
+    void View::PrintAllTasks(const api::AllTasks& tasks) {
+        if (tasks.empty()) {
+            printer_->PrintString("There are no outstanding tasks now.\n");
+            return;
+        }
+        for (const auto &[task, subtasks]: tasks) {
+            if (!subtasks.empty())
+                PrintTaskWithSubtasks({task, subtasks});
+            else
+                printer_->PrintString(convert::TaskToString(task) + '\n');
+        }
+    }
+
+    void View::PrintException(const std::string& exception) {
+        printer_->PrintString(exception + '\n');
+    }
 }

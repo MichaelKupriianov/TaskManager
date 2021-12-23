@@ -1,19 +1,18 @@
 #pragma once
 
 #include <memory>
-#include "ui/step/Dependency.h"
-#include "ui/command/Command.h"
-#include "ui/Context.h"
+#include "step/Resources.h"
+#include "Context.h"
 
 namespace ui {
     class StateMachine {
     public:
-        explicit StateMachine(const std::shared_ptr<step::Dependency>&);
-
-        virtual std::shared_ptr<command::Command> GetCommand(Context& context);
-
+        explicit StateMachine(const std::shared_ptr<step::Resources>&);
         virtual ~StateMachine() = default;
+
+        virtual void Run(Context&);
+        virtual void Run(SubContext&);
     private:
-        const std::shared_ptr<step::Dependency> dependency_;
+        const std::shared_ptr<step::Resources> dependency_;
     };
 }

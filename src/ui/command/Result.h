@@ -7,7 +7,6 @@
 #include "api/AliasesProtoObjects.h"
 
 namespace ui::command {
-
     struct Result {
     public:
         explicit Result(bool i_finished) : finished{i_finished} {}

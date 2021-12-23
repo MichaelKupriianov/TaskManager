@@ -152,26 +152,21 @@ namespace model {
         return false;
     }
 
-    bool TaskManager::Save(const std::string& filename) {
-        Persister::Tasks tasks;
+    api::ArrayFamilyTasks TaskManager::Save() {
+        api::ArrayFamilyTasks tasks;
         for (const auto& task: tasks_)
             tasks.push_back(task);
-        return persister_->Save(tasks, filename);
+        return tasks;
     }
 
-    bool TaskManager::Load(const std::string& filename) {
-        std::optional<Persister::Tasks> tasks{persister_->Load(filename)};
-        if (!tasks.has_value())
-            return false;
-
+    void TaskManager::Load(const api::ArrayFamilyTasks &tasks) {
         tasks_.clear();
-        for (const auto& task: tasks.value())
+        for (const auto& task: tasks)
             tasks_.insert(task);
 
         int max_id;
         if (tasks_.empty()) max_id = 0;
         max_id = (*prev(tasks_.end())).first.value();
         generator_ = std::make_shared<IdGenerator>(max_id);
-        return true;
     }
 }

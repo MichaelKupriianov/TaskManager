@@ -2,10 +2,12 @@
 
 #include <memory>
 #include <optional>
-#include "ui/command/Command.h"
-#include "ui/command/Result.h"
+#include "Task.pb.h"
+#include "command/Command.h"
+#include "command/Result.h"
 
 namespace ui {
+
     class Context {
     public:
         bool has_command() const { return command_.has_value(); }
@@ -21,5 +23,18 @@ namespace ui {
     private:
         std::optional<std::shared_ptr<command::Command>> command_;
         std::optional<std::shared_ptr<command::Result>> result_;
+    };
+
+    class SubContext {
+    public:
+        SubContext() : task_{new api::Task} {}
+
+        bool if_finished() const { return finished_; }
+        std::shared_ptr<api::Task> task() const { return task_; }
+
+        void finished() { finished_ = true; }
+    private:
+        bool finished_ = false;
+        std::shared_ptr<api::Task> task_;
     };
 }

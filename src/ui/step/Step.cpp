@@ -1,64 +1,65 @@
 #include "Step.h"
-#include "dependency/DependencyForSteps.h"
+#include "Resources.h"
 
-std::shared_ptr<Step> StepRoot::execute(Context &context,
-                                        const std::shared_ptr<DependencyForSteps> &dependency) {
-    TypeOfStep command(dependency->view()->ReadCommand());
-    return dependency->factory()->CreateStep(command);
-}
+namespace ui::step {
 
-std::shared_ptr<Step> StepQuit::execute(Context &context,
-                                        const std::shared_ptr<DependencyForSteps> &dependency) {
-    dependency->view()->PrintQuit();
-    context.set_command(std::shared_ptr<Command>{new CommandQuit});
-    return dependency->factory()->GetRootStep();
-}
+    std::shared_ptr<Step> Root::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        if (context.has_result())
+            return resources->factory->CreateStep(step::Type::PRINT);
 
-std::shared_ptr<Step> StepHelp::execute(Context &context,
-                                        const std::shared_ptr<DependencyForSteps> &dependency) {
-    dependency->view()->PrintHelp();
-    return dependency->factory()->GetRootStep();
-}
+        Type type{resources->view->ReadCommand()};
+        return resources->factory->CreateStep(type);
+    }
 
-StepComplete::StepComplete() : command_{TypeOfStep::COMPLETE} {}
+    std::shared_ptr<Step> Quit::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        resources->view->PrintQuit();
+        context.set_command(std::make_shared<command::Quit>());
+        return resources->factory->GetInitialStep();
+    }
 
-std::shared_ptr<Step> StepComplete::execute(Context &context,
-                                            const std::shared_ptr<DependencyForSteps> &dependency) {
-    TaskId id{dependency->view()->ReadId(command_)};
-    if (dependency->view()->Confirm())
-        context.set_command(std::make_shared<CommandComplete>(id, dependency->view()));
-    return dependency->factory()->GetRootStep();
-}
+    std::shared_ptr<Step> Help::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        resources->view->PrintHelp();
+        return resources->factory->GetInitialStep();
+    }
 
-StepDelete::StepDelete() : command_{TypeOfStep::DELETE} {}
+    std::shared_ptr<Step> Print::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        resources->view->PrintHelp();
+        return resources->factory->GetInitialStep();
+    }
 
-std::shared_ptr<Step> StepDelete::execute(Context &context,
-                                          const std::shared_ptr<DependencyForSteps> &dependency) {
-    TaskId id{dependency->view()->ReadId(command_)};
-    if (dependency->view()->Confirm())
-        context.set_command(std::shared_ptr<Command>(
-                new CommandDelete{id, dependency->view()}));
-    return dependency->factory()->GetRootStep();
-}
+    Complete::Complete() : type_{step::Type::COMPLETE} {}
 
-StepSave::StepSave() : command_{TypeOfStep::SAVE} {}
+    std::shared_ptr<Step> Complete::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        api::TaskId id{resources->view->ReadId(type_)};
+        if (resources->view->Confirm())
+            context.set_command(std::make_shared<command::Complete>(id));
+        return resources->factory->GetInitialStep();
+    }
 
-std::shared_ptr<Step> StepSave::execute(Context &context,
-                                        const std::shared_ptr<DependencyForSteps> &dependency) {
-    const std::string filename{dependency->view()->ReadFilename(command_)};
-    if (dependency->view()->Confirm())
-        context.set_command(std::shared_ptr<Command>(
-                new CommandSave{filename, dependency->view()}));
-    return dependency->factory()->GetRootStep();
-}
+    Delete::Delete() : type_{step::Type::DELETE} {}
 
-StepLoad::StepLoad() : command_{TypeOfStep::LOAD} {}
+    std::shared_ptr<Step> Delete::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        api::TaskId id{resources->view->ReadId(type_)};
+        if (resources->view->Confirm())
+            context.set_command(std::make_shared<command::Delete>(id));
+        return resources->factory->GetInitialStep();
+    }
 
-std::shared_ptr<Step> StepLoad::execute(Context &context,
-                                        const std::shared_ptr<DependencyForSteps> &dependency) {
-    const std::string filename{dependency->view()->ReadFilename(command_)};
-    if (dependency->view()->Confirm())
-        context.set_command(std::shared_ptr<Command>(
-                new CommandLoad{filename, dependency->view()}));
-    return dependency->factory()->GetRootStep();
+    Save::Save() : type_{step::Type::SAVE} {}
+
+    std::shared_ptr<Step> Save::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        const std::string filename{resources->view->ReadFilename(type_)};
+        if (resources->view->Confirm())
+            context.set_command(std::make_shared<command::Save>(filename));
+        return resources->factory->GetInitialStep();
+    }
+
+    Load::Load() : type_{step::Type::LOAD} {}
+
+    std::shared_ptr<Step> Load::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+        const std::string filename{resources->view->ReadFilename(type_)};
+        if (resources->view->Confirm())
+            context.set_command(std::make_shared<command::Load>(filename));
+        return resources->factory->GetInitialStep();
+    }
 }
