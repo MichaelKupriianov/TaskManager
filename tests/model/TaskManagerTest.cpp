@@ -1,330 +1,295 @@
 #include"gtest/gtest.h"
 #include"gmock/gmock.h"
-#include"TaskManager.h"
+#include"model/TaskManager.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
 using ::testing::_;
 
-class IdGeneratorMock : public IdGenerator {
+class IdGeneratorMock : public model::IdGenerator {
 public:
-    MOCK_METHOD(TaskId, GenerateId, (), (override));
-};
-
-class PersisterMock : public Persister {
-public:
-    MOCK_METHOD(bool, Save, (const Tasks &, const std::string &), (override));
-    MOCK_METHOD(std::optional<Tasks>, Load, (const std::string &), (override));
+    MOCK_METHOD(proto::TaskId, GenerateId, (), (override));
 };
 
 class TaskManagerTest : public ::testing::Test {
 public:
     void SetUp() override {
         generator_ = std::make_shared<IdGeneratorMock>();
-        persister_ = std::make_shared<PersisterMock>();
-        manager_ = std::make_shared<TaskManager>(generator_, persister_);
-    }
-
-    static Task CreateTask(const std::string &title) {
-        Task task;
-        task.set_title(title);
-        return task;
-    }
-
-    static Task CreateTask(Task_Priority priority) {
-        Task task;
-        task.set_priority(priority);
-        return task;
-    }
-
-    static Task CreateTask(time_t date) {
-        Task task;
-        google::protobuf::Timestamp time;
-        time.set_seconds(date);
-        task.set_allocated_date(new google::protobuf::Timestamp(time));
-        return task;
-    }
-
-    static TaskId CreateId(int value) {
-        TaskId id;
-        id.set_value(value);
-        return id;
+        manager_ = std::make_shared<model::TaskManager>(generator_);
     }
 
 protected:
     std::shared_ptr<IdGeneratorMock> generator_;
-    std::shared_ptr<PersisterMock> persister_;
-    std::shared_ptr<TaskManager> manager_;
+    std::shared_ptr<model::TaskManager> manager_;
 };
 
 TEST_F(TaskManagerTest, shouldAddTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_EQ(manager_->ShowTask(CreateId(0), SortBy::ID).value().first.second,
-              CreateTask("first"));
-    EXPECT_TRUE(manager_->AddTask(CreateTask("second")));
-    EXPECT_EQ(manager_->ShowTask(CreateId(1), SortBy::ID).value().first.second,
-              CreateTask("second"));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_EQ(manager_->ShowTask(proto::CreateTaskId(0), model::TasksSortBy::ID).value().first.second,
+              proto::CreateTask("first"));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("second")));
+    EXPECT_EQ(manager_->ShowTask(proto::CreateTaskId(1), model::TasksSortBy::ID).value().first.second,
+              proto::CreateTask("second"));
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseIfIdGeneratorWorksdBadly) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_FALSE(manager_->AddTask(CreateTask("first")));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_FALSE(manager_->AddTask(proto::CreateTask("first")));
 }
 
 TEST_F(TaskManagerTest, shouldAddSubTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_EQ(manager_->ShowTask(CreateId(1), SortBy::ID).value().first.second,
-              CreateTask("second"));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_EQ(manager_->ShowTask(proto::CreateTaskId(1), model::TasksSortBy::ID).value().first.second,
+              proto::CreateTask("second"));
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseIfParentsIdIsIncorrect) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_FALSE(manager_->AddSubTask(CreateTask("second"), CreateId(3)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_FALSE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(3)));
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseIfAddSubtaskToSubtask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_FALSE(manager_->AddSubTask(CreateTask("third"), CreateId(1)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_FALSE(manager_->AddSubTask(proto::CreateTask("third"), proto::CreateTaskId(1)));
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseIfAddSubtaskToCompletedTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->Complete(CreateId(0)));
-    EXPECT_FALSE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->Complete(proto::CreateTaskId(0)));
+    EXPECT_FALSE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
 }
 
 TEST_F(TaskManagerTest, shouldEditTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_TRUE(manager_->Edit(CreateId(0), CreateTask("third")));
-    EXPECT_TRUE(manager_->Edit(CreateId(1), CreateTask("fourth")));
-    EXPECT_EQ(manager_->ShowTask(CreateId(0), SortBy::ID).value().first.second,
-              CreateTask("third"));
-    EXPECT_EQ(manager_->ShowTask(CreateId(1), SortBy::ID).value().first.second,
-              CreateTask("fourth"));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_TRUE(manager_->Edit(proto::CreateTaskId(0), proto::CreateTask("third")));
+    EXPECT_TRUE(manager_->Edit(proto::CreateTaskId(1), proto::CreateTask("fourth")));
+    EXPECT_EQ(manager_->ShowTask(proto::CreateTaskId(0), model::TasksSortBy::ID).value().first.second,
+              proto::CreateTask("third"));
+    EXPECT_EQ(manager_->ShowTask(proto::CreateTaskId(1), model::TasksSortBy::ID).value().first.second,
+              proto::CreateTask("fourth"));
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseWhenEditIfIDNotExist) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_FALSE(manager_->Edit(CreateId(1), CreateTask("second")));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_FALSE(manager_->Edit(proto::CreateTaskId(1), proto::CreateTask("second")));
 }
 
 TEST_F(TaskManagerTest, shouldCompleteTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_TRUE(manager_->Complete(CreateId(0)));
-    EXPECT_EQ(manager_->ShowAll(SortBy::ID).size(), 0);
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_TRUE(manager_->Complete(proto::CreateTaskId(0)));
+    EXPECT_EQ(manager_->ShowAll(model::TasksSortBy::ID).size(), 0);
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseWhenCompleteIfIDNotExist) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_FALSE(manager_->Complete(CreateId(1)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_FALSE(manager_->Complete(proto::CreateTaskId(1)));
 }
 
 TEST_F(TaskManagerTest, shouldDeleteTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_TRUE(manager_->Delete(CreateId(0)));
-    EXPECT_EQ(manager_->ShowAll(SortBy::ID).size(), 0);
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_TRUE(manager_->Delete(proto::CreateTaskId(0)));
+    EXPECT_EQ(manager_->ShowAll(model::TasksSortBy::ID).size(), 0);
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseWhenDeleteIfIDNotExist) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_FALSE(manager_->Delete(CreateId(1)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_FALSE(manager_->Delete(proto::CreateTaskId(1)));
 }
 
 TEST_F(TaskManagerTest, shouldSortById) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(3)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)))
-            .WillOnce(Return(CreateId(2)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)))
+            .WillOnce(Return(proto::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddTask(CreateTask("second")));
-    EXPECT_TRUE(manager_->AddTask(CreateTask("third")));
-    EXPECT_EQ(manager_->ShowParents(SortBy::ID)[0].second, CreateTask("first"));
-    EXPECT_EQ(manager_->ShowParents(SortBy::ID)[1].second, CreateTask("second"));
-    EXPECT_EQ(manager_->ShowParents(SortBy::ID)[2].second, CreateTask("third"));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("second")));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("third")));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[0].second, proto::CreateTask("first"));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[1].second, proto::CreateTask("second"));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[2].second, proto::CreateTask("third"));
 }
 
 TEST_F(TaskManagerTest, shouldSortByPriority) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(3)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)))
-            .WillOnce(Return(CreateId(2)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)))
+            .WillOnce(Return(proto::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask(Task_Priority_LOW)));
-    EXPECT_TRUE(manager_->AddTask(CreateTask(Task_Priority_NONE)));
-    EXPECT_TRUE(manager_->AddTask(CreateTask(Task_Priority_HIGH)));
-    EXPECT_EQ(manager_->ShowParents(SortBy::PRIORITY)[0].second,
-              CreateTask(Task_Priority_HIGH));
-    EXPECT_EQ(manager_->ShowParents(SortBy::PRIORITY)[1].second,
-              CreateTask(Task_Priority_LOW));
-    EXPECT_EQ(manager_->ShowParents(SortBy::PRIORITY)[2].second,
-              CreateTask(Task_Priority_NONE));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("", proto::Task_Priority_LOW)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("", proto::Task_Priority_NONE)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("", proto::Task_Priority_HIGH)));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[0].second,
+              proto::CreateTask("", proto::Task_Priority_HIGH));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[1].second,
+              proto::CreateTask("", proto::Task_Priority_LOW));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[2].second,
+              proto::CreateTask("", proto::Task_Priority_NONE));
 }
 
 TEST_F(TaskManagerTest, shouldSortByDate) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(3)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)))
-            .WillOnce(Return(CreateId(2)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)))
+            .WillOnce(Return(proto::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask(100)));
-    EXPECT_TRUE(manager_->AddTask(CreateTask(300)));
-    EXPECT_TRUE(manager_->AddTask(CreateTask(200)));
-    EXPECT_EQ(manager_->ShowParents(SortBy::DATE)[0].second, CreateTask(100));
-    EXPECT_EQ(manager_->ShowParents(SortBy::DATE)[1].second, CreateTask(200));
-    EXPECT_EQ(manager_->ShowParents(SortBy::DATE)[2].second, CreateTask(300));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("", proto::Task_Priority_NONE, 100)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("", proto::Task_Priority_NONE, 300)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("", proto::Task_Priority_NONE, 200)));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[0].second,
+              CreateTask("", proto::Task_Priority_NONE, 100));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[1].second,
+              CreateTask("", proto::Task_Priority_NONE, 200));
+    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[2].second,
+              CreateTask("", proto::Task_Priority_NONE, 300));
 }
 
 TEST_F(TaskManagerTest, shouldShowTaskWithSubtasks) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(3)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)))
-            .WillOnce(Return(CreateId(2)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)))
+            .WillOnce(Return(proto::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("third"), CreateId(0)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("third"), proto::CreateTaskId(0)));
 
-    std::optional<TaskManager::TaskWithSubtasks> task =
-            manager_->ShowTask(CreateId(0), SortBy::ID);
-    ASSERT_TRUE(task.has_value());
-    EXPECT_EQ(task.value().first.second, CreateTask("first"));
-    EXPECT_EQ(task.value().second[0].second, CreateTask("second"));
-    EXPECT_EQ(task.value().second[1].second, CreateTask("third"));
+    std::optional<proto::CompositeTask> result =
+            manager_->ShowTask(proto::CreateTaskId(0), model::TasksSortBy::ID);
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value().first.second, proto::CreateTask("first"));
+    EXPECT_EQ(result.value().second[0].second, proto::CreateTask("second"));
+    EXPECT_EQ(result.value().second[1].second, proto::CreateTask("third"));
 }
 
 TEST_F(TaskManagerTest, shouldReturnNullptrIfIDNotExist) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(CreateId(0)));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    std::optional<TaskManager::TaskWithSubtasks> task =
-            manager_->ShowTask(CreateId(1), SortBy::ID);
-    ASSERT_FALSE(task.has_value());
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    std::optional<proto::CompositeTask> result =
+            manager_->ShowTask(proto::CreateTaskId(1), model::TasksSortBy::ID);
+    ASSERT_FALSE(result.has_value());
 }
 
 TEST_F(TaskManagerTest, shouldShowAll) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(4)
-            .WillOnce(Return(CreateId(0)))
-            .WillOnce(Return(CreateId(1)))
-            .WillOnce(Return(CreateId(2)))
-            .WillOnce(Return(CreateId(3)));
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)))
+            .WillOnce(Return(proto::CreateTaskId(2)))
+            .WillOnce(Return(proto::CreateTaskId(3)));
 
-    EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateId(0)));
-    EXPECT_TRUE(manager_->AddTask(CreateTask("third")));
-    EXPECT_TRUE(manager_->AddSubTask(CreateTask("fourth"), CreateId(2)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("third")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("fourth"), proto::CreateTaskId(2)));
 
-    std::vector<TaskManager::TaskWithSubtasks> task =
-            manager_->ShowAll(SortBy::ID);
-    EXPECT_EQ(task[0].first.second, CreateTask("first"));
-    EXPECT_EQ(task[0].second[0].second, CreateTask("second"));
-    EXPECT_EQ(task[1].first.second, CreateTask("third"));
-    EXPECT_EQ(task[1].second[0].second, CreateTask("fourth"));
+    proto::ArrayCompositeTasks result =
+            manager_->ShowAll(model::TasksSortBy::ID);
+    EXPECT_EQ(result[0].first.second, proto::CreateTask("first"));
+    EXPECT_EQ(result[0].second[0].second, proto::CreateTask("second"));
+    EXPECT_EQ(result[1].first.second, proto::CreateTask("third"));
+    EXPECT_EQ(result[1].second[0].second, proto::CreateTask("fourth"));
 }
 
-TEST_F(TaskManagerTest, shouldSaveTasks) {
-    EXPECT_CALL(*persister_, Save(_, "file"))
-            .Times(1)
-            .WillOnce(Return(true));
+TEST_F(TaskManagerTest, shouldGetAllTasks) {
+    EXPECT_CALL(*generator_, GenerateId())
+            .Times(2)
+            .WillOnce(Return(proto::CreateTaskId(0)))
+            .WillOnce(Return(proto::CreateTaskId(1)));
 
-    manager_->AddTask(CreateTask("first"));
-    EXPECT_TRUE(manager_->Save("file"));
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
+    EXPECT_TRUE(manager_->AddSubTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
+
+    proto::ArrayHierarchicalTasks result = manager_->GetAllTasks();
+    EXPECT_EQ(result[0].first, proto::CreateTaskId(0));
+    EXPECT_EQ(result[0].second, proto::CreateHierarchicalTask(proto::CreateTask("first"), std::nullopt));
+    EXPECT_EQ(result[1].first, proto::CreateTaskId(1));
+    EXPECT_EQ(result[1].second, proto::CreateHierarchicalTask(proto::CreateTask("second"), proto::CreateTaskId(0)));
 }
 
-TEST_F(TaskManagerTest, shouldRerurnFalseIfCantSaveTasks) {
-    EXPECT_CALL(*persister_, Save(_, "file"))
+TEST_F(TaskManagerTest, shouldRewriteTaskManager) {
+    EXPECT_CALL(*generator_, GenerateId())
             .Times(1)
-            .WillOnce(Return(false));
+            .WillOnce(Return(proto::CreateTaskId(0)));
 
-    EXPECT_FALSE(manager_->Save("file"));
-}
+    EXPECT_TRUE(manager_->AddTask(proto::CreateTask("first")));
 
-TEST_F(TaskManagerTest, shouldLoadTasks) {
-    GeneralizedTask task;
-    task.set_allocated_parent(new TaskId);
-    task.set_allocated_task(new Task);
-    std::pair<TaskId, GeneralizedTask> gen_task{CreateId(0), task};
-    Persister::Tasks result;
-    result.push_back(gen_task);
+    proto::ArrayHierarchicalTasks tasks;
+    tasks.emplace_back(proto::CreateTaskId(1),
+                       proto::CreateHierarchicalTask(proto::CreateTask("first"),
+                                                     std::nullopt));
+    tasks.emplace_back(proto::CreateTaskId(2),
+                       proto::CreateHierarchicalTask(proto::CreateTask("second"),
+                                                     proto::CreateTaskId(0)));
+    manager_->Rewrite(tasks);
 
-    EXPECT_CALL(*persister_, Load("file"))
-            .Times(1)
-            .WillOnce(Return(result));
-
-    EXPECT_TRUE(manager_->Load("file"));
-}
-
-TEST_F(TaskManagerTest, shouldRerurnFalseIfCantLoadTasks) {
-    EXPECT_CALL(*persister_, Load("file"))
-            .Times(1)
-            .WillOnce(Return(std::nullopt));
-
-    EXPECT_FALSE(manager_->Load("file"));
+    proto::ArrayHierarchicalTasks result = manager_->GetAllTasks();
+    EXPECT_EQ(result, tasks);
 }

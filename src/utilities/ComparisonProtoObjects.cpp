@@ -1,6 +1,7 @@
 #include "ComparisonProtoObjects.h"
 
 namespace proto {
+
     bool operator<(const TaskId& first, const TaskId& second) {
         return first.value() < second.value();
     }

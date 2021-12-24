@@ -159,7 +159,7 @@ namespace model {
         return tasks;
     }
 
-    void TaskManager::Rewrite(const proto::ArrayHierarchicalTasks &tasks) {
+    void TaskManager::Rewrite(const proto::ArrayHierarchicalTasks& tasks) {
         tasks_.clear();
         for (const auto& task: tasks)
             tasks_.insert(task);

@@ -1,6 +1,13 @@
 #include "CreateProtoObjects.h"
 
 namespace proto {
+
+    TaskId CreateTaskId(int value) {
+        TaskId id;
+        id.set_value(value);
+        return id;
+    }
+
     Task CreateTask(const std::string& title, Task_Priority priority,
                     time_t date, const std::string& label, Task_Status status) {
         Task task;
@@ -20,11 +27,5 @@ namespace proto {
         if (parent.has_value())
             hierarchical_task.set_allocated_parent(new TaskId(parent.value()));
         return hierarchical_task;
-    }
-
-    TaskId CreateTaskId(int value) {
-        TaskId id;
-        id.set_value(value);
-        return id;
     }
 }

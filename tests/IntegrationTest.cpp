@@ -466,7 +466,7 @@ TEST_F(IntegrationTest, Scenario_5) {
             .WillOnce(Return("y"))
 
             .WillOnce(Return("save"))
-            .WillOnce(Return("first"))
+            .WillOnce(Return("integration_test_1"))
             .WillOnce(Return("y"))
 
             .WillOnce(Return("add"))
@@ -481,11 +481,11 @@ TEST_F(IntegrationTest, Scenario_5) {
             .WillOnce(Return(""))
 
             .WillOnce(Return("save"))
-            .WillOnce(Return("second"))
+            .WillOnce(Return("integration_test_2"))
             .WillOnce(Return("y"))
 
             .WillOnce(Return("load"))
-            .WillOnce(Return("first"))
+            .WillOnce(Return("integration_test_1"))
             .WillOnce(Return("y"))
 
             .WillOnce(Return("show"))
@@ -493,7 +493,7 @@ TEST_F(IntegrationTest, Scenario_5) {
             .WillOnce(Return(""))
 
             .WillOnce(Return("load"))
-            .WillOnce(Return("second"))
+            .WillOnce(Return("integration_test_2"))
             .WillOnce(Return("y"))
 
             .WillOnce(Return("show"))
@@ -549,4 +549,7 @@ TEST_F(IntegrationTest, Scenario_5) {
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
 
     controller_->Run();
+
+    remove("integration_test_1");
+    remove("integration_test_2");
 }

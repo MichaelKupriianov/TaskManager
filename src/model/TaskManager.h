@@ -31,7 +31,7 @@ namespace model {
         virtual proto::ArrayCompositeTasks ShowAll(TasksSortBy) const;
 
         virtual proto::ArrayHierarchicalTasks GetAllTasks();
-        virtual void Rewrite(const proto::ArrayHierarchicalTasks &);
+        virtual void Rewrite(const proto::ArrayHierarchicalTasks&);
     private:
         static bool ComparatorPriority(const std::unique_ptr<proto::SimpleTask>&,
                                        const std::unique_ptr<proto::SimpleTask>&);
