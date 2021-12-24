@@ -4,9 +4,10 @@
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/util/delimited_message_util.h>
 
-bool TaskPersister::Save(const api::ArrayFamilyTasks& tasks, const std::string& filename) {
+bool TaskPersister::Save(const proto::ArrayHierarchicalTasks & tasks, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) return false;
+
     for (const auto &[id, task]: tasks) {
         google::protobuf::util::SerializeDelimitedToOstream(id, &file);
         google::protobuf::util::SerializeDelimitedToOstream(task, &file);
@@ -15,15 +16,15 @@ bool TaskPersister::Save(const api::ArrayFamilyTasks& tasks, const std::string& 
     return true;
 }
 
-std::optional<api::ArrayFamilyTasks> TaskPersister::Load(const std::string& filename) {
-    api::ArrayFamilyTasks result;
+std::optional<proto::ArrayHierarchicalTasks> TaskPersister::Load(const std::string& filename) {
+    proto::ArrayHierarchicalTasks result;
     std::ifstream file(filename);
     if (!file.is_open()) return std::nullopt;
 
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> input =
             std::make_unique<google::protobuf::io::IstreamInputStream>(&file);
-    api::FamilyTask task;
-    api::TaskId id;
+    proto::HierarchicalTask task;
+    proto::TaskId id;
 
     while (google::protobuf::util::ParseDelimitedFromZeroCopyStream(&id, input.get(), nullptr)) {
         google::protobuf::util::ParseDelimitedFromZeroCopyStream(&task, input.get(), nullptr);

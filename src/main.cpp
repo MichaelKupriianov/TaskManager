@@ -11,7 +11,6 @@ int main() {
     auto view = std::make_shared<ui::View>(reader, printer);
     auto factory = std::make_shared<ui::Factory>();
     auto resources_for_machine = std::make_shared<ui::step::Resources>(factory, view);
-
     auto machine = std::make_shared<ui::StateMachine>(resources_for_machine);
 
     ui::Controller controller{machine, resources_for_controller};

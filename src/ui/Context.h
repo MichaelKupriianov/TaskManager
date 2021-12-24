@@ -27,14 +27,14 @@ namespace ui {
 
     class SubContext {
     public:
-        SubContext() : task_{new api::Task} {}
+        SubContext() : task_{new proto::Task} {}
 
         bool if_finished() const { return finished_; }
-        std::shared_ptr<api::Task> task() const { return task_; }
+        std::shared_ptr<proto::Task> task() const { return task_; }
 
         void finished() { finished_ = true; }
     private:
         bool finished_ = false;
-        std::shared_ptr<api::Task> task_;
+        std::shared_ptr<proto::Task> task_;
     };
 }

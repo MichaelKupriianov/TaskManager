@@ -21,7 +21,7 @@ namespace ui::step {
     AddSub::AddSub() : type_{Type::ADD_SUB} {}
 
     std::shared_ptr<Step> AddSub::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-        api::TaskId parent_id{resources->view->ReadParentId(type_)};
+        proto::TaskId parent_id{resources->view->ReadParentId(type_)};
 
         auto sub_resources = std::make_shared<Resources>(resources->factory, resources->view, type_);
         SubContext sub_context;

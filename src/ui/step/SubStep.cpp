@@ -13,7 +13,7 @@ namespace ui::step {
 
     std::shared_ptr<SubStep> SubStepPriority::execute(SubContext& context,
                                                       const std::shared_ptr<Resources>& resources) {
-        api::Task::Priority priority(resources->view->ReadPriority((resources->command).value()));
+        proto::Task::Priority priority(resources->view->ReadPriority((resources->command).value()));
         context.task()->set_priority(priority);
         return resources->factory->GetNextSubStepFrom(*this);
     }

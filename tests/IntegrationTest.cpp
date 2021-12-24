@@ -1,18 +1,18 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "controller/Controller.h"
+#include "ui/controller/Controller.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
 using ::testing::InSequence;
 using ::testing::_;
 
-class MockReader : public Reader {
+class ReaderMock : public ui::Reader {
 public:
     MOCK_METHOD(std::string, ReadString, (), (override));
 };
 
-class MockPrinter : public Printer {
+class PrinterMock : public ui::Printer {
 public:
     MOCK_METHOD(void, PrintString, (const std::string &), (override));
 };
@@ -20,24 +20,25 @@ public:
 class IntegrationTest : public ::testing::Test {
 public:
     void SetUp() override {
-        auto generator = std::make_shared<IdGenerator>();
-        auto persister = std::make_shared<Persister>();
-        auto task_manager = std::make_shared<TaskManager>(generator, persister);
+        auto generator = std::make_shared<model::IdGenerator>();
+        auto manager = std::make_shared<model::TaskManager>(generator);
+        auto persister = std::make_shared<TaskPersister>();
+        auto resources_for_controller = std::make_shared<ui::command::Resources>(manager, persister);
 
-        reader_ = std::make_shared<MockReader>();
-        printer_ = std::make_shared<MockPrinter>();
-        auto view = std::make_shared<View>(reader_, printer_);
-        auto factory = std::make_shared<Factory>();
-        auto dependency = std::make_shared<DependencyForSteps>(factory, view);
-        auto step_machine = std::make_shared<StepMachine>(dependency);
+        reader_ = std::make_shared<ReaderMock>();
+        printer_ = std::make_shared<PrinterMock>();
+        auto view = std::make_shared<ui::View>(reader_, printer_);
+        auto factory = std::make_shared<ui::Factory>();
+        auto resources_for_machine = std::make_shared<ui::step::Resources>(factory, view);
+        auto machine = std::make_shared<ui::StateMachine>(resources_for_machine);
 
-        controller_ = std::make_shared<Controller>(step_machine, task_manager);
+        controller_ = std::make_shared<ui::Controller>(machine, resources_for_controller);
     }
 
 protected:
-    std::shared_ptr<MockReader> reader_;
-    std::shared_ptr<MockPrinter> printer_;
-    std::shared_ptr<Controller> controller_;
+    std::shared_ptr<ReaderMock> reader_;
+    std::shared_ptr<PrinterMock> printer_;
+    std::shared_ptr<ui::Controller> controller_;
 };
 
 TEST_F(IntegrationTest, Scenario_1) {

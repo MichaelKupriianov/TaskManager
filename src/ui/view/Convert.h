@@ -5,17 +5,19 @@
 #include <optional>
 #include "Task.pb.h"
 #include "ui/step/Type.h"
-#include "api/TasksSortBy.h"
+#include "model/TasksSortBy.h"
+#include "ui/command/Error.h"
 
 namespace ui::convert {
-    std::optional<api::Task::Priority> StringToPriority(const std::string&);
+    std::optional<proto::Task::Priority> StringToPriority(const std::string&);
     std::optional<time_t> StringToDate(const std::string&);
     std::optional<step::Type> StringToStepType(const std::string&);
     std::optional<int> StringToId(const std::string&);
-    std::optional<api::TasksSortBy> StringToSortBy(const std::string&);
-    std::string PriorityToString(api::Task::Priority);
+    std::optional<model::TasksSortBy> StringToSortBy(const std::string&);
+    std::string PriorityToString(proto::Task::Priority);
     std::string DateToString(const google::protobuf::Timestamp& date);
     std::string CommandToString(step::Type command);
-    std::string TaskToString(const std::pair<api::TaskId, api::Task>& task);
+    std::string TaskToString(const std::pair<proto::TaskId, proto::Task>& task);
+    std::string ErrorToString(command::Error);
 }
 

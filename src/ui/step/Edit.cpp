@@ -7,7 +7,7 @@ namespace ui::step {
     Edit::Edit() : type_{step::Type::EDIT} {}
 
     std::shared_ptr<Step> Edit::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-        api::TaskId id{resources->view->ReadId(type_)};
+        proto::TaskId id{resources->view->ReadId(type_)};
 
         auto sub_resources = std::make_shared<Resources>(resources->factory, resources->view, type_);
         SubContext sub_context;

@@ -15,8 +15,8 @@ namespace ui {
         printer_->PrintString("show - Show all tasks\n");
         printer_->PrintString("show_task - Show task with its subtasks\n");
         printer_->PrintString("show_label - Show task with some specific label\n");
-        printer_->PrintString("save - Save introduced tasks to a file\n");
-        printer_->PrintString("load - Load tasks for a file\n");
+        printer_->PrintString("save - GetAllTasks introduced tasks to a file\n");
+        printer_->PrintString("load - Rewrite tasks for a file\n");
         printer_->PrintString("quit - finish work\n\n");
     }
 
@@ -34,12 +34,12 @@ namespace ui {
         return ReadCommand();
     }
 
-    api::TaskId View::ReadId(step::Type command) {
+    proto::TaskId View::ReadId(step::Type command) {
         printer_->PrintString(convert::CommandToString(command) + " ID: ");
         std::string string_id{reader_->ReadString()};
 
         if (std::optional<int> result{convert::StringToId(string_id)}; result.has_value()) {
-            api::TaskId id;
+            proto::TaskId id;
             id.set_value(result.value());
             return id;
         }
@@ -47,12 +47,12 @@ namespace ui {
         return ReadId(command);
     }
 
-    api::TaskId View::ReadParentId(step::Type command) {
+    proto::TaskId View::ReadParentId(step::Type command) {
         printer_->PrintString(convert::CommandToString(command) + " Parent ID: ");
         std::string parent_id{reader_->ReadString()};
 
         if (std::optional<int> result{convert::StringToId(parent_id)}; result.has_value()) {
-            api::TaskId id;
+            proto::TaskId id;
             id.set_value(result.value());
             return id;
         }
@@ -69,11 +69,11 @@ namespace ui {
         return ReadTitle(command);
     }
 
-    api::Task::Priority View::ReadPriority(step::Type command) {
+    proto::Task::Priority View::ReadPriority(step::Type command) {
         printer_->PrintString(convert::CommandToString(command) + " priority (high, medium, low or none): ");
         std::string priority{reader_->ReadString()};
 
-        if (std::optional<api::Task::Priority> result{convert::StringToPriority(priority)}; result.has_value())
+        if (std::optional<proto::Task::Priority> result{convert::StringToPriority(priority)}; result.has_value())
             return result.value();
         printer_->PrintString("There is no such priority\n");
         return ReadPriority(command);
@@ -118,12 +118,12 @@ namespace ui {
         return ReadIfPrintSubtasks(command);
     }
 
-    api::TasksSortBy View::ReadSortBy(step::Type command) {
+    model::TasksSortBy View::ReadSortBy(step::Type command) {
         printer_->PrintString(convert::CommandToString(command) +
                               " sort by? (id, date or priority): ");
         std::string answer{reader_->ReadString()};
 
-        if (std::optional<api::TasksSortBy> result{convert::StringToSortBy(answer)}; result.has_value())
+        if (std::optional<model::TasksSortBy> result{convert::StringToSortBy(answer)}; result.has_value())
             return result.value();
         return ReadSortBy(command);
     }
@@ -137,14 +137,14 @@ namespace ui {
         return ReadTitle(command);
     }
 
-    void View::PrintArrayOfTasks(const api::ArrayTasks& tasks) {
+    void View::PrintArrayOfTasks(const proto::ArraySimpleTasks& tasks) {
         for (const auto& task: tasks) {
             std::string result = convert::TaskToString(task) + '\n';
             printer_->PrintString(result);
         }
     }
 
-    void View::PrintTaskWithSubtasks(const api::TaskWithSubtasks& task) {
+    void View::PrintTaskWithSubtasks(const proto::CompositeTask& task) {
         std::string result = convert::TaskToString(task.first);
         if (task.second.empty())
             result += "\n";
@@ -158,7 +158,7 @@ namespace ui {
         }
     }
 
-    void View::PrintAllTasks(const api::AllTasks& tasks) {
+    void View::PrintAllTasks(const proto::ArrayCompositeTasks& tasks) {
         if (tasks.empty()) {
             printer_->PrintString("There are no outstanding tasks now.\n");
             return;
@@ -171,7 +171,7 @@ namespace ui {
         }
     }
 
-    void View::PrintException(const std::string& exception) {
-        printer_->PrintString(exception + '\n');
+    void View::PrintError(command::Error error) {
+        printer_->PrintString(convert::ErrorToString(error) + '\n');
     }
 }

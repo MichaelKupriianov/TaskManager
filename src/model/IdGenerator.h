@@ -7,7 +7,7 @@ namespace model {
     public:
         explicit IdGenerator(int v = 0) : max_id_(v) {}
 
-        virtual api::TaskId GenerateId();
+        virtual proto::TaskId GenerateId();
 
         virtual ~IdGenerator() = default;
     private:

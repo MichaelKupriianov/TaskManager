@@ -23,14 +23,22 @@ namespace ui::step {
     }
 
     std::shared_ptr<Step> Print::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-        resources->view->PrintHelp();
+        if (context.result()->error.has_value())
+            resources->view->PrintError(context.result()->error.value());
+        if (context.result()->task.has_value())
+            resources->view->PrintTaskWithSubtasks(context.result()->task.value());
+        if (context.result()->array.has_value())
+            resources->view->PrintArrayOfTasks(context.result()->array.value());
+        if (context.result()->all_tasks.has_value())
+            resources->view->PrintAllTasks(context.result()->all_tasks.value());
+        context.set_result(std::nullopt);
         return resources->factory->GetInitialStep();
     }
 
     Complete::Complete() : type_{step::Type::COMPLETE} {}
 
     std::shared_ptr<Step> Complete::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-        api::TaskId id{resources->view->ReadId(type_)};
+        proto::TaskId id{resources->view->ReadId(type_)};
         if (resources->view->Confirm())
             context.set_command(std::make_shared<command::Complete>(id));
         return resources->factory->GetInitialStep();
@@ -39,7 +47,7 @@ namespace ui::step {
     Delete::Delete() : type_{step::Type::DELETE} {}
 
     std::shared_ptr<Step> Delete::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-        api::TaskId id{resources->view->ReadId(type_)};
+        proto::TaskId id{resources->view->ReadId(type_)};
         if (resources->view->Confirm())
             context.set_command(std::make_shared<command::Delete>(id));
         return resources->factory->GetInitialStep();

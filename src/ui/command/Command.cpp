@@ -6,96 +6,96 @@ namespace ui::command {
         return Result(true);
     }
 
-    Add::Add(const api::Task& task) : task_{task} {}
+    Add::Add(const proto::Task& task) : task_{task} {}
 
-    Result Add::execute(const std::shared_ptr<Resources>& dependency) {
-        dependency->manager->AddTask(task_);
+    Result Add::execute(const std::shared_ptr<Resources>& resources) {
+        resources->manager->AddTask(task_);
         return Result(false);
     }
 
-    AddSub::AddSub(const api::Task& task, api::TaskId parent)
+    AddSub::AddSub(const proto::Task& task, proto::TaskId parent)
             : task_{task}, parent_id_(parent) {}
 
-    Result AddSub::execute(const std::shared_ptr<Resources>& dependency) {
-        if (!dependency->manager->AddSubTask(task_, parent_id_))
-            return Result("Incorrect parent ID (for example, subtask cannot have child)");
+    Result AddSub::execute(const std::shared_ptr<Resources>& resources) {
+        if (!resources->manager->AddSubTask(task_, parent_id_))
+            return Result(Error::INCORRECT_PARENT_ID);
         else
             return Result(false);
     }
 
-    Edit::Edit(api::TaskId id, const api::Task& task) : id_{id}, task_{task} {}
+    Edit::Edit(proto::TaskId id, const proto::Task& task) : id_{id}, task_{task} {}
 
-    Result Edit::execute(const std::shared_ptr<Resources>& dependency) {
-        if (!dependency->manager->Edit(id_, task_))
-            return Result("There are no task with such ID");
+    Result Edit::execute(const std::shared_ptr<Resources>& resources) {
+        if (!resources->manager->Edit(id_, task_))
+            return Result(Error::NO_TASK_WITH_SUCH_ID);
         else
             return Result(false);
     }
 
-    Complete::Complete(api::TaskId id) : id_{id} {}
+    Complete::Complete(proto::TaskId id) : id_{id} {}
 
-    Result Complete::execute(const std::shared_ptr<Resources>& dependency) {
-        if (!dependency->manager->Complete(id_))
-            return Result("There are no task with such ID");
+    Result Complete::execute(const std::shared_ptr<Resources>& resources) {
+        if (!resources->manager->Complete(id_))
+            return Result(Error::NO_TASK_WITH_SUCH_ID);
         else
             return Result(false);
     }
 
-    Delete::Delete(api::TaskId id) : id_{id} {}
+    Delete::Delete(proto::TaskId id) : id_{id} {}
 
-    Result Delete::execute(const std::shared_ptr<Resources>& dependency) {
-        if (!dependency->manager->Delete(id_))
-            return Result("There are no task with such ID");
+    Result Delete::execute(const std::shared_ptr<Resources>& resources) {
+        if (!resources->manager->Delete(id_))
+            return Result(Error::NO_TASK_WITH_SUCH_ID);
         else
             return Result(false);
     }
 
-    Show::Show(bool if_print_subtasks, api::TasksSortBy sort_by)
+    Show::Show(bool if_print_subtasks, model::TasksSortBy sort_by)
             : if_print_subtasks_{if_print_subtasks}, sort_by_{sort_by} {}
 
-    Result Show::execute(const std::shared_ptr<Resources>& dependency) {
+    Result Show::execute(const std::shared_ptr<Resources>& resources) {
         if (if_print_subtasks_)
-            return Result(dependency->manager->ShowAll(sort_by_));
+            return Result(resources->manager->ShowAll(sort_by_));
         else
-            return Result(dependency->manager->ShowParents(sort_by_));
+            return Result(resources->manager->ShowParents(sort_by_));
     }
 
-    ShowTask::ShowTask(api::TaskId id, api::TasksSortBy sort_by)
+    ShowTask::ShowTask(proto::TaskId id, model::TasksSortBy sort_by)
             : id_{id}, sort_by_{sort_by} {}
 
-    Result ShowTask::execute(const std::shared_ptr<Resources>& dependency) {
-        if (auto result = dependency->manager->ShowTask(id_, sort_by_); result.has_value())
+    Result ShowTask::execute(const std::shared_ptr<Resources>& resources) {
+        if (auto result = resources->manager->ShowTask(id_, sort_by_); result.has_value())
             return Result(result.value());
         else
-            return Result("There are no task with such ID");
+            return Result(Error::NO_TASK_WITH_SUCH_ID);
     }
 
-    ShowLabel::ShowLabel(const std::string& label, api::TasksSortBy sort_by)
+    ShowLabel::ShowLabel(const std::string& label, model::TasksSortBy sort_by)
             : label_{label}, sort_by_{sort_by} {}
 
-    Result ShowLabel::execute(const std::shared_ptr<Resources>& dependency) {
-        return Result(dependency->manager->ShowLabel(label_, sort_by_));
+    Result ShowLabel::execute(const std::shared_ptr<Resources>& resources) {
+        return Result(resources->manager->ShowLabel(label_, sort_by_));
     }
 
     Save::Save(const std::string& filename) : filename_{filename} {}
 
-    Result Save::execute(const std::shared_ptr<Resources>& dependency) {
-        api::ArrayFamilyTasks tasks{dependency->manager->Save()};
+    Result Save::execute(const std::shared_ptr<Resources>& resources) {
+        proto::ArrayHierarchicalTasks tasks{resources->manager->GetAllTasks()};
 
-        if (!dependency->persister->Save(tasks, filename_))
-            return Result("Cannot save to the specified file");
+        if (!resources->persister->Save(tasks, filename_))
+            return Result(Error::CANNOT_SAVE_TO_FILE);
         else
             return Result(false);
     }
 
     Load::Load(const std::string& filename) : filename_{filename} {}
 
-    Result Load::execute(const std::shared_ptr<Resources>& dependency) {
-        std::optional<api::ArrayFamilyTasks> tasks{dependency->persister->Load(filename_)};
+    Result Load::execute(const std::shared_ptr<Resources>& resources) {
+        std::optional<proto::ArrayHierarchicalTasks> tasks{resources->persister->Load(filename_)};
         if (!tasks.has_value())
-            return Result("Cannot load for the specified file");
+            return Result(Error::CANNOT_LOAD_FROM_FILE);
 
-        dependency->manager->Load(tasks.value());
+        resources->manager->Rewrite(tasks.value());
         return Result(false);
     }
 }

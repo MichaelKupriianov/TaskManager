@@ -4,7 +4,8 @@
 #include "Task.pb.h"
 #include "Resources.h"
 #include "Result.h"
-#include "api/TasksSortBy.h"
+#include "Error.h"
+#include "model/TasksSortBy.h"
 
 namespace ui::command {
 
@@ -22,79 +23,79 @@ namespace ui::command {
 
     class Add : public Command {
     public:
-        explicit Add(const api::Task&);
+        explicit Add(const proto::Task&);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~Add() override = default;
     private:
-        const api::Task task_;
+        const proto::Task task_;
     };
 
     class AddSub : public Command {
     public:
-        explicit AddSub(const api::Task&, api::TaskId);
+        explicit AddSub(const proto::Task&, proto::TaskId);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~AddSub() override = default;
     private:
-        const api::Task task_;
-        const api::TaskId parent_id_;
+        const proto::Task task_;
+        const proto::TaskId parent_id_;
     };
 
     class Edit : public Command {
     public:
-        explicit Edit(api::TaskId, const api::Task&);
+        explicit Edit(proto::TaskId, const proto::Task&);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~Edit() override = default;
     private:
-        const api::TaskId id_;
-        const api::Task task_;
+        const proto::TaskId id_;
+        const proto::Task task_;
     };
 
     class Complete : public Command {
     public:
-        explicit Complete(api::TaskId);
+        explicit Complete(proto::TaskId);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~Complete() override = default;
     private:
-        const api::TaskId id_;
+        const proto::TaskId id_;
     };
 
     class Delete : public Command {
     public:
-        explicit Delete(api::TaskId);
+        explicit Delete(proto::TaskId);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~Delete() override = default;
     private:
-        const api::TaskId id_;
+        const proto::TaskId id_;
     };
 
     class Show : public Command {
     public:
-        explicit Show(bool, api::TasksSortBy);
+        explicit Show(bool, model::TasksSortBy);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~Show() override = default;
     private:
         const bool if_print_subtasks_;
-        const api::TasksSortBy sort_by_;
+        const model::TasksSortBy sort_by_;
     };
 
     class ShowTask : public Command {
     public:
-        explicit ShowTask(api::TaskId, api::TasksSortBy);
+        explicit ShowTask(proto::TaskId, model::TasksSortBy);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~ShowTask() override = default;
     private:
-        const api::TaskId id_;
-        const api::TasksSortBy sort_by_;
+        const proto::TaskId id_;
+        const model::TasksSortBy sort_by_;
     };
 
     class ShowLabel : public Command {
     public:
-        explicit ShowLabel(const std::string&, api::TasksSortBy);
+        explicit ShowLabel(const std::string&, model::TasksSortBy);
         Result execute(const std::shared_ptr<Resources>&) override;
         ~ShowLabel() override = default;
     private:
         const std::string label_;
-        const api::TasksSortBy sort_by_;
+        const model::TasksSortBy sort_by_;
     };
 
     class Save : public Command {

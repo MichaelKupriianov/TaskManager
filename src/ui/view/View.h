@@ -10,8 +10,9 @@
 #include "Convert.h"
 #include "Task.pb.h"
 #include "ui/step/Type.h"
-#include "api/TasksSortBy.h"
-#include "api/AliasesProtoObjects.h"
+#include "ui/command/Error.h"
+#include "model/TasksSortBy.h"
+#include "utilities/AliasesProtoObjects.h"
 
 namespace ui {
     class View {
@@ -22,21 +23,21 @@ namespace ui {
         virtual void PrintHelp();
         virtual void PrintQuit();
         virtual step::Type ReadCommand();
-        virtual api::TaskId ReadId(step::Type);
-        virtual api::TaskId ReadParentId(step::Type);
+        virtual proto::TaskId ReadId(step::Type);
+        virtual proto::TaskId ReadParentId(step::Type);
         virtual std::string ReadTitle(step::Type);
-        virtual api::Task::Priority ReadPriority(step::Type);
+        virtual proto::Task::Priority ReadPriority(step::Type);
         virtual google::protobuf::Timestamp ReadDate(step::Type);
         virtual std::string ReadLabel(step::Type);
         virtual bool Confirm();
         virtual bool ReadIfPrintSubtasks(step::Type);
-        virtual api::TasksSortBy ReadSortBy(step::Type);
+        virtual model::TasksSortBy ReadSortBy(step::Type);
         virtual std::string ReadFilename(step::Type);
 
-        virtual void PrintArrayOfTasks(const api::ArrayTasks&);
-        virtual void PrintTaskWithSubtasks(const api::TaskWithSubtasks&);
-        virtual void PrintAllTasks(const api::AllTasks&);
-        virtual void PrintException(const std::string& exception);
+        virtual void PrintArrayOfTasks(const proto::ArraySimpleTasks&);
+        virtual void PrintTaskWithSubtasks(const proto::CompositeTask&);
+        virtual void PrintAllTasks(const proto::ArrayCompositeTasks&);
+        virtual void PrintError(command::Error);
     private:
         const std::shared_ptr<Reader> reader_;
         const std::shared_ptr<Printer> printer_;

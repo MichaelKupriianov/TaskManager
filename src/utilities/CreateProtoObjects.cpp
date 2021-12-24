@@ -1,6 +1,6 @@
 #include "CreateProtoObjects.h"
 
-namespace api {
+namespace proto {
     Task CreateTask(const std::string& title, Task_Priority priority,
                     time_t date, const std::string& label, Task_Status status) {
         Task task;
@@ -14,12 +14,12 @@ namespace api {
         return task;
     }
 
-    FamilyTask CreateFamilyTask(const Task& task, std::optional<TaskId> parent) {
-        FamilyTask generalized_task;
-        generalized_task.set_allocated_task(new Task(task));
+    HierarchicalTask CreateHierarchicalTask(const Task& task, std::optional<TaskId> parent) {
+        HierarchicalTask hierarchical_task;
+        hierarchical_task.set_allocated_task(new Task(task));
         if (parent.has_value())
-            generalized_task.set_allocated_parent(new TaskId(parent.value()));
-        return generalized_task;
+            hierarchical_task.set_allocated_parent(new TaskId(parent.value()));
+        return hierarchical_task;
     }
 
     TaskId CreateTaskId(int value) {

@@ -1,12 +1,13 @@
 #include "Convert.h"
+#include <cassert>
 
 namespace ui::convert {
 
-    std::optional<api::Task::Priority> StringToPriority(const std::string& priority) {
-        if (priority == "high") return api::Task_Priority_HIGH;
-        if (priority == "medium") return api::Task_Priority_MEDIUM;
-        if (priority == "low") return api::Task_Priority_LOW;
-        if (priority == "none" || priority.empty()) return api::Task_Priority_NONE;
+    std::optional<proto::Task::Priority> StringToPriority(const std::string& priority) {
+        if (priority == "high") return proto::Task_Priority_HIGH;
+        if (priority == "medium") return proto::Task_Priority_MEDIUM;
+        if (priority == "low") return proto::Task_Priority_LOW;
+        if (priority == "none" || priority.empty()) return proto::Task_Priority_NONE;
         return std::nullopt;
     }
 
@@ -73,20 +74,20 @@ namespace ui::convert {
         }
     }
 
-    std::optional<api::TasksSortBy> StringToSortBy(const std::string& sort) {
-        if (sort == "id" || sort.empty()) return api::TasksSortBy::ID;
-        if (sort == "date") return api::TasksSortBy::DATE;
-        if (sort == "priority") return api::TasksSortBy::PRIORITY;
+    std::optional<model::TasksSortBy> StringToSortBy(const std::string& sort) {
+        if (sort == "id" || sort.empty()) return model::TasksSortBy::ID;
+        if (sort == "date") return model::TasksSortBy::DATE;
+        if (sort == "priority") return model::TasksSortBy::PRIORITY;
         return std::nullopt;
     }
 
-    std::string PriorityToString(api::Task::Priority priority) {
+    std::string PriorityToString(proto::Task::Priority priority) {
         switch (priority) {
-            case api::Task_Priority_HIGH:
+            case proto::Task_Priority_HIGH:
                 return "high";
-            case api::Task_Priority_MEDIUM:
+            case proto::Task_Priority_MEDIUM:
                 return "medium";
-            case api::Task_Priority_LOW:
+            case proto::Task_Priority_LOW:
                 return "low";
             default:
                 return "none";
@@ -121,15 +122,15 @@ namespace ui::convert {
             case step::Type::SHOW_LABEL:
                 return "[Show by label]";
             case step::Type::SAVE:
-                return "[Save]";
+                return "[GetAllTasks]";
             case step::Type::LOAD:
-                return "[Load]";
+                return "[Rewrite]";
             default:
                 assert(false);
         }
     }
 
-    std::string TaskToString(const std::pair<api::TaskId, api::Task>& task) {
+    std::string TaskToString(const std::pair<proto::TaskId, proto::Task>& task) {
         std::string result;
         result += "id: " + std::to_string(task.first.value());
         result += ", title: " + task.second.title();
@@ -137,5 +138,17 @@ namespace ui::convert {
         result += ", date: " + convert::DateToString(task.second.date());
         if (!task.second.label().empty()) result += ", label: " + task.second.label();
         return result;
+    }
+
+    std::string ErrorToString(command::Error error) {
+        if (error == command::Error::INCORRECT_PARENT_ID)
+            return "Incorrect parent ID (for example, subtask cannot have child)";
+        if (error == command::Error::NO_TASK_WITH_SUCH_ID)
+            return "There are no task with such ID";
+        if (error == command::Error::CANNOT_SAVE_TO_FILE)
+            return "Cannot save to the specified file";
+        if (error == command::Error::CANNOT_LOAD_FROM_FILE)
+            return "Cannot load from the specified file";
+        assert(false);
     }
 }

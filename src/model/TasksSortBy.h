@@ -1,6 +1,6 @@
 #pragma once
 
-namespace api {
+namespace model {
     enum class TasksSortBy {
         ID,
         DATE,
