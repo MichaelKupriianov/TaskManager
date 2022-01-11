@@ -66,7 +66,6 @@ namespace ui::convert {
             if (symbol < '0' || symbol > '9') return std::nullopt;
         try {
             int result = std::stoi(id);
-            if (result < 0) return std::nullopt;
             return result;
         }
         catch (...) {
@@ -122,15 +121,15 @@ namespace ui::convert {
             case step::Type::SHOW_LABEL:
                 return "[Show by label]";
             case step::Type::SAVE:
-                return "[GetAllTasks]";
+                return "[Save to file]";
             case step::Type::LOAD:
-                return "[Rewrite]";
+                return "[Load from file]";
             default:
                 assert(false);
         }
     }
 
-    std::string TaskToString(const std::pair<proto::TaskId, proto::Task>& task) {
+    std::string TaskToString(const proto::SimpleTask& task) {
         std::string result;
         result += "id: " + std::to_string(task.first.value());
         result += ", title: " + task.second.title();

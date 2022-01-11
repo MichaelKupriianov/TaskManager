@@ -34,9 +34,9 @@ namespace ui {
         virtual model::TasksSortBy ReadSortBy(step::Type);
         virtual std::string ReadFilename(step::Type);
 
-        virtual void PrintArrayOfTasks(const proto::ArraySimpleTasks&);
-        virtual void PrintTaskWithSubtasks(const proto::CompositeTask&);
-        virtual void PrintAllTasks(const proto::ArrayCompositeTasks&);
+        virtual void PrintArraySimpleTasks(const proto::ArraySimpleTasks&);
+        virtual void PrintCompositeTask(const proto::CompositeTask&);
+        virtual void PrintArrayCompositeTasks(const proto::ArrayCompositeTasks&);
         virtual void PrintError(command::Error);
     private:
         const std::shared_ptr<Reader> reader_;

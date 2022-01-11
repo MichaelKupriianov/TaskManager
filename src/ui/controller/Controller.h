@@ -11,7 +11,7 @@ namespace ui {
 
         void Run();
     private:
-        const std::shared_ptr<StateMachine> step_machine_;
-        const std::shared_ptr<command::Resources> dependency_;
+        const std::shared_ptr<StateMachine> state_machine_;
+        const std::shared_ptr<command::Resources> resources_;
     };
 }

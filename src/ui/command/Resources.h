@@ -1,8 +1,8 @@
 #pragma once
 
-#include<memory>
-#include"model/TaskManager.h"
-#include"persistence/TaskPersister.h"
+#include <memory>
+#include "model/TaskManager.h"
+#include "persistence/TaskPersister.h"
 
 namespace ui::command {
     struct Resources {

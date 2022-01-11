@@ -1,29 +1,29 @@
 #pragma once
 
-#include"gtest/gtest.h"
-#include"gmock/gmock.h"
-#include"SubStep.h"
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "ui/step/SubStep.h"
 
-class SubStepTitleMock : public SubStepTitle {
+class SubStepTitleMock : public ui::step::SubStepTitle {
 public:
     MOCK_METHOD(std::shared_ptr<SubStep>, execute,
-                (SubContext & , const std::shared_ptr<SubDependency> &), (override));
+                (ui::SubContext& , const std::shared_ptr<ui::step::Resources>&), (override));
 };
 
-class SubStepPriorityMock : public SubStepTitle {
+class SubStepPriorityMock : public ui::step::SubStepTitle {
 public:
     MOCK_METHOD(std::shared_ptr<SubStep>, execute,
-                (SubContext & , const std::shared_ptr<SubDependency> &), (override));
+                (ui::SubContext& , const std::shared_ptr<ui::step::Resources>&), (override));
 };
 
-class SubStepDateMock : public SubStepTitle {
+class SubStepDateMock : public ui::step::SubStepTitle {
 public:
     MOCK_METHOD(std::shared_ptr<SubStep>, execute,
-                (SubContext & , const std::shared_ptr<SubDependency> &), (override));
+                (ui::SubContext& , const std::shared_ptr<ui::step::Resources>&), (override));
 };
 
-class SubStepLabelMock : public SubStepTitle {
+class SubStepLabelMock : public ui::step::SubStepTitle {
 public:
     MOCK_METHOD(std::shared_ptr<SubStep>, execute,
-                (SubContext & , const std::shared_ptr<SubDependency> &), (override));
+                (ui::SubContext& , const std::shared_ptr<ui::step::Resources>&), (override));
 };

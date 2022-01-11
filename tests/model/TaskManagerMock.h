@@ -18,4 +18,6 @@ public:
     MOCK_METHOD(proto::ArraySimpleTasks, ShowParents, (model::TasksSortBy), (const, override));
     MOCK_METHOD(std::optional<proto::CompositeTask>, ShowTask, (proto::TaskId, model::TasksSortBy), (const, override));
     MOCK_METHOD(proto::ArrayCompositeTasks, ShowAll, (model::TasksSortBy), (const, override));
+    MOCK_METHOD(proto::ArrayHierarchicalTasks, GetAllTasks, (), (const, override));
+    MOCK_METHOD(void, Rewrite, (const proto::ArrayHierarchicalTasks&), (override));
 };

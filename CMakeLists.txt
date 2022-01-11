@@ -19,9 +19,9 @@ include_directories(src)
 include_directories(tests)
 
 file(GLOB_RECURSE model_src src/model/* src/utilities/* src/persistence/*)
-file(GLOB_RECURSE ui_src src/ui/* src/utilities/* src/model/*.h src/persistence/*.h)
-file(GLOB_RECURSE model_tests_src "tests/model/*" "tests/utilities/*" "tests/persistence/*")
-file(GLOB_RECURSE ui_tests_src "tests/ui/* tests/model/*.h tests/persistence/*.h")
+file(GLOB_RECURSE ui_src src/ui/* src/utilities/* src/model/* src/persistence/*)
+file(GLOB_RECURSE model_tests_src tests/model/* tests/utilities/* tests/persistence/*)
+file(GLOB_RECURSE ui_tests_src tests/ui/* tests/model/*.h tests/persistence/*.h)
 
 add_executable(TaskManager ${proto_src} ${proto_hdr} ${model_src} ${ui_src} src/main.cpp)
 target_link_libraries(TaskManager ${Protobuf_LIBRARIES})

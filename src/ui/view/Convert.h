@@ -7,6 +7,7 @@
 #include "ui/step/Type.h"
 #include "model/TasksSortBy.h"
 #include "ui/command/Error.h"
+#include "utilities/AliasesProtoObjects.h"
 
 namespace ui::convert {
     std::optional<proto::Task::Priority> StringToPriority(const std::string&);
@@ -17,7 +18,7 @@ namespace ui::convert {
     std::string PriorityToString(proto::Task::Priority);
     std::string DateToString(const google::protobuf::Timestamp& date);
     std::string CommandToString(step::Type command);
-    std::string TaskToString(const std::pair<proto::TaskId, proto::Task>& task);
+    std::string TaskToString(const proto::SimpleTask& task);
     std::string ErrorToString(command::Error);
 }
 

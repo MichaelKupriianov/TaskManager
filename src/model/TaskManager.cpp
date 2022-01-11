@@ -152,7 +152,7 @@ namespace model {
         return false;
     }
 
-    proto::ArrayHierarchicalTasks TaskManager::GetAllTasks() {
+    proto::ArrayHierarchicalTasks TaskManager::GetAllTasks() const {
         proto::ArrayHierarchicalTasks tasks;
         for (const auto& task: tasks_)
             tasks.push_back(task);

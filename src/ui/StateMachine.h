@@ -13,6 +13,6 @@ namespace ui {
         virtual void Run(Context&);
         virtual void Run(SubContext&);
     private:
-        const std::shared_ptr<step::Resources> dependency_;
+        const std::shared_ptr<step::Resources> resources_;
     };
 }

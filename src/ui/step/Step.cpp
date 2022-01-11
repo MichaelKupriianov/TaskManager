@@ -26,11 +26,11 @@ namespace ui::step {
         if (context.result()->error.has_value())
             resources->view->PrintError(context.result()->error.value());
         if (context.result()->task.has_value())
-            resources->view->PrintTaskWithSubtasks(context.result()->task.value());
+            resources->view->PrintCompositeTask(context.result()->task.value());
         if (context.result()->array.has_value())
-            resources->view->PrintArrayOfTasks(context.result()->array.value());
+            resources->view->PrintArraySimpleTasks(context.result()->array.value());
         if (context.result()->all_tasks.has_value())
-            resources->view->PrintAllTasks(context.result()->all_tasks.value());
+            resources->view->PrintArrayCompositeTasks(context.result()->all_tasks.value());
         context.set_result(std::nullopt);
         return resources->factory->GetInitialStep();
     }

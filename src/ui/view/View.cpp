@@ -137,14 +137,14 @@ namespace ui {
         return ReadTitle(command);
     }
 
-    void View::PrintArrayOfTasks(const proto::ArraySimpleTasks& tasks) {
+    void View::PrintArraySimpleTasks(const proto::ArraySimpleTasks& tasks) {
         for (const auto& task: tasks) {
             std::string result = convert::TaskToString(task) + '\n';
             printer_->PrintString(result);
         }
     }
 
-    void View::PrintTaskWithSubtasks(const proto::CompositeTask& task) {
+    void View::PrintCompositeTask(const proto::CompositeTask& task) {
         std::string result = convert::TaskToString(task.first);
         if (task.second.empty())
             result += "\n";
@@ -158,14 +158,14 @@ namespace ui {
         }
     }
 
-    void View::PrintAllTasks(const proto::ArrayCompositeTasks& tasks) {
+    void View::PrintArrayCompositeTasks(const proto::ArrayCompositeTasks& tasks) {
         if (tasks.empty()) {
             printer_->PrintString("There are no outstanding tasks now.\n");
             return;
         }
         for (const auto &[task, subtasks]: tasks) {
             if (!subtasks.empty())
-                PrintTaskWithSubtasks({task, subtasks});
+                PrintCompositeTask({task, subtasks});
             else
                 printer_->PrintString(convert::TaskToString(task) + '\n');
         }
