@@ -14,33 +14,33 @@
 #include "persistence/TaskPersister.h"
 
 namespace model {
-    class TaskManager {
-    public:
-        explicit TaskManager(const std::shared_ptr<IdGenerator>&);
-        virtual ~TaskManager() = default;
+class TaskManager {
+public:
+    explicit TaskManager(const std::shared_ptr<IdGenerator>& generator);
+    virtual ~TaskManager() = default;
 
-        virtual bool AddTask(const proto::Task&);
-        virtual bool AddSubTask(const proto::Task&, proto::TaskId);
-        virtual bool Edit(proto::TaskId, const proto::Task&);
-        virtual bool Complete(proto::TaskId);
-        virtual bool Delete(proto::TaskId);
+    virtual bool AddTask(const model::Task& task);
+    virtual bool AddSubTask(const model::Task& task, model::TaskId id);
+    virtual bool Edit(model::TaskId id, const model::Task& task);
+    virtual bool Complete(model::TaskId id);
+    virtual bool Delete(model::TaskId id);
 
-        virtual proto::ArraySimpleTasks ShowLabel(const std::string& label, TasksSortBy) const;
-        virtual proto::ArraySimpleTasks ShowParents(TasksSortBy) const;
-        virtual std::optional<proto::CompositeTask> ShowTask(proto::TaskId, TasksSortBy) const;
-        virtual proto::ArrayCompositeTasks ShowAll(TasksSortBy) const;
+    virtual model::ManyTasksWithId ShowLabel(const std::string& label, TasksSortBy) const;
+    virtual model::ManyTasksWithId ShowParents(TasksSortBy) const;
+    virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, TasksSortBy) const;
+    virtual model::ManyCompositeTasks ShowAll(TasksSortBy) const;
 
-        virtual proto::ArrayHierarchicalTasks GetAllTasks() const;
-        virtual void Rewrite(const proto::ArrayHierarchicalTasks&);
-    private:
-        static bool ComparatorPriority(const std::unique_ptr<proto::SimpleTask>&,
-                                       const std::unique_ptr<proto::SimpleTask>&);
-        static bool ComparatorDate(const std::unique_ptr<proto::SimpleTask>&,
-                                   const std::unique_ptr<proto::SimpleTask>&);
-        static bool ComparatorId(const std::unique_ptr<proto::SimpleTask>&,
-                                 const std::unique_ptr<proto::SimpleTask>&);
-    private:
-        std::map<proto::TaskId, proto::HierarchicalTask> tasks_;
-        std::shared_ptr<IdGenerator> generator_;
-    };
+    virtual model::ManyHierarchicalTasks GetAllTasks() const;
+    virtual void Overwrite(const model::ManyHierarchicalTasks&);
+private:
+    static bool ComparatorPriority(const std::unique_ptr<model::TaskWithId>&,
+                                   const std::unique_ptr<model::TaskWithId>&);
+    static bool ComparatorDate(const std::unique_ptr<model::TaskWithId>&,
+                               const std::unique_ptr<model::TaskWithId>&);
+    static bool ComparatorId(const std::unique_ptr<model::TaskWithId>&,
+                             const std::unique_ptr<model::TaskWithId>&);
+private:
+    std::map<model::TaskId, model::HierarchicalTask> tasks_;
+    std::shared_ptr<IdGenerator> generator_;
+};
 }

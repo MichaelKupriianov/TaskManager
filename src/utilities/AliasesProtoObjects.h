@@ -1,9 +1,9 @@
 #include "Task.pb.h"
 
-namespace proto {
-    using SimpleTask = std::pair<TaskId, Task>;
-    using ArraySimpleTasks = std::vector<SimpleTask>;
-    using CompositeTask = std::pair<SimpleTask, ArraySimpleTasks>;
-    using ArrayCompositeTasks = std::vector<CompositeTask>;
-    using ArrayHierarchicalTasks = std::vector<std::pair<TaskId, HierarchicalTask>>;
+namespace model {
+using TaskWithId = std::pair<TaskId, Task>;
+using ManyTasksWithId = std::vector<TaskWithId>;
+using CompositeTask = std::pair<TaskWithId, ManyTasksWithId>;
+using ManyCompositeTasks = std::vector<CompositeTask>;
+using ManyHierarchicalTasks = std::vector<std::pair<TaskId, HierarchicalTask>>;
 }

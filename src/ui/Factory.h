@@ -9,17 +9,17 @@
 #include "step/Type.h"
 
 namespace ui {
-    class Factory {
-    public:
-        virtual std::shared_ptr<step::Step> CreateStep(step::Type);
-        virtual std::shared_ptr<step::Step> GetInitialStep();
+class Factory {
+public:
+    virtual std::shared_ptr<step::Step> CreateStep(step::Type);
+    virtual std::shared_ptr<step::Step> GetInitialStep();
 
-        virtual std::shared_ptr<step::SubStep> GetInitialSubStep();
-        virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepTitle&);
-        virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepPriority&);
-        virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepDate&);
-        virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepLabel&);
+    virtual std::shared_ptr<step::SubStep> GetInitialSubStep();
+    virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepTitle&);
+    virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepPriority&);
+    virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepDate&);
+    virtual std::shared_ptr<step::SubStep> GetNextSubStepFrom(const step::SubStepLabel&);
 
-        virtual ~Factory() = default;
-    };
+    virtual ~Factory() = default;
+};
 }

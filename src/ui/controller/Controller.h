@@ -5,13 +5,13 @@
 #include "ui/command/Resources.h"
 
 namespace ui {
-    class Controller {
-    public:
-        Controller(const std::shared_ptr<StateMachine>&, const std::shared_ptr<command::Resources>&);
+class Controller {
+public:
+    Controller(const std::shared_ptr<StateMachine>&, const std::shared_ptr<command::Resources>&);
 
-        void Run();
-    private:
-        const std::shared_ptr<StateMachine> state_machine_;
-        const std::shared_ptr<command::Resources> resources_;
-    };
+    void Run();
+private:
+    const std::shared_ptr<StateMachine> state_machine_;
+    const std::shared_ptr<command::Resources> resources_;
+};
 }

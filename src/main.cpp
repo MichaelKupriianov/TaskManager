@@ -13,7 +13,8 @@ int main() {
     auto resources_for_machine = std::make_shared<ui::step::Resources>(factory, view);
     auto machine = std::make_shared<ui::StateMachine>(resources_for_machine);
 
-    ui::Controller controller{machine, resources_for_controller};
-    controller.Run();
+    auto controller = std::make_shared<ui::Controller>(machine, resources_for_controller);
+    controller->Run();
+
     return 0;
 }

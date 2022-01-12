@@ -7,5 +7,5 @@
 class TaskPersisterMock : public TaskPersister {
 public:
     MOCK_METHOD(bool, Save, (const proto::ArrayHierarchicalTasks&, const std::string&), (override));
-    MOCK_METHOD(std::optional<proto::ArrayHierarchicalTasks>, Load, (const std::string&), (override));
+    MOCK_METHOD(std::optional<model::ManyHierarchicalTasks>, Load, (const std::string&), (override));
 };

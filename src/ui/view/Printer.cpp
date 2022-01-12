@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace ui {
-    void Printer::PrintString(const std::string& string) {
-        std::cout << string;
-    }
+void Printer::PrintString(const std::string& string) {
+    std::cout << string;
+}
 }
