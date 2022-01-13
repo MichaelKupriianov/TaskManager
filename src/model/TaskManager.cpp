@@ -159,7 +159,7 @@ model::ManyHierarchicalTasks TaskManager::GetAllTasks() const {
     return tasks;
 }
 
-void TaskManager::Overwrite(const model::ManyHierarchicalTasks&) {
+void TaskManager::Overwrite(const model::ManyHierarchicalTasks& tasks) {
     tasks_.clear();
     for (const auto& task: tasks)
         tasks_.insert(task);

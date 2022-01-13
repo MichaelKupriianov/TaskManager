@@ -1,73 +1,97 @@
 #include "Step.h"
-#include "Resources.h"
+#include "ui/Factory.h"
 
 namespace ui::step {
 
-std::shared_ptr<Step> Root::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    if (context.has_result())
-        return resources->factory->CreateStep(step::Type::PRINT);
+Root::Root(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
 
-    Type type{resources->view->ReadCommand()};
-    return resources->factory->CreateStep(type);
+std::shared_ptr<Step> Root::execute(Context& context) {
+    if (context.result()->has_value())
+        return factory_->CreateStep(step::Type::PRINT);
+
+    Type type{view_->ReadCommand()};
+    return factory_->CreateStep(type);
 }
 
-std::shared_ptr<Step> Quit::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    resources->view->PrintQuit();
+Quit::Quit(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> Quit::execute(Context& context) {
+    view_->PrintQuit();
     context.set_command(std::make_shared<command::Quit>());
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
 
-std::shared_ptr<Step> Help::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    resources->view->PrintHelp();
-    return resources->factory->GetInitialStep();
+Help::Help(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> Help::execute(Context& context) {
+    view_->PrintHelp();
+    return factory_->GetInitialStep();
 }
 
-std::shared_ptr<Step> Print::execute(Context& context, const std::shared_ptr<Resources>& resources) {
+Print::Print(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> Print::execute(Context& context) {
     if (context.result()->error.has_value())
-        resources->view->PrintError(context.result()->error.value());
+        view_->PrintError(context.result()->error.value());
     if (context.result()->task.has_value())
-        resources->view->PrintCompositeTask(context.result()->task.value());
+        view_->PrintCompositeTask(context.result()->task.value());
     if (context.result()->array.has_value())
-        resources->view->PrintArraySimpleTasks(context.result()->array.value());
+        view_->PrintArraySimpleTasks(context.result()->array.value());
     if (context.result()->all_tasks.has_value())
-        resources->view->PrintArrayCompositeTasks(context.result()->all_tasks.value());
-    context.set_result(std::nullopt);
-    return resources->factory->GetInitialStep();
+        view_->PrintArrayCompositeTasks(context.result()->all_tasks.value());
+    context.set_result();
+    return factory_->GetInitialStep();
 }
 
-Complete::Complete() : type_{step::Type::COMPLETE} {}
+Complete::Complete(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
 
-std::shared_ptr<Step> Complete::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    model::TaskId id{resources->view->ReadId(type_)};
-    if (resources->view->Confirm())
+std::shared_ptr<Step> Complete::execute(Context& context) {
+    model::TaskId id{view_->ReadId(name())};
+    if (view_->Confirm())
         context.set_command(std::make_shared<command::Complete>(id));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
 
-Delete::Delete() : type_{step::Type::DELETE} {}
+std::string Complete::name() {return "[Complete Task]";}
 
-std::shared_ptr<Step> Delete::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    model::TaskId id{resources->view->ReadId(type_)};
-    if (resources->view->Confirm())
+Delete::Delete(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> Delete::execute(Context& context) {
+    model::TaskId id{view_->ReadId(name())};
+    if (view_->Confirm())
         context.set_command(std::make_shared<command::Delete>(id));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
 
-Save::Save() : type_{step::Type::SAVE} {}
+std::string Delete::name() {return "[Delete Task]";}
 
-std::shared_ptr<Step> Save::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    const std::string filename{resources->view->ReadFilename(type_)};
-    if (resources->view->Confirm())
+Save::Save(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> Save::execute(Context& context) {
+    const std::string filename{view_->ReadFilename(name())};
+    if (view_->Confirm())
         context.set_command(std::make_shared<command::Save>(filename));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
 
-Load::Load() : type_{step::Type::LOAD} {}
+std::string Save::name() {return "[Save to file]";}
 
-std::shared_ptr<Step> Load::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    const std::string filename{resources->view->ReadFilename(type_)};
-    if (resources->view->Confirm())
+Load::Load(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> Load::execute(Context& context) {
+    const std::string filename{view_->ReadFilename(name())};
+    if (view_->Confirm())
         context.set_command(std::make_shared<command::Load>(filename));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
+
+std::string Load::name() {return "[Load from file]";}
 }

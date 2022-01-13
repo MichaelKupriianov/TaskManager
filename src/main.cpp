@@ -1,4 +1,7 @@
-#include "ui/controller/Controller.h"
+#include "ui/StateMachine.h"
+#include "ui/Factory.h"
+#include "model/TaskManager.h"
+#include "persistence/TaskPersister.h"
 
 int main() {
     auto generator = std::make_shared<model::IdGenerator>();
@@ -9,12 +12,12 @@ int main() {
     auto reader = std::make_shared<ui::Reader>();
     auto printer = std::make_shared<ui::Printer>();
     auto view = std::make_shared<ui::View>(reader, printer);
-    auto factory = std::make_shared<ui::Factory>();
-    auto resources_for_machine = std::make_shared<ui::step::Resources>(factory, view);
-    auto machine = std::make_shared<ui::StateMachine>(resources_for_machine);
+    auto factory = std::make_shared<ui::Factory>(view);
 
-    auto controller = std::make_shared<ui::Controller>(machine, resources_for_controller);
-    controller->Run();
+    auto initial_step{factory->GetInitialStep()};
+    auto machine = std::make_shared<ui::StateMachine>(initial_step);
+
+    machine->Run(resources_for_controller);
 
     return 0;
 }

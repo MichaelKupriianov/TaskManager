@@ -1,36 +1,45 @@
 #include "Show.h"
-#include "Resources.h"
+#include "ui/Factory.h"
 #include "model/TasksSortBy.h"
 
 namespace ui::step {
 
-Show::Show() : type_{step::Type::SHOW} {}
+Show::Show(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
 
-std::shared_ptr<Step> Show::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    bool print_subtasks{resources->view->ReadIfPrintSubtasks(type_)};
-    model::TasksSortBy sort_by{resources->view->ReadSortBy(type_)};
+std::shared_ptr<Step> Show::execute(Context& context) {
+    bool print_subtasks{view_->ReadIfPrintSubtasks(name())};
+    model::TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::Show>(print_subtasks, sort_by));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
 
-ShowTask::ShowTask() : type_{step::Type::SHOW_TASK} {}
+std::string Show::name() {return "[Show]";}
 
-std::shared_ptr<Step> ShowTask::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    model::TaskId id{resources->view->ReadId(type_)};
-    model::TasksSortBy sort_by{resources->view->ReadSortBy(type_)};
+ShowTask::ShowTask(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> ShowTask::execute(Context& context) {
+    model::TaskId id{view_->ReadId(name())};
+    model::TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::ShowTask>(id, sort_by));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
 
-ShowLabel::ShowLabel() : type_{step::Type::SHOW_LABEL} {}
+std::string ShowTask::name() {return "[Show Task]";}
 
-std::shared_ptr<Step> ShowLabel::execute(Context& context, const std::shared_ptr<Resources>& resources) {
-    std::string label{resources->view->ReadLabel(type_)};
-    model::TasksSortBy sort_by{resources->view->ReadSortBy(type_)};
+ShowLabel::ShowLabel(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+        factory_{factory}, view_{view} {}
+
+std::shared_ptr<Step> ShowLabel::execute(Context& context) {
+    std::string label{view_->ReadLabel(name())};
+    model::TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::ShowLabel>(label, sort_by));
-    return resources->factory->GetInitialStep();
+    return factory_->GetInitialStep();
 }
+
+std::string ShowLabel::name() {return "[Show by label]";}
 }

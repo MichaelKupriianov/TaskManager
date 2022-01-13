@@ -2,74 +2,109 @@
 
 #include <memory>
 #include "ui/Context.h"
+#include "ui/view/View.h"
 #include "Type.h"
 
-namespace ui::step {
-class Resources;
+namespace ui {
+class Factory;
+namespace step {
 
 class Step {
 public:
-    virtual std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) = 0;
+    virtual std::shared_ptr<Step> execute(Context&) = 0;
     virtual ~Step() = default;
 };
 
 class Root : public Step {
 public:
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Root(const std::shared_ptr<Factory>&, const std::shared_ptr<View>& view_);
     ~Root() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+private:
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Quit : public Step {
 public:
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Quit(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Quit() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+private:
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Help : public Step {
 public:
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Help(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Help() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+private:
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Print : public Step {
 public:
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Print(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Print() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+private:
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Complete : public Step {
 public:
-    Complete();
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Complete(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Complete() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+    std::string name();
 private:
-    const Type type_;
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Delete : public Step {
 public:
-    Delete();
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Delete(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Delete() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+    std::string name();
 private:
-    const Type type_;
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Save : public Step {
 public:
-    Save();
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Save(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Save() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+    std::string name();
 private:
-    const Type type_;
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
 
 class Load : public Step {
 public:
-    Load();
-    std::shared_ptr<Step> execute(Context&, const std::shared_ptr<Resources>&) override;
+    Load(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
     ~Load() override = default;
+
+    std::shared_ptr<Step> execute(Context&) override;
+    std::string name();
 private:
-    const Type type_;
+    std::shared_ptr<Factory> factory_;
+    std::shared_ptr<View> view_;
 };
+}
 }

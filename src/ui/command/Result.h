@@ -16,6 +16,8 @@ public:
     explicit Result(const model::CompositeTask& i_task) : task{i_task}, finished{false} {}
     explicit Result(const model::ManyCompositeTasks& i_all_tasks) : all_tasks{i_all_tasks}, finished{false} {}
 
+    bool has_value() { return error.has_value() || array.has_value() || task.has_value() || all_tasks.has_value(); }
+
     const bool finished;
     const std::optional<Error> error;
     const std::optional<model::ManyTasksWithId> array;

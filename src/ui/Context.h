@@ -10,31 +10,26 @@ namespace ui {
 
 class Context {
 public:
-    bool has_command() const { return command_.has_value(); }
-    bool has_result() const { return result_.has_value(); }
+    explicit Context(const std::shared_ptr<command::Result>& result) : result_{result} {}
+    explicit Context(const std::string& name) : command_name_{name}, task_{new model::Task} {}
 
-    std::shared_ptr<command::Command> command() const { return command_.value(); }
-    std::shared_ptr<command::Result> result() const { return result_.value(); }
-
-    void set_command(const std::shared_ptr<command::Command>& command) { command_ = command; }
-    void set_result(const std::shared_ptr<command::Result>& result) { result_ = result; }
-    void set_command(std::nullopt_t) { command_ = std::nullopt; }
-    void set_result(std::nullopt_t) { result_ = std::nullopt; }
-private:
-    std::optional<std::shared_ptr<command::Command>> command_;
-    std::optional<std::shared_ptr<command::Result>> result_;
-};
-
-class SubContext {
-public:
-    SubContext() : task_{new model::Task} {}
-
-    bool if_finished() const { return finished_; }
+    std::shared_ptr<command::Command> command() const { return command_; }
+    std::shared_ptr<command::Result> result() const { return result_; }
     std::shared_ptr<model::Task> task() const { return task_; }
+    std::string command_name() const { return command_name_; }
+    bool if_finished() const { return finished_; }
 
+    void set_command(const std::shared_ptr<command::Command>& command) {
+        command_ = command;
+        finished_ = true;
+    }
+    void set_result() { result_ = std::make_shared<command::Result>(false); }
     void finished() { finished_ = true; }
 private:
-    bool finished_ = false;
+    std::shared_ptr<command::Command> command_;
+    std::shared_ptr<command::Result> result_;
     std::shared_ptr<model::Task> task_;
+    std::string command_name_;
+    bool finished_ = false;
 };
 }

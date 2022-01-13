@@ -2,18 +2,23 @@
 #include "step/Step.h"
 
 namespace ui {
-StateMachine::StateMachine(const std::shared_ptr<step::Resources>& resources) :
-        resources_{resources} {}
 
-void StateMachine::Run(Context& context) {
-    auto step = resources_->factory->GetInitialStep();
-    while (!context.has_command())
-        step = step->execute(context, resources_);
+StateMachine::StateMachine(const std::shared_ptr<step::Step>& initial_step) :
+        initial_step_{initial_step} {}
+
+void StateMachine::Run(const std::shared_ptr<command::Resources>& resources) {
+    auto result = std::make_shared<command::Result>(false);
+    while (true) {
+        Context context{result};
+        Run(context);
+        result = std::make_shared<command::Result>(context.command()->execute(resources));
+        if (result->finished) break;
+    }
 }
 
-void StateMachine::Run(SubContext& context) {
-    auto step = resources_->factory->GetInitialSubStep();
+void StateMachine::Run(Context &context) {
+    auto step{initial_step_};
     while (!context.if_finished())
-        step = step->execute(context, resources_);
+        step = step->execute(context);
 }
 }

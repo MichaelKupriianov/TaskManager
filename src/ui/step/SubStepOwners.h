@@ -6,10 +6,10 @@
 
 namespace ui::step {
 
-class Show : public Step {
+class Add : public Step {
 public:
-    Show(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
-    ~Show() override = default;
+    Add(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
+    ~Add() override = default;
 
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
@@ -18,10 +18,10 @@ private:
     std::shared_ptr<View> view_;
 };
 
-class ShowTask : public Step {
+class AddSub : public Step {
 public:
-    ShowTask(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
-    ~ShowTask() override = default;
+    AddSub(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
+    ~AddSub() override = default;
 
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
@@ -30,10 +30,10 @@ private:
     std::shared_ptr<View> view_;
 };
 
-class ShowLabel : public Step {
+class Edit : public Step {
 public:
-    ShowLabel(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
-    ~ShowLabel() override = default;
+    Edit(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
+    ~Edit() override = default;
 
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
@@ -42,3 +42,4 @@ private:
     std::shared_ptr<View> view_;
 };
 }
+

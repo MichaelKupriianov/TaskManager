@@ -23,16 +23,16 @@ public:
     virtual void PrintHelp();
     virtual void PrintQuit();
     virtual step::Type ReadCommand();
-    virtual model::TaskId ReadId(step::Type);
-    virtual model::TaskId ReadParentId(step::Type);
-    virtual std::string ReadTitle(step::Type);
-    virtual model::Task::Priority ReadPriority(step::Type);
-    virtual google::protobuf::Timestamp ReadDate(step::Type);
-    virtual std::string ReadLabel(step::Type);
+    virtual model::TaskId ReadId(const std::string &command);
+    virtual model::TaskId ReadParentId(const std::string &command);
+    virtual std::string ReadTitle(const std::string &command);
+    virtual model::Task::Priority ReadPriority(const std::string &command);
+    virtual google::protobuf::Timestamp ReadDate(const std::string &command);
+    virtual std::string ReadLabel(const std::string &command);
     virtual bool Confirm();
-    virtual bool ReadIfPrintSubtasks(step::Type);
-    virtual model::TasksSortBy ReadSortBy(step::Type);
-    virtual std::string ReadFilename(step::Type);
+    virtual bool ReadIfPrintSubtasks(const std::string &command);
+    virtual model::TasksSortBy ReadSortBy(const std::string &command);
+    virtual std::string ReadFilename(const std::string &command);
 
     virtual void PrintArraySimpleTasks(const model::ManyTasksWithId&);
     virtual void PrintCompositeTask(const model::CompositeTask&);

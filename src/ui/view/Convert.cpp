@@ -102,32 +102,32 @@ std::string DateToString(const google::protobuf::Timestamp& date) {
     return result;
 }
 
-std::string CommandToString(step::Type command) {
-    switch (command) {
-        case step::Type::ADD:
-            return "[Add Task]";
-        case step::Type::ADD_SUB:
-            return "[Add SubTask]";
-        case step::Type::EDIT:
-            return "[Edit Task]";
-        case step::Type::COMPLETE:
-            return "[Complete Task]";
-        case step::Type::DELETE:
-            return "[Delete Task]";
-        case step::Type::SHOW:
-            return "[Show]";
-        case step::Type::SHOW_TASK:
-            return "[Show Task]";
-        case step::Type::SHOW_LABEL:
-            return "[Show by label]";
-        case step::Type::SAVE:
-            return "[Save to file]";
-        case step::Type::LOAD:
-            return "[Load from file]";
-        default:
-            assert(false);
-    }
-}
+//std::string CommandToString(step::Type command) {
+//    switch (command) {
+//        case step::Type::ADD:
+//            return "[Add Task]";
+//        case step::Type::ADD_SUB:
+//            return "[Add SubTask]";
+//        case step::Type::EDIT:
+//            return "[Edit Task]";
+//        case step::Type::COMPLETE:
+//            return "[Complete Task]";
+//        case step::Type::DELETE:
+//            return "[Delete Task]";
+//        case step::Type::SHOW:
+//            return "[Show]";
+//        case step::Type::SHOW_TASK:
+//            return "[Show Task]";
+//        case step::Type::SHOW_LABEL:
+//            return "[Show by label]";
+//        case step::Type::SAVE:
+//            return "[Save to file]";
+//        case step::Type::LOAD:
+//            return "[Load from file]";
+//        default:
+//            assert(false);
+//    }
+//}
 
 std::string TaskToString(const model::TaskWithId& task) {
     std::string result;
