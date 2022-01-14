@@ -6,6 +6,9 @@
 
 class TaskPersisterMock : public TaskPersister {
 public:
-    MOCK_METHOD(bool, Save, (const proto::ArrayHierarchicalTasks&, const std::string&), (override));
-    MOCK_METHOD(std::optional<model::ManyHierarchicalTasks>, Load, (const std::string&), (override));
+    TaskPersisterMock(const std::string& filename)
+            : TaskPersister(filename) {}
+
+    MOCK_METHOD(bool, Save, (const model::ManyHierarchicalTasks&), (override));
+    MOCK_METHOD(std::optional<model::ManyHierarchicalTasks>, Load, (), (override));
 };

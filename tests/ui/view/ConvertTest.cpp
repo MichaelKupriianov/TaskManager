@@ -8,11 +8,11 @@ class ConvertTest : public ::testing::Test {
 };
 
 TEST_F(ConvertTest, shouldConvertStringToPriority) {
-    EXPECT_EQ(convert::StringToPriority("high"), proto::Task_Priority_HIGH);
-    EXPECT_EQ(convert::StringToPriority("medium"), proto::Task_Priority_MEDIUM);
-    EXPECT_EQ(convert::StringToPriority("low"), proto::Task_Priority_LOW);
-    EXPECT_EQ(convert::StringToPriority("none"), proto::Task_Priority_NONE);
-    EXPECT_EQ(convert::StringToPriority(""), proto::Task_Priority_NONE);
+    EXPECT_EQ(convert::StringToPriority("high"), model::Task_Priority_HIGH);
+    EXPECT_EQ(convert::StringToPriority("medium"), model::Task_Priority_MEDIUM);
+    EXPECT_EQ(convert::StringToPriority("low"), model::Task_Priority_LOW);
+    EXPECT_EQ(convert::StringToPriority("none"), model::Task_Priority_NONE);
+    EXPECT_EQ(convert::StringToPriority(""), model::Task_Priority_NONE);
     EXPECT_EQ(convert::StringToPriority("priority"), std::nullopt);
 }
 
@@ -64,10 +64,10 @@ TEST_F(ConvertTest, shouldConvertStringToSortBy) {
 }
 
 TEST_F(ConvertTest, shouldConvertPriorityToString) {
-    EXPECT_EQ(convert::PriorityToString(proto::Task_Priority_HIGH), "high");
-    EXPECT_EQ(convert::PriorityToString(proto::Task_Priority_MEDIUM), "medium");
-    EXPECT_EQ(convert::PriorityToString(proto::Task_Priority_LOW), "low");
-    EXPECT_EQ(convert::PriorityToString(proto::Task_Priority_NONE), "none");
+    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_HIGH), "high");
+    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_MEDIUM), "medium");
+    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_LOW), "low");
+    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_NONE), "none");
 }
 
 TEST_F(ConvertTest, shouldConvertDateToString) {
@@ -86,27 +86,14 @@ TEST_F(ConvertTest, shouldConvertDateToString) {
     EXPECT_EQ(convert::DateToString(date), "Nov  5 00:00");
 }
 
-TEST_F(ConvertTest, shouldConvertCommandToString) {
-    EXPECT_EQ(convert::CommandToString(step::Type::ADD), "[Add Task]");
-    EXPECT_EQ(convert::CommandToString(step::Type::ADD_SUB), "[Add SubTask]");
-    EXPECT_EQ(convert::CommandToString(step::Type::EDIT), "[Edit Task]");
-    EXPECT_EQ(convert::CommandToString(step::Type::COMPLETE), "[Complete Task]");
-    EXPECT_EQ(convert::CommandToString(step::Type::DELETE), "[Delete Task]");
-    EXPECT_EQ(convert::CommandToString(step::Type::SHOW), "[Show]");
-    EXPECT_EQ(convert::CommandToString(step::Type::SHOW_TASK), "[Show Task]");
-    EXPECT_EQ(convert::CommandToString(step::Type::SHOW_LABEL), "[Show by label]");
-    EXPECT_EQ(convert::CommandToString(step::Type::SAVE), "[Save to file]");
-    EXPECT_EQ(convert::CommandToString(step::Type::LOAD), "[Load from file]");
-}
-
 TEST_F(ConvertTest, shouldConvertTaskToString) {
-    EXPECT_EQ(convert::TaskToString({proto::CreateTaskId(0), proto::CreateTask("first")}),
+    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(0), model::CreateTask("first")}),
               "id: 0, title: first, priority: none, date: none");
-    EXPECT_EQ(convert::TaskToString({proto::CreateTaskId(11),
-                                     proto::CreateTask("second", proto::Task_Priority_LOW)}),
+    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(11),
+                                     model::CreateTask("second", model::Task_Priority_LOW)}),
               "id: 11, title: second, priority: low, date: none");
-    EXPECT_EQ(convert::TaskToString({proto::CreateTaskId(101),
-                                     proto::CreateTask("third", proto::Task_Priority_MEDIUM, 61594808400)}),
+    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(101),
+                                     model::CreateTask("third", model::Task_Priority_MEDIUM, 61594808400)}),
               "id: 101, title: third, priority: medium, date: Nov 11 23:00");
 }
 

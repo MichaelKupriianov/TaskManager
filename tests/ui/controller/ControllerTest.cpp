@@ -1,7 +1,6 @@
 //#include "gtest/gtest.h"
 //#include "gmock/gmock.h"
 //#include "ui/controller/Controller.h"
-//#include "ui/StepMachineMock.h"
 //#include "ui/command/CommandMock.h"
 //
 //using ::testing::Return;
@@ -14,50 +13,86 @@
 //class ControllerTest : public ::testing::Test {
 //public:
 //    void SetUp() override {
-//        task_ = std::make_shared<proto::Task>();
-//        id_ = std::make_shared<proto::TaskId>();
-//
 //        auto generator = std::make_shared<model::IdGenerator>();
+//        auto manager = std::make_shared<model::TaskManager>(generator);
 //        auto persister = std::make_shared<TaskPersister>();
-//        manager_ = std::make_shared<model::TaskManager>(generator);
+//        auto resources_for_controller = std::make_shared<ui::command::Resources>(manager, persister);
 //
-//        auto reader = std::make_shared<Reader>();
-//        auto printer = std::make_shared<Printer>();
-//        view_ = std::make_shared<View>(reader, printer);
-//        auto factory = std::make_shared<Factory>();
-//        auto dependency = std::make_shared<DependencyForStates>(factory, view_);
-//        machine_ = std::make_shared<StepMachineMock>(dependency);
+//        auto reader = std::make_shared<ui::Reader>();
+//        auto printer = std::make_shared<ui::Printer>();
+//        auto view = std::make_shared<ui::View>(reader, printer);
+//        auto factory = std::make_shared<ui::Factory>();
+//        auto resources_for_machine = std::make_shared<ui::step::Resources>(factory, view);
 //
-//        controller_ = std::make_shared<Controller>(machine_, manager_);
+//        command_ = std::make_shared<CommandQuitMock>();
+//        machine_ = std::make_shared<StateMachineMock>(resources_for_machine, command_);
+//        controller_ = std::make_shared<ui::Controller>(machine_, resources_for_controller);
 //    }
 //
 //protected:
-//    std::shared_ptr<proto::Task> task_;
-//    std::shared_ptr<proto::TaskId> id_;
-//    std::shared_ptr<TaskManager> manager_;
-//    std::shared_ptr<View> view_;
-//    std::shared_ptr<StepMachineMock> machine_;
+//    std::shared_ptr<CommandQuitMock> command_;
+//    std::shared_ptr<StateMachineMock> machine_;
 //    std::shared_ptr<Controller> controller_;
 //};
 //
 //TEST_F(ControllerTest, shouldWork) {
-//    auto command_add = std::make_shared<CommandAddMock>(*task_, view_);
-//    auto command_edit = std::make_shared<CommandEditMock>(*id_, *task_, view_);
-//    auto command_quit = std::make_shared<CommandQuitMock>();
-//    EXPECT_CALL(*machine_, GetCommand())
-//            .Times(3)
-//            .WillOnce(Return(command_add))
-//            .WillOnce(Return(command_edit))
-//            .WillOnce(Return(command_quit));
+//    EXPECT_CALL(*command_, execute(_))
+//          .Times(3)
+//          .WillOnce(Return(command::Result(false)))
+//          .WillOnce(Return(command::Result(command::Error::CANNOT_LOAD_FROM_FILE)))
+//          .WillOnce(Return(command::Result(true)));
 //
-//    EXPECT_CALL(*command_add, execute(manager_))
-//          .Times(1)
-//          .WillOnce(Return(true));
-//    EXPECT_CALL(*command_edit, execute(manager_))
-//            .Times(1)
-//            .WillOnce(Return(true));
-//    EXPECT_CALL(*command_quit, execute(manager_))
-//            .Times(1)
-//            .WillOnce(Returna(false));
 //    controller_->Run();
+//}
+
+//TEST_F(CommandTest, shouldSaveToFile) {
+//auto command = std::make_shared<Save>("filename");
+//
+//EXPECT_CALL(*manager_, GetAllTasks())
+//.Times(1)
+//.WillOnce(Return(*array_hierarchical_tasks_));
+//EXPECT_CALL(*persister_, Save(*array_hierarchical_tasks_, "filename"))
+//.Times(1)
+//.WillOnce(Return(true));
+//
+//Result result{command->execute(resources_)};
+//EXPECT_FALSE(result.finished);
+//}
+//
+//TEST_F(CommandTest, shouldHandleErrorWhenSaveToFile) {
+//auto command = std::make_shared<Save>("filename");
+//
+//EXPECT_CALL(*manager_, GetAllTasks())
+//.Times(1)
+//.WillOnce(Return(*array_hierarchical_tasks_));
+//EXPECT_CALL(*persister_, Save(*array_hierarchical_tasks_, "filename"))
+//.Times(1)
+//.WillOnce(Return(false));
+//
+//Result result{command->execute(resources_)};
+//EXPECT_TRUE(result.error.has_value());
+//}
+//
+//TEST_F(CommandTest, shouldLoadFromFile) {
+//auto command = std::make_shared<Load>("filename");
+//
+//EXPECT_CALL(*manager_, Rewrite(*array_hierarchical_tasks_))
+//.Times(1);
+//EXPECT_CALL(*persister_, Load("filename"))
+//.Times(1)
+//.WillOnce(Return(*array_hierarchical_tasks_));
+//
+//Result result{command->execute(resources_)};
+//EXPECT_FALSE(result.finished);
+//}
+//
+//TEST_F(CommandTest, shouldHandleErrorWhenLoadFromFile) {
+//auto command = std::make_shared<Load>("filename");
+//
+//EXPECT_CALL(*persister_, Load("filename"))
+//.Times(1)
+//.WillOnce(Return(std::nullopt));
+//
+//Result result{command->execute(resources_)};
+//EXPECT_TRUE(result.error.has_value());
 //}

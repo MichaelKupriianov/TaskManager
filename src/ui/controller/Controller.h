@@ -8,6 +8,7 @@ class Controller {
 public:
     Controller(const std::shared_ptr<model::TaskManager>& manager) :
             manager_{manager} {}
+    virtual ~Controller() = default;
 
     virtual bool AddTask(const model::Task& task);
     virtual bool AddSubTask(const model::Task& task, model::TaskId id);
@@ -15,10 +16,10 @@ public:
     virtual bool Complete(model::TaskId id);
     virtual bool Delete(model::TaskId id);
 
-    virtual model::ManyTasksWithId ShowLabel(const std::string& label, model::TasksSortBy) const;
-    virtual model::ManyTasksWithId ShowParents(model::TasksSortBy) const;
-    virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, model::TasksSortBy) const;
-    virtual model::ManyCompositeTasks ShowAll(model::TasksSortBy) const;
+    virtual model::ManyTasksWithId ShowLabel(const std::string& label, model::TasksSortBy);
+    virtual model::ManyTasksWithId ShowParents(model::TasksSortBy);
+    virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, model::TasksSortBy);
+    virtual model::ManyCompositeTasks ShowAll(model::TasksSortBy);
 
     virtual bool Save(const std::string& filename);
     virtual bool Load(const std::string& filename);

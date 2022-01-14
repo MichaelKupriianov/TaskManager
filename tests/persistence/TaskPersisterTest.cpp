@@ -11,10 +11,10 @@ TEST_F(TaskPersisterTest, shouldSaveLoadOneTask) {
     tasks.emplace_back(model::CreateTaskId(1),
                        model::CreateHierarchicalTask(model::CreateTask("first"),
                                                      std::nullopt));
-    TaskPersister persister;
-    ASSERT_TRUE(persister.Save(tasks, "persister_test_1"));
+    TaskPersister persister("persister_test_1");
+    ASSERT_TRUE(persister.Save(tasks));
 
-    std::optional<model::ManyHierarchicalTasks> result = persister.Load("persister_test_1");
+    std::optional<model::ManyHierarchicalTasks> result = persister.Load();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), tasks);
     remove("persister_test_1");
@@ -31,10 +31,10 @@ TEST_F(TaskPersisterTest, shouldSaveLoadSeveralTasks) {
     tasks.emplace_back(model::CreateTaskId(5),
                        model::CreateHierarchicalTask(model::CreateTask("third"),
                                                      model::CreateTaskId(2)));
-    TaskPersister persister;
-    ASSERT_TRUE(persister.Save(tasks, "persister_test_2"));
+    TaskPersister persister("persister_test_2");
+    ASSERT_TRUE(persister.Save(tasks));
 
-    std::optional<model::ManyHierarchicalTasks> result = persister.Load("persister_test_2");
+    std::optional<model::ManyHierarchicalTasks> result = persister.Load();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), tasks);
     remove("persister_test_2");
@@ -48,11 +48,11 @@ TEST_F(TaskPersisterTest, shouldSaveLoadTasksWithAndWithoutAParent) {
     tasks.emplace_back(model::CreateTaskId(2),
                        model::CreateHierarchicalTask(model::CreateTask("second"),
                                                      model::CreateTaskId(0)));
-    TaskPersister persister;
-    ASSERT_TRUE(persister.Save(tasks, "persister_test_3"));
+    TaskPersister persister("persister_test_3");
+    ASSERT_TRUE(persister.Save(tasks));
 
     std::optional<model::ManyHierarchicalTasks> result;
-    result = persister.Load("persister_test_3");
+    result = persister.Load();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), tasks);
     remove("persister_test_3");

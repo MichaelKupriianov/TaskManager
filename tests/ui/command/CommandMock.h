@@ -6,17 +6,17 @@
 
 class CommandQuitMock : public ui::command::Quit {
 public:
-    MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::command::Resources>&), (override));
+    MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::Controller>&), (override));
 };
 
 class CommandAddMock : public ui::command::Add {
 public:
-    CommandAddMock(const proto::Task &task) : ui::command::Add{task} {}
-    MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::command::Resources>&), (override));
+    CommandAddMock(const model::Task &task) : ui::command::Add{task} {}
+    MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::Controller>&), (override));
 };
 
 class CommandEditMock : public ui::command::Edit {
 public:
-    CommandEditMock(proto::TaskId id, const proto::Task &task) : ui::command::Edit{id, task} {}
-    MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::command::Resources>&), (override));
+    CommandEditMock(model::TaskId id, const model::Task &task) : ui::command::Edit{id, task} {}
+    MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::Controller>&), (override));
 };

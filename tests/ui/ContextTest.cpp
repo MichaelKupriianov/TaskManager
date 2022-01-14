@@ -7,46 +7,40 @@ class ContextTest : public ::testing::Test {
 };
 
 TEST_F(ContextTest, shouldWorkWithCommand) {
-    ui::Context context;
-    ASSERT_FALSE(context.has_command());
-
+    Context context{std::make_shared<command::Result>(false)};
     auto command = std::make_shared<command::Quit>();
     context.set_command(command);
-    ASSERT_TRUE(context.has_command());
+
     EXPECT_TRUE(std::dynamic_pointer_cast<command::Quit>(std::shared_ptr(
             context.command())));
-
-    context.set_command(std::nullopt);
-    EXPECT_FALSE(context.has_command());
 }
 
 TEST_F(ContextTest, shouldWorkWithResult) {
-    ui::Context context;
-    ASSERT_FALSE(context.has_result());
-
-    auto result = std::make_shared<command::Result>(true);
-    context.set_result(result);
-    ASSERT_TRUE(context.has_result());
+    ui::Context context{std::make_shared<command::Result>(true)};
     EXPECT_TRUE(context.result()->finished);
-
-    context.set_result(std::nullopt);
-    EXPECT_FALSE(context.has_result());
+    context.set_result();
+    EXPECT_FALSE(context.result()->finished);
 }
 
 TEST_F(ContextTest, shouldWorkWithTask) {
-    SubContext context;
+    Context context{""};
     context.task()->set_title("title");
-    context.task()->set_priority(proto::Task_Priority_LOW);
+    context.task()->set_priority(model::Task_Priority_LOW);
     context.task()->set_label("qwerty");
 
     EXPECT_EQ(context.task()->title(), "title");
-    EXPECT_EQ(context.task()->priority(), proto::Task_Priority_LOW);
+    EXPECT_EQ(context.task()->priority(), model::Task_Priority_LOW);
     EXPECT_FALSE(context.task()->has_date());
     EXPECT_EQ(context.task()->label(), "qwerty");
 }
 
+TEST_F(ContextTest, shouldWorkWithCommandName) {
+    Context context{"Add"};
+    EXPECT_EQ(context.command_name(), "Add");
+}
+
 TEST_F(ContextTest, shouldFinished) {
-    SubContext context;
+    Context context{""};
     EXPECT_EQ(context.if_finished(), false);
     context.finished();
     EXPECT_EQ(context.if_finished(), true);

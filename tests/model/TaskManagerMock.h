@@ -9,8 +9,8 @@ public:
     TaskManagerMock(const std::shared_ptr<model::IdGenerator>& generator)
             : TaskManager(generator) {}
 
-    MOCK_METHOD(bool, AddTask, (const proto::Task&), (override));
-    MOCK_METHOD(bool, AddSubTask, (const proto::Task&, proto::TaskId), (override));
+    MOCK_METHOD(bool, AddTask, (const model::Task&), (override));
+    MOCK_METHOD(bool, AddSubTask, (const model::Task&, model::TaskId), (override));
     MOCK_METHOD(bool, Edit, (model::TaskId, const model::Task &), (override));
     MOCK_METHOD(bool, Complete, (model::TaskId), (override));
     MOCK_METHOD(bool, Delete, (model::TaskId), (override));
@@ -19,5 +19,5 @@ public:
     MOCK_METHOD(std::optional<model::CompositeTask>, ShowTask, (model::TaskId, model::TasksSortBy), (const, override));
     MOCK_METHOD(model::ManyCompositeTasks, ShowAll, (model::TasksSortBy), (const, override));
     MOCK_METHOD(model::ManyHierarchicalTasks, GetAllTasks, (), (const, override));
-    MOCK_METHOD(void, Overwrite, (const proto::ArrayHierarchicalTasks&), (override));
+    MOCK_METHOD(void, Overwrite, (const model::ManyHierarchicalTasks&), (override));
 };

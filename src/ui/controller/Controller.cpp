@@ -22,19 +22,19 @@ bool Controller::Delete(model::TaskId id) {
     return manager_->Delete(id);
 }
 
-model::ManyTasksWithId Controller::ShowLabel(const std::string& label, model::TasksSortBy sort_by) const {
+model::ManyTasksWithId Controller::ShowLabel(const std::string& label, model::TasksSortBy sort_by) {
     return manager_->ShowLabel(label, sort_by);
 }
 
-model::ManyTasksWithId Controller::ShowParents(model::TasksSortBy sort_by) const {
+model::ManyTasksWithId Controller::ShowParents(model::TasksSortBy sort_by) {
     return manager_->ShowParents(sort_by);
 }
 
-std::optional<model::CompositeTask> Controller::ShowTask(model::TaskId id, model::TasksSortBy sort_by) const {
+std::optional<model::CompositeTask> Controller::ShowTask(model::TaskId id, model::TasksSortBy sort_by) {
     return manager_->ShowTask(id, sort_by);
 }
 
-model::ManyCompositeTasks Controller::ShowAll(model::TasksSortBy sort_by) const {
+model::ManyCompositeTasks Controller::ShowAll(model::TasksSortBy sort_by) {
     return manager_->ShowAll(sort_by);
 }
 
