@@ -2,22 +2,22 @@
 
 namespace ui::command {
 
-Result Quit::execute(const std::shared_ptr<Resources>&) {
+Result Quit::execute(const std::shared_ptr<Controller>&) {
     return Result(true);
 }
 
 Add::Add(const model::Task& task) : task_{task} {}
 
-Result Add::execute(const std::shared_ptr<Resources>& resources) {
-    resources->manager->AddTask(task_);
+Result Add::execute(const std::shared_ptr<Controller>& controller) {
+    controller->AddTask(task_);
     return Result(false);
 }
 
 AddSub::AddSub(const model::Task& task, model::TaskId parent)
         : task_{task}, parent_id_(parent) {}
 
-Result AddSub::execute(const std::shared_ptr<Resources>& resources) {
-    if (!resources->manager->AddSubTask(task_, parent_id_))
+Result AddSub::execute(const std::shared_ptr<Controller>& controller) {
+    if (!controller->AddSubTask(task_, parent_id_))
         return Result(Error::INCORRECT_PARENT_ID);
     else
         return Result(false);
@@ -25,8 +25,8 @@ Result AddSub::execute(const std::shared_ptr<Resources>& resources) {
 
 Edit::Edit(model::TaskId id, const model::Task& task) : id_{id}, task_{task} {}
 
-Result Edit::execute(const std::shared_ptr<Resources>& resources) {
-    if (!resources->manager->Edit(id_, task_))
+Result Edit::execute(const std::shared_ptr<Controller>& controller) {
+    if (!controller->Edit(id_, task_))
         return Result(Error::NO_TASK_WITH_SUCH_ID);
     else
         return Result(false);
@@ -34,8 +34,8 @@ Result Edit::execute(const std::shared_ptr<Resources>& resources) {
 
 Complete::Complete(model::TaskId id) : id_{id} {}
 
-Result Complete::execute(const std::shared_ptr<Resources>& resources) {
-    if (!resources->manager->Complete(id_))
+Result Complete::execute(const std::shared_ptr<Controller>& controller) {
+    if (!controller->Complete(id_))
         return Result(Error::NO_TASK_WITH_SUCH_ID);
     else
         return Result(false);
@@ -43,8 +43,8 @@ Result Complete::execute(const std::shared_ptr<Resources>& resources) {
 
 Delete::Delete(model::TaskId id) : id_{id} {}
 
-Result Delete::execute(const std::shared_ptr<Resources>& resources) {
-    if (!resources->manager->Delete(id_))
+Result Delete::execute(const std::shared_ptr<Controller>& controller) {
+    if (!controller->Delete(id_))
         return Result(Error::NO_TASK_WITH_SUCH_ID);
     else
         return Result(false);
@@ -53,18 +53,18 @@ Result Delete::execute(const std::shared_ptr<Resources>& resources) {
 Show::Show(bool if_print_subtasks, model::TasksSortBy sort_by)
         : if_print_subtasks_{if_print_subtasks}, sort_by_{sort_by} {}
 
-Result Show::execute(const std::shared_ptr<Resources>& resources) {
+Result Show::execute(const std::shared_ptr<Controller>& controller) {
     if (if_print_subtasks_)
-        return Result(resources->manager->ShowAll(sort_by_));
+        return Result(controller->ShowAll(sort_by_));
     else
-        return Result(resources->manager->ShowParents(sort_by_));
+        return Result(controller->ShowParents(sort_by_));
 }
 
 ShowTask::ShowTask(model::TaskId id, model::TasksSortBy sort_by)
         : id_{id}, sort_by_{sort_by} {}
 
-Result ShowTask::execute(const std::shared_ptr<Resources>& resources) {
-    if (auto result = resources->manager->ShowTask(id_, sort_by_); result.has_value())
+Result ShowTask::execute(const std::shared_ptr<Controller>& controller) {
+    if (auto result = controller->ShowTask(id_, sort_by_); result.has_value())
         return Result(result.value());
     else
         return Result(Error::NO_TASK_WITH_SUCH_ID);
@@ -73,16 +73,14 @@ Result ShowTask::execute(const std::shared_ptr<Resources>& resources) {
 ShowLabel::ShowLabel(const std::string& label, model::TasksSortBy sort_by)
         : label_{label}, sort_by_{sort_by} {}
 
-Result ShowLabel::execute(const std::shared_ptr<Resources>& resources) {
-    return Result(resources->manager->ShowLabel(label_, sort_by_));
+Result ShowLabel::execute(const std::shared_ptr<Controller>& controller) {
+    return Result(controller->ShowLabel(label_, sort_by_));
 }
 
 Save::Save(const std::string& filename) : filename_{filename} {}
 
-Result Save::execute(const std::shared_ptr<Resources>& resources) {
-    model::ManyHierarchicalTasks tasks{resources->manager->GetAllTasks()};
-
-    if (!resources->persister->Save(tasks, filename_))
+Result Save::execute(const std::shared_ptr<Controller>& controller) {
+    if (!controller->Save(filename_))
         return Result(Error::CANNOT_SAVE_TO_FILE);
     else
         return Result(false);
@@ -90,12 +88,10 @@ Result Save::execute(const std::shared_ptr<Resources>& resources) {
 
 Load::Load(const std::string& filename) : filename_{filename} {}
 
-Result Load::execute(const std::shared_ptr<Resources>& resources) {
-    std::optional<model::ManyHierarchicalTasks> tasks{resources->persister->Load(filename_)};
-    if (!tasks.has_value())
+Result Load::execute(const std::shared_ptr<Controller>& controller) {
+    if (!controller->Load(filename_))
         return Result(Error::CANNOT_LOAD_FROM_FILE);
-
-    resources->manager->Overwrite(tasks.value());
-    return Result(false);
+    else
+        return Result(false);
 }
 }

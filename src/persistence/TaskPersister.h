@@ -8,10 +8,14 @@
 
 class TaskPersister {
 public:
-    virtual bool Save(const model::ManyHierarchicalTasks& tasks, const std::string& filename);
-    virtual std::optional<model::ManyHierarchicalTasks> Load(const std::string& filename);
+    TaskPersister(const std::string &filename) : filename_{filename} {}
+
+    virtual bool Save(const model::ManyHierarchicalTasks& tasks);
+    virtual std::optional<model::ManyHierarchicalTasks> Load();
 
     virtual ~TaskPersister() = default;
+private:
+    const std::string filename_;
 };
 
 

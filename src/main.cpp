@@ -6,8 +6,7 @@
 int main() {
     auto generator = std::make_shared<model::IdGenerator>();
     auto manager = std::make_shared<model::TaskManager>(generator);
-    auto persister = std::make_shared<TaskPersister>();
-    auto resources_for_controller = std::make_shared<ui::command::Resources>(manager, persister);
+    auto controller = std::make_shared<ui::Controller>(manager);
 
     auto reader = std::make_shared<ui::Reader>();
     auto printer = std::make_shared<ui::Printer>();
@@ -17,7 +16,7 @@ int main() {
     auto initial_step{factory->GetInitialStep()};
     auto machine = std::make_shared<ui::StateMachine>(initial_step);
 
-    machine->Run(resources_for_controller);
+    machine->Run(controller);
 
     return 0;
 }

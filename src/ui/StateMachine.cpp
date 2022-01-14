@@ -6,12 +6,12 @@ namespace ui {
 StateMachine::StateMachine(const std::shared_ptr<step::Step>& initial_step) :
         initial_step_{initial_step} {}
 
-void StateMachine::Run(const std::shared_ptr<command::Resources>& resources) {
+void StateMachine::Run(const std::shared_ptr<Controller>& controller) {
     auto result = std::make_shared<command::Result>(false);
     while (true) {
         Context context{result};
         Run(context);
-        result = std::make_shared<command::Result>(context.command()->execute(resources));
+        result = std::make_shared<command::Result>(context.command()->execute(controller));
         if (result->finished) break;
     }
 }

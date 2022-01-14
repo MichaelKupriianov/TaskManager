@@ -25,8 +25,7 @@ public:
     void SetUp() override {
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
-        auto persister = std::make_shared<TaskPersister>();
-        resources_= std::make_shared<ui::command::Resources>(manager, persister);
+        controller_= std::make_shared<ui::Controller>(manager);
 
         reader_ = std::make_shared<ReaderMock>();
         printer_ = std::make_shared<PrinterMock>();
@@ -40,7 +39,7 @@ public:
 protected:
     std::shared_ptr<ReaderMock> reader_;
     std::shared_ptr<PrinterMock> printer_;
-    std::shared_ptr<ui::command::Resources> resources_;
+    std::shared_ptr<ui::Controller> controller_;
     std::shared_ptr<ui::StateMachine> machine_;
 };
 
@@ -114,7 +113,7 @@ TEST_F(IntegrationTest, Scenario_1) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
 
-    machine_->Run(resources_);
+    machine_->Run(controller_);
 }
 
 TEST_F(IntegrationTest, Scenario_2) {
@@ -233,7 +232,7 @@ TEST_F(IntegrationTest, Scenario_2) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
 
-    machine_->Run(resources_);
+    machine_->Run(controller_);
 }
 
 TEST_F(IntegrationTest, Scenario_3) {
@@ -370,7 +369,7 @@ TEST_F(IntegrationTest, Scenario_3) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
 
-    machine_->Run(resources_);
+    machine_->Run(controller_);
 }
 
 TEST_F(IntegrationTest, Scenario_4) {
@@ -456,7 +455,7 @@ TEST_F(IntegrationTest, Scenario_4) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
 
-    machine_->Run(resources_);
+    machine_->Run(controller_);
 }
 
 TEST_F(IntegrationTest, Scenario_5) {
@@ -551,7 +550,7 @@ TEST_F(IntegrationTest, Scenario_5) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
 
-    machine_->Run(resources_);
+    machine_->Run(controller_);
 
     remove("integration_test_1");
     remove("integration_test_2");

@@ -3,8 +3,8 @@
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/util/delimited_message_util.h>
 
-bool TaskPersister::Save(const model::ManyHierarchicalTasks& tasks, const std::string& filename) {
-    std::ofstream file(filename);
+bool TaskPersister::Save(const model::ManyHierarchicalTasks& tasks) {
+    std::ofstream file(filename_);
     if (!file.is_open()) return false;
 
     for (const auto &[id, task]: tasks) {
@@ -15,9 +15,9 @@ bool TaskPersister::Save(const model::ManyHierarchicalTasks& tasks, const std::s
     return true;
 }
 
-std::optional<model::ManyHierarchicalTasks> TaskPersister::Load(const std::string& filename) {
+std::optional<model::ManyHierarchicalTasks> TaskPersister::Load() {
     model::ManyHierarchicalTasks result;
-    std::ifstream file(filename);
+    std::ifstream file(filename_);
     if (!file.is_open()) return std::nullopt;
 
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> input =
