@@ -12,16 +12,19 @@ struct Result {
 public:
     explicit Result(bool i_finished) : finished{i_finished} {}
     explicit Result(Error i_error) : error{i_error}, finished{false} {}
-    explicit Result(const model::ManyTasksWithId& i_array) : array{i_array}, finished{false} {}
-    explicit Result(const model::CompositeTask& i_task) : task{i_task}, finished{false} {}
-    explicit Result(const model::ManyCompositeTasks& i_all_tasks) : all_tasks{i_all_tasks}, finished{false} {}
+    explicit Result(const model::ManyTasksWithId& tasks) : many_tasks{tasks}, finished{false} {}
+    explicit Result(const model::CompositeTask& task) : composite_task{task}, finished{false} {}
+    explicit Result(const model::ManyCompositeTasks& tasks) : many_composite_tasks{tasks}, finished{false} {}
 
-    bool has_value() { return error.has_value() || array.has_value() || task.has_value() || all_tasks.has_value(); }
+    bool has_value() {
+        return error.has_value() || many_tasks.has_value() || composite_task.has_value() ||
+               many_composite_tasks.has_value();
+    }
 
     const bool finished;
     const std::optional<Error> error;
-    const std::optional<model::ManyTasksWithId> array;
-    const std::optional<model::CompositeTask> task;
-    const std::optional<model::ManyCompositeTasks> all_tasks;
+    const std::optional<model::ManyTasksWithId> many_tasks;
+    const std::optional<model::CompositeTask> composite_task;
+    const std::optional<model::ManyCompositeTasks> many_composite_tasks;
 };
 }

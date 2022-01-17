@@ -34,9 +34,9 @@ public:
     virtual model::TasksSortBy ReadSortBy(const std::string &command);
     virtual std::string ReadFilename(const std::string &command);
 
-    virtual void PrintArraySimpleTasks(const model::ManyTasksWithId&);
+    virtual void PrintManyTasksWithId(const model::ManyTasksWithId&);
     virtual void PrintCompositeTask(const model::CompositeTask&);
-    virtual void PrintArrayCompositeTasks(const model::ManyCompositeTasks&);
+    virtual void PrintManyCompositeTasks(const model::ManyCompositeTasks&);
     virtual void PrintError(command::Error);
 private:
     const std::shared_ptr<Reader> reader_;

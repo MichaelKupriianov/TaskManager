@@ -41,7 +41,7 @@ Edit::Edit(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>&
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> Edit::execute(Context& context) {
-    model::TaskId id{view_->ReadParentId(name())};
+    model::TaskId id{view_->ReadId(name())};
 
     Context sub_context(name());
     StateMachine machine{factory_->GetInitialSubStep()};

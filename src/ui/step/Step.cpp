@@ -37,12 +37,12 @@ Print::Print(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View
 std::shared_ptr<Step> Print::execute(Context& context) {
     if (context.result()->error.has_value())
         view_->PrintError(context.result()->error.value());
-    if (context.result()->task.has_value())
-        view_->PrintCompositeTask(context.result()->task.value());
-    if (context.result()->array.has_value())
-        view_->PrintArraySimpleTasks(context.result()->array.value());
-    if (context.result()->all_tasks.has_value())
-        view_->PrintArrayCompositeTasks(context.result()->all_tasks.value());
+    if (context.result()->composite_task.has_value())
+        view_->PrintCompositeTask(context.result()->composite_task.value());
+    if (context.result()->many_tasks.has_value())
+        view_->PrintManyTasksWithId(context.result()->many_tasks.value());
+    if (context.result()->many_composite_tasks.has_value())
+        view_->PrintManyCompositeTasks(context.result()->many_composite_tasks.value());
     context.set_result();
     return factory_->GetInitialStep();
 }

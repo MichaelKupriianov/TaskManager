@@ -21,9 +21,10 @@ public:
     MOCK_METHOD(bool, Confirm, (), (override));
     MOCK_METHOD(bool, ReadIfPrintSubtasks, (const std::string&), (override));
     MOCK_METHOD(model::TasksSortBy, ReadSortBy, (const std::string&), (override));
+    MOCK_METHOD(std::string, ReadFilename, (const std::string&), (override));
 
-    MOCK_METHOD(void, PrintArraySimpleTasks, (const model::ManyTasksWithId&), (override));
+    MOCK_METHOD(void, PrintManyTasksWithId, (const model::ManyTasksWithId&), (override));
     MOCK_METHOD(void, PrintCompositeTask, (const model::CompositeTask&), (override));
-    MOCK_METHOD(void, PrintArrayCompositeTasks, (const model::ManyCompositeTasks&), (override));
+    MOCK_METHOD(void, PrintManyCompositeTasks, (const model::ManyCompositeTasks&), (override));
     MOCK_METHOD(void, PrintError, (ui::command::Error), (override));
 };

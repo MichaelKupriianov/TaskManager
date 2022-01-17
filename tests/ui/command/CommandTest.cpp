@@ -23,7 +23,7 @@ public:
 
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
-        controller_ = std::make_shared<ControllerMock>(manager_);
+        controller_ = std::make_shared<ControllerMock>(manager);
     }
 
 protected:
@@ -35,7 +35,6 @@ protected:
     std::shared_ptr<model::ManyCompositeTasks> array_composite_tasks_;
     std::shared_ptr<model::ManyHierarchicalTasks> array_hierarchical_tasks_;
 
-    std::shared_ptr<model::TaskManager> manager_;
     std::shared_ptr<ControllerMock> controller_;
 };
 
@@ -146,7 +145,7 @@ TEST_F(CommandTest, shouldShowTasksWithSubtasks) {
             .WillOnce(Return(*array_composite_tasks_));
 
     Result result{command->execute(controller_)};
-    EXPECT_TRUE(result.all_tasks.has_value());
+    EXPECT_TRUE(result.many_composite_tasks.has_value());
 }
 
 TEST_F(CommandTest, shouldShowOnlyTasks) {
@@ -156,7 +155,7 @@ TEST_F(CommandTest, shouldShowOnlyTasks) {
             .WillOnce(Return(*array_simple_tasks_));
 
     Result result{command->execute(controller_)};
-    EXPECT_TRUE(result.array.has_value());
+    EXPECT_TRUE(result.many_tasks.has_value());
 }
 
 TEST_F(CommandTest, shouldShowSomeTask) {
@@ -166,7 +165,7 @@ TEST_F(CommandTest, shouldShowSomeTask) {
             .WillOnce(Return(*composite_task_));
 
     Result result{command->execute(controller_)};
-    EXPECT_TRUE(result.task.has_value());
+    EXPECT_TRUE(result.composite_task.has_value());
 }
 
 TEST_F(CommandTest, shouldHandleErrorWhenShowSomeTask) {
@@ -186,7 +185,7 @@ TEST_F(CommandTest, shouldShowByLabel) {
             .WillOnce(Return(*array_simple_tasks_));
 
     Result result{command->execute(controller_)};
-    EXPECT_TRUE(result.array.has_value());
+    EXPECT_TRUE(result.many_tasks.has_value());
 }
 
 TEST_F(CommandTest, shouldSaveToFile) {

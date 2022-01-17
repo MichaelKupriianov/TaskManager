@@ -134,7 +134,7 @@ std::string View::ReadFilename(const std::string &command) {
     return ReadTitle(command);
 }
 
-void View::PrintArraySimpleTasks(const model::ManyTasksWithId& tasks) {
+void View::PrintManyTasksWithId(const model::ManyTasksWithId& tasks) {
     for (const auto& task: tasks) {
         std::string result = convert::TaskToString(task) + '\n';
         printer_->PrintString(result);
@@ -155,7 +155,7 @@ void View::PrintCompositeTask(const model::CompositeTask& task) {
     }
 }
 
-void View::PrintArrayCompositeTasks(const model::ManyCompositeTasks& tasks) {
+void View::PrintManyCompositeTasks(const model::ManyCompositeTasks& tasks) {
     if (tasks.empty()) {
         printer_->PrintString("There are no outstanding tasks now.\n");
         return;
