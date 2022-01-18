@@ -14,7 +14,7 @@ void View::PrintHelp() {
     printer_->PrintString("delete - Delete existent task\n");
     printer_->PrintString("show - Show all tasks\n");
     printer_->PrintString("show_task - Show task with its subtasks\n");
-    printer_->PrintString("show_by_label - Show task with some specific label\n");
+    printer_->PrintString("show_by_label - Show tasks with some specific label\n");
     printer_->PrintString("save - GetAllTasks introduced tasks to a file\n");
     printer_->PrintString("load - Overwrite tasks for a file\n");
     printer_->PrintString("quit - finish work\n\n");
@@ -95,19 +95,7 @@ google::protobuf::Timestamp View::ReadDate(const std::string& command) {
 std::vector<std::string> View::ReadLabels(const std::string& command) {
     printer_->PrintString(command + " labels through a space (if there is no label, leave empty): ");
     std::string labels{reader_->ReadString()};
-    std::vector<std::string> result;
-    std::string label;
-    for (auto symbol: labels) {
-        if (symbol == ' ') {
-            result.push_back(label);
-            label.clear();
-        }
-        else {
-            label.push_back(symbol);
-        }
-    }
-    if (!label.empty()) result.push_back(label);
-    return result;
+    return convert::StringToLabels(labels);
 }
 
 bool View::Confirm() {

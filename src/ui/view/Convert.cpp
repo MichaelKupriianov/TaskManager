@@ -1,5 +1,6 @@
 #include "Convert.h"
 #include <cassert>
+#include <vector>
 
 namespace ui::convert {
 
@@ -78,6 +79,24 @@ std::optional<model::TasksSortBy> StringToSortBy(const std::string& sort) {
     if (sort == "date") return model::TasksSortBy::DATE;
     if (sort == "priority") return model::TasksSortBy::PRIORITY;
     return std::nullopt;
+}
+
+std::vector<std::string> StringToLabels(const std::string& labels) {
+    std::vector<std::string> result;
+    std::string label;
+    for (auto symbol: labels) {
+        if (symbol == ' ') {
+            if (!label.empty()) result.push_back(label);
+            label.clear();
+        }
+        else {
+            label.push_back(symbol);
+        }
+    }
+    if (!label.empty()) result.push_back(label);
+    std::sort(result.begin(), result.end());
+    result.erase(std::unique(result.begin(), result.end()), result.end());
+    return result;
 }
 
 std::string PriorityToString(model::Task::Priority priority) {
