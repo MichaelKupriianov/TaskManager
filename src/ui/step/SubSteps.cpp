@@ -35,8 +35,9 @@ SubStepLabel::SubStepLabel(const std::shared_ptr<Factory>& factory, const std::s
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> SubStepLabel::execute(Context& context) {
-    const std::string label{view_->ReadLabel(context.command_name())};
-    context.task()->set_label(label);
+    const std::vector<std::string> labels{view_->ReadLabels(context.command_name())};
+    for(const auto &label : labels)
+        context.task()->add_labels(label);
     context.finished();
     return factory_->GetNextSubStepFrom(*this);
 }
