@@ -258,6 +258,30 @@ TEST_F(TaskManagerTest, shouldShowAll) {
     EXPECT_EQ(result[1].second[0].second, model::CreateTask("fourth"));
 }
 
+TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
+    EXPECT_CALL(*generator_, GenerateId())
+            .Times(4)
+            .WillOnce(Return(model::CreateTaskId(0)))
+            .WillOnce(Return(model::CreateTaskId(1)))
+            .WillOnce(Return(model::CreateTaskId(2)))
+            .WillOnce(Return(model::CreateTaskId(3)));
+
+    model::Task first(model::CreateTask("first", model::Task_Priority_LOW, 100, {"label_1", "label_2"}));
+    model::Task second(model::CreateTask("second", model::Task_Priority_MEDIUM, 200, {"label_2", "label_3"}));
+    model::Task third(model::CreateTask("third", model::Task_Priority_NONE, 300, {"label_1", "label_3"}));
+    model::Task fourth(model::CreateTask("fourth", model::Task_Priority_HIGH, 500, {"label_2"}));
+    EXPECT_TRUE(manager_->AddTask(first));
+    EXPECT_TRUE(manager_->AddSubTask(second, model::CreateTaskId(0)));
+    EXPECT_TRUE(manager_->AddTask(third));
+    EXPECT_TRUE(manager_->AddSubTask(fourth, model::CreateTaskId(2)));
+
+    model::ManyTasksWithId result =
+            manager_->ShowByLabel("label_2", model::TasksSortBy::ID);
+    EXPECT_EQ(result[0].second, first);
+    EXPECT_EQ(result[1].second, second);
+    EXPECT_EQ(result[2].second, fourth);
+}
+
 TEST_F(TaskManagerTest, shouldGetAllTasks) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
