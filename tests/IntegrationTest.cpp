@@ -75,7 +75,7 @@ TEST_F(IntegrationTest, Scenario_1) {
             .WillOnce(Return("label"))
             .WillOnce(Return("y"))
 
-            .WillOnce(Return("show_label"))
+            .WillOnce(Return("show_by_label"))
             .WillOnce(Return("label"))
             .WillOnce(Return(""))
 
@@ -98,7 +98,7 @@ TEST_F(IntegrationTest, Scenario_1) {
     EXPECT_CALL(*printer_, PrintString(
             "id: 0, title: first, priority: none, date: Dec 12 00:00  :\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(
-            "   id: 1, title: second, priority: medium, date: none, label: label\n")).Times(1);
+            "   id: 1, title: second, priority: medium, date: none, labels: label\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(6);
@@ -106,9 +106,9 @@ TEST_F(IntegrationTest, Scenario_1) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(2);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 0, title: third, priority: none, date: Nov 11 13:00, label: label\n")).Times(1);
+            "id: 0, title: third, priority: none, date: Nov 11 13:00, labels: label\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 1, title: second, priority: medium, date: none, label: label\n")).Times(1);
+            "id: 1, title: second, priority: medium, date: none, labels: label\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
@@ -205,11 +205,11 @@ TEST_F(IntegrationTest, Scenario_2) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(4);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 1, title: fourth, priority: none, date: Jan 11 06:06, label: label  :\n")).Times(1);
+            "id: 1, title: fourth, priority: none, date: Jan 11 06:06, labels: label  :\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(
-            "   id: 2, title: third, priority: medium, date: Dec 24 00:00, label: label\n")).Times(1);
+            "   id: 2, title: third, priority: medium, date: Dec 24 00:00, labels: label\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 0, title: first, priority: medium, date: Dec 23 12:00, label: label\n")).Times(1);
+            "id: 0, title: first, priority: medium, date: Dec 23 12:00, labels: label\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(4);
@@ -217,9 +217,9 @@ TEST_F(IntegrationTest, Scenario_2) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(2);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 0, title: first, priority: medium, date: Dec 23 12:00, label: label\n")).Times(1);
+            "id: 0, title: first, priority: medium, date: Dec 23 12:00, labels: label\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 1, title: fourth, priority: none, date: Jan 11 06:06, label: label\n")).Times(1);
+            "id: 1, title: fourth, priority: none, date: Jan 11 06:06, labels: label\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(4);
@@ -227,7 +227,7 @@ TEST_F(IntegrationTest, Scenario_2) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(2);
     EXPECT_CALL(*printer_, PrintString(
-            "id: 1, title: fourth, priority: none, date: Jan 11 06:06, label: label\n")).Times(1);
+            "id: 1, title: fourth, priority: none, date: Jan 11 06:06, labels: label\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
@@ -248,7 +248,7 @@ TEST_F(IntegrationTest, Scenario_3) {
             .WillOnce(Return("zero"))
             .WillOnce(Return(""))
             .WillOnce(Return(""))
-            .WillOnce(Return("label_1"))
+            .WillOnce(Return("label_1 label_2"))
             .WillOnce(Return("y"))
 
             .WillOnce(Return("add_subtask"))
@@ -264,7 +264,7 @@ TEST_F(IntegrationTest, Scenario_3) {
             .WillOnce(Return("second"))
             .WillOnce(Return("low"))
             .WillOnce(Return("0:0 1/1"))
-            .WillOnce(Return("label_2"))
+            .WillOnce(Return("label_2 label_3"))
             .WillOnce(Return("y"))
 
             .WillOnce(Return("add_subtask"))
@@ -291,11 +291,11 @@ TEST_F(IntegrationTest, Scenario_3) {
             .WillOnce(Return("1"))
             .WillOnce(Return(""))
 
-            .WillOnce(Return("show_label"))
+            .WillOnce(Return("show_by_label"))
             .WillOnce(Return("label_1"))
             .WillOnce(Return(""))
 
-            .WillOnce(Return("show_label"))
+            .WillOnce(Return("show_by_label"))
             .WillOnce(Return("label_2"))
             .WillOnce(Return(""))
 
@@ -305,10 +305,10 @@ TEST_F(IntegrationTest, Scenario_3) {
 
             .WillOnce(Return("quit"));
 
-    const std::string zero{"id: 0, title: zero, priority: none, date: none, label: label_1"};
-    const std::string first{"id: 1, title: first, priority: high, date: Dec 31 23:59, label: label_1"};
-    const std::string second{"id: 2, title: second, priority: low, date: Jan  1 00:00, label: label_2"};
-    const std::string third{"id: 3, title: third, priority: medium, date: Jun  6 06:06, label: label_2"};
+    const std::string zero{"id: 0, title: zero, priority: none, date: none, labels: label_1 label_2"};
+    const std::string first{"id: 1, title: first, priority: high, date: Dec 31 23:59, labels: label_1"};
+    const std::string second{"id: 2, title: second, priority: low, date: Jan  1 00:00, labels: label_2 label_3"};
+    const std::string third{"id: 3, title: third, priority: medium, date: Jun  6 06:06, labels: label_2"};
 
     InSequence s;
 
@@ -359,6 +359,7 @@ TEST_F(IntegrationTest, Scenario_3) {
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(2);
+    EXPECT_CALL(*printer_, PrintString(zero + "\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(second + "\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString(third + "\n")).Times(1);
 
