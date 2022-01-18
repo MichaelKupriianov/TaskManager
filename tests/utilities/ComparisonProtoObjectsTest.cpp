@@ -42,10 +42,13 @@ TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskShouldWork) {
     task_2.set_priority(model::Task_Priority_LOW);
     EXPECT_TRUE(task_1 == task_2);
 
-    task_1.set_label("label");
+    task_1.add_labels("label_1");
+    task_1.add_labels("label_2");
     EXPECT_FALSE(task_1 == task_2);
 
-    task_2.set_label("label");
+    task_2.add_labels("label_1");
+    EXPECT_FALSE(task_1 == task_2);
+    task_2.add_labels("label_2");
     EXPECT_TRUE(task_1 == task_2);
 }
 

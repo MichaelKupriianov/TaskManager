@@ -16,13 +16,14 @@ TEST_F(CreateProtoObjectsTest, ShouldCreateTask) {
     const std::string title{"first"};
     const model::Task_Priority priority{model::Task_Priority_MEDIUM};
     const time_t date{1000};
-    const std::string label{"label"};
-    const model::Task task{model::CreateTask(title, priority, date, label)};
+    const std::vector<std::string> labels{"label_1", "label_2"};
+    const model::Task task{model::CreateTask(title, priority, date, labels)};
 
     EXPECT_EQ(task.title(), title);
     EXPECT_EQ(task.priority(), priority);
     EXPECT_EQ(task.date().seconds(), date);
-    EXPECT_EQ(task.label(), label);
+    EXPECT_EQ(task.labels()[0], labels[0]);
+    EXPECT_EQ(task.labels()[1], labels[1]);
     EXPECT_EQ(task.status(), model::Task_Status_IN_PROGRESS);
 }
 
