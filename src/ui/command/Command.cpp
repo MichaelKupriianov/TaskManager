@@ -70,11 +70,11 @@ Result ShowTask::execute(const std::shared_ptr<Controller>& controller) {
         return Result(Error::NO_TASK_WITH_SUCH_ID);
 }
 
-ShowLabel::ShowLabel(const std::string& label, model::TasksSortBy sort_by)
+ShowByLabel::ShowByLabel(const std::string& label, model::TasksSortBy sort_by)
         : label_{label}, sort_by_{sort_by} {}
 
-Result ShowLabel::execute(const std::shared_ptr<Controller>& controller) {
-    return Result(controller->ShowLabel(label_, sort_by_));
+Result ShowByLabel::execute(const std::shared_ptr<Controller>& controller) {
+    return Result(controller->ShowByLabel(label_, sort_by_));
 }
 
 Save::Save(const std::string& filename) : filename_{filename} {}

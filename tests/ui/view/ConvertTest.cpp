@@ -37,7 +37,7 @@ TEST_F(ConvertTest, shouldConvertStringToStepType) {
     EXPECT_EQ(convert::StringToStepType("delete"), step::Type::DELETE);
     EXPECT_EQ(convert::StringToStepType("show"), step::Type::SHOW);
     EXPECT_EQ(convert::StringToStepType("show_task"), step::Type::SHOW_TASK);
-    EXPECT_EQ(convert::StringToStepType("show_label"), step::Type::SHOW_LABEL);
+    EXPECT_EQ(convert::StringToStepType("show_by_label"), step::Type::SHOW_BY_LABEL);
     EXPECT_EQ(convert::StringToStepType("save"), step::Type::SAVE);
     EXPECT_EQ(convert::StringToStepType("load"), step::Type::LOAD);
     EXPECT_EQ(convert::StringToStepType("title"), std::nullopt);

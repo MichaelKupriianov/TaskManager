@@ -14,7 +14,7 @@ void View::PrintHelp() {
     printer_->PrintString("delete - Delete existent task\n");
     printer_->PrintString("show - Show all tasks\n");
     printer_->PrintString("show_task - Show task with its subtasks\n");
-    printer_->PrintString("show_label - Show task with some specific label\n");
+    printer_->PrintString("show_by_label - Show task with some specific label\n");
     printer_->PrintString("save - GetAllTasks introduced tasks to a file\n");
     printer_->PrintString("load - Overwrite tasks for a file\n");
     printer_->PrintString("quit - finish work\n\n");
@@ -34,7 +34,7 @@ step::Type View::ReadCommand() {
     return ReadCommand();
 }
 
-model::TaskId View::ReadId(const std::string &command) {
+model::TaskId View::ReadId(const std::string& command) {
     printer_->PrintString(command + " ID: ");
     std::string string_id{reader_->ReadString()};
 
@@ -47,7 +47,7 @@ model::TaskId View::ReadId(const std::string &command) {
     return ReadId(command);
 }
 
-model::TaskId View::ReadParentId(const std::string &command) {
+model::TaskId View::ReadParentId(const std::string& command) {
     printer_->PrintString(command + " Parent ID: ");
     std::string parent_id{reader_->ReadString()};
 
@@ -60,7 +60,7 @@ model::TaskId View::ReadParentId(const std::string &command) {
     return ReadId(command);
 }
 
-std::string View::ReadTitle(const std::string &command) {
+std::string View::ReadTitle(const std::string& command) {
     printer_->PrintString(command + " title: ");
     std::string title{reader_->ReadString()};
 
@@ -69,7 +69,7 @@ std::string View::ReadTitle(const std::string &command) {
     return ReadTitle(command);
 }
 
-model::Task::Priority View::ReadPriority(const std::string &command) {
+model::Task::Priority View::ReadPriority(const std::string& command) {
     printer_->PrintString(command + " priority (high, medium, low or none): ");
     std::string priority{reader_->ReadString()};
 
@@ -79,7 +79,7 @@ model::Task::Priority View::ReadPriority(const std::string &command) {
     return ReadPriority(command);
 }
 
-google::protobuf::Timestamp View::ReadDate(const std::string &command) {
+google::protobuf::Timestamp View::ReadDate(const std::string& command) {
     printer_->PrintString(command + " due date (in 12:12 12/12 or 12/12 format): ");
     std::string string_date{reader_->ReadString()};
 
@@ -92,10 +92,22 @@ google::protobuf::Timestamp View::ReadDate(const std::string &command) {
     return ReadDate(command);
 }
 
-std::string View::ReadLabel(const std::string &command) {
-    printer_->PrintString(command + " label (if there is no label, leave empty): ");
-    std::string label{reader_->ReadString()};
-    return label;
+std::vector<std::string> View::ReadLabels(const std::string& command) {
+    printer_->PrintString(command + " labels through a space (if there is no label, leave empty): ");
+    std::string labels{reader_->ReadString()};
+    std::vector<std::string> result;
+    std::string label;
+    for (auto symbol: labels) {
+        if (symbol == ' ') {
+            result.push_back(label);
+            label.clear();
+        }
+        else {
+            label.push_back(symbol);
+        }
+    }
+    if (!label.empty()) result.push_back(label);
+    return result;
 }
 
 bool View::Confirm() {
@@ -107,7 +119,7 @@ bool View::Confirm() {
     return Confirm();
 }
 
-bool View::ReadIfPrintSubtasks(const std::string &command) {
+bool View::ReadIfPrintSubtasks(const std::string& command) {
     printer_->PrintString(command + " Print subtasks? (y/n): ");
     std::string answer{reader_->ReadString()};
 
@@ -116,7 +128,13 @@ bool View::ReadIfPrintSubtasks(const std::string &command) {
     return ReadIfPrintSubtasks(command);
 }
 
-model::TasksSortBy View::ReadSortBy(const std::string &command) {
+std::string View::ReadLabel(const std::string &command) {
+    printer_->PrintString(command + " label (if there is no label, leave empty): ");
+    std::string label{reader_->ReadString()};
+    return label;
+}
+
+model::TasksSortBy View::ReadSortBy(const std::string& command) {
     printer_->PrintString(command + " sort by? (id, date or priority): ");
     std::string answer{reader_->ReadString()};
 
@@ -125,7 +143,7 @@ model::TasksSortBy View::ReadSortBy(const std::string &command) {
     return ReadSortBy(command);
 }
 
-std::string View::ReadFilename(const std::string &command) {
+std::string View::ReadFilename(const std::string& command) {
     printer_->PrintString(command + " filename: ");
     std::string title{reader_->ReadString()};
 

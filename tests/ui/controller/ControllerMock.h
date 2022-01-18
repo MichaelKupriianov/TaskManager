@@ -14,7 +14,7 @@ public:
     MOCK_METHOD(bool, Edit, (model::TaskId, const model::Task &), (override));
     MOCK_METHOD(bool, Complete, (model::TaskId), (override));
     MOCK_METHOD(bool, Delete, (model::TaskId), (override));
-    MOCK_METHOD(model::ManyTasksWithId, ShowLabel, (const std::string &, model::TasksSortBy), ( override));
+    MOCK_METHOD(model::ManyTasksWithId, ShowByLabel, (const std::string &, model::TasksSortBy), ( override));
     MOCK_METHOD(model::ManyTasksWithId, ShowParents, (model::TasksSortBy), (override));
     MOCK_METHOD(std::optional<model::CompositeTask>, ShowTask, (model::TaskId, model::TasksSortBy), (override));
     MOCK_METHOD(model::ManyCompositeTasks, ShowAll, (model::TasksSortBy), (override));

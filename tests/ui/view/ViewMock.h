@@ -17,9 +17,10 @@ public:
     MOCK_METHOD(std::string, ReadTitle, (const std::string&), (override));
     MOCK_METHOD(model::Task::Priority, ReadPriority, (const std::string&), (override));
     MOCK_METHOD(google::protobuf::Timestamp, ReadDate, (const std::string&), (override));
-    MOCK_METHOD(std::string, ReadLabel, (const std::string&), (override));
+    MOCK_METHOD(std::vector<std::string>, ReadLabels, (const std::string&), (override));
     MOCK_METHOD(bool, Confirm, (), (override));
     MOCK_METHOD(bool, ReadIfPrintSubtasks, (const std::string&), (override));
+    MOCK_METHOD(std::string, ReadLabel, (const std::string&), (override));
     MOCK_METHOD(model::TasksSortBy, ReadSortBy, (const std::string&), (override));
     MOCK_METHOD(std::string, ReadFilename, (const std::string&), (override));
 

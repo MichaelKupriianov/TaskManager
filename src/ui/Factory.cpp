@@ -28,8 +28,8 @@ std::shared_ptr<step::Step> Factory::CreateStep(step::Type type) {
             return std::make_shared<step::Show>(shared_from_this(), view_);
         case step::Type::SHOW_TASK:
             return std::make_shared<step::ShowTask>(shared_from_this(), view_);
-        case step::Type::SHOW_LABEL:
-            return std::make_shared<step::ShowLabel>(shared_from_this(), view_);
+        case step::Type::SHOW_BY_LABEL:
+            return std::make_shared<step::ShowByLabel>(shared_from_this(), view_);
         case step::Type::SAVE:
             return std::make_shared<step::Save>(shared_from_this(), view_);
         case step::Type::LOAD:

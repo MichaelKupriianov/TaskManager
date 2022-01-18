@@ -30,10 +30,10 @@ private:
     std::shared_ptr<View> view_;
 };
 
-class ShowLabel : public Step {
+class ShowByLabel : public Step {
 public:
-    ShowLabel(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
-    ~ShowLabel() override = default;
+    ShowByLabel(const std::shared_ptr<Factory>&, const std::shared_ptr<View>&);
+    ~ShowByLabel() override = default;
 
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();

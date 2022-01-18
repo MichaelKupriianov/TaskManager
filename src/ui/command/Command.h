@@ -88,11 +88,11 @@ private:
     const model::TasksSortBy sort_by_;
 };
 
-class ShowLabel : public Command {
+class ShowByLabel : public Command {
 public:
-    explicit ShowLabel(const std::string&, model::TasksSortBy);
+    explicit ShowByLabel(const std::string&, model::TasksSortBy);
     Result execute(const std::shared_ptr<Controller>&) override;
-    ~ShowLabel() override = default;
+    ~ShowByLabel() override = default;
 private:
     const std::string label_;
     const model::TasksSortBy sort_by_;

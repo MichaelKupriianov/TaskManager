@@ -30,16 +30,16 @@ std::shared_ptr<Step> ShowTask::execute(Context& context) {
 
 std::string ShowTask::name() {return "[Show Task]";}
 
-ShowLabel::ShowLabel(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
+ShowByLabel::ShowByLabel(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
-std::shared_ptr<Step> ShowLabel::execute(Context& context) {
+std::shared_ptr<Step> ShowByLabel::execute(Context& context) {
     std::string label{view_->ReadLabel(name())};
     model::TasksSortBy sort_by{view_->ReadSortBy(name())};
 
-    context.set_command(std::make_shared<command::ShowLabel>(label, sort_by));
+    context.set_command(std::make_shared<command::ShowByLabel>(label, sort_by));
     return factory_->GetInitialStep();
 }
 
-std::string ShowLabel::name() {return "[Show by label]";}
+std::string ShowByLabel::name() {return "[Show by label]";}
 }

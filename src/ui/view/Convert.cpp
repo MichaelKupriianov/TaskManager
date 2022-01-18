@@ -55,7 +55,7 @@ std::optional<step::Type> StringToStepType(const std::string& command) {
     if (command == "delete") return step::Type::DELETE;
     if (command == "show") return step::Type::SHOW;
     if (command == "show_task") return step::Type::SHOW_TASK;
-    if (command == "show_label") return step::Type::SHOW_LABEL;
+    if (command == "show_by_label") return step::Type::SHOW_BY_LABEL;
     if (command == "save") return step::Type::SAVE;
     if (command == "load") return step::Type::LOAD;
     return std::nullopt;
@@ -108,7 +108,10 @@ std::string TaskToString(const model::TaskWithId& task) {
     result += ", title: " + task.second.title();
     result += ", priority: " + convert::PriorityToString(task.second.priority());
     result += ", date: " + convert::DateToString(task.second.date());
-    if (!task.second.label().empty()) result += ", label: " + task.second.label();
+    if (!task.second.labels().empty()) {
+        result += ", labels:";
+        for (const auto& label: task.second.labels()) result += " " + label;
+    }
     return result;
 }
 
