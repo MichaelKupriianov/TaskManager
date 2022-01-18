@@ -33,12 +33,12 @@ public:
     virtual model::ManyHierarchicalTasks GetAllTasks() const;
     virtual void Overwrite(const model::ManyHierarchicalTasks&);
 private:
-    static bool ComparatorPriority(const std::unique_ptr<model::TaskWithId>&,
-                                   const std::unique_ptr<model::TaskWithId>&);
-    static bool ComparatorDate(const std::unique_ptr<model::TaskWithId>&,
-                               const std::unique_ptr<model::TaskWithId>&);
-    static bool ComparatorId(const std::unique_ptr<model::TaskWithId>&,
-                             const std::unique_ptr<model::TaskWithId>&);
+    static bool ComparatorPriority(const model::TaskWithId&,
+                                   const model::TaskWithId&);
+    static bool ComparatorDate(const model::TaskWithId&,
+                               const model::TaskWithId&);
+    static bool ComparatorId(const model::TaskWithId&,
+                             const model::TaskWithId&);
 private:
     std::map<model::TaskId, model::HierarchicalTask> tasks_;
     std::shared_ptr<IdGenerator> generator_;
