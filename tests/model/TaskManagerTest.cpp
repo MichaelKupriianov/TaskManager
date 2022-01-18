@@ -163,9 +163,10 @@ TEST_F(TaskManagerTest, shouldSortById) {
             .WillOnce(Return(model::CreateTaskId(1)))
             .WillOnce(Return(model::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("second")));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("third")));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("second")));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("third")));
+    ASSERT_EQ(manager_->ShowParents(model::TasksSortBy::ID).size(), 3);
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[0].second, model::CreateTask("first"));
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[1].second, model::CreateTask("second"));
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[2].second, model::CreateTask("third"));
@@ -178,9 +179,10 @@ TEST_F(TaskManagerTest, shouldSortByPriority) {
             .WillOnce(Return(model::CreateTaskId(1)))
             .WillOnce(Return(model::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_LOW)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_HIGH)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_LOW)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_HIGH)));
+    ASSERT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY).size(), 3);
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[0].second,
               model::CreateTask("", model::Task_Priority_HIGH));
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[1].second,
@@ -196,9 +198,10 @@ TEST_F(TaskManagerTest, shouldSortByDate) {
             .WillOnce(Return(model::CreateTaskId(1)))
             .WillOnce(Return(model::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 100)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 300)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 200)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 100)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 300)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 200)));
+    ASSERT_EQ(manager_->ShowParents(model::TasksSortBy::DATE).size(), 3);
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[0].second,
               CreateTask("", model::Task_Priority_NONE, 100));
     EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[1].second,
@@ -214,14 +217,15 @@ TEST_F(TaskManagerTest, shouldShowTaskWithSubtasks) {
             .WillOnce(Return(model::CreateTaskId(1)))
             .WillOnce(Return(model::CreateTaskId(2)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
-    EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("third"), model::CreateTaskId(0)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    ASSERT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
+    ASSERT_TRUE(manager_->AddSubTask(model::CreateTask("third"), model::CreateTaskId(0)));
 
     std::optional<model::CompositeTask> result =
             manager_->ShowTask(model::CreateTaskId(0), model::TasksSortBy::ID);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value().first.second, model::CreateTask("first"));
+    ASSERT_EQ(result.value().second.size(), 2);
     EXPECT_EQ(result.value().second[0].second, model::CreateTask("second"));
     EXPECT_EQ(result.value().second[1].second, model::CreateTask("third"));
 }
@@ -231,10 +235,10 @@ TEST_F(TaskManagerTest, shouldReturnNullptrIfIDNotExist) {
             .Times(1)
             .WillOnce(Return(model::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("first")));
     std::optional<model::CompositeTask> result =
             manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID);
-    ASSERT_FALSE(result.has_value());
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST_F(TaskManagerTest, shouldShowAll) {
@@ -245,16 +249,19 @@ TEST_F(TaskManagerTest, shouldShowAll) {
             .WillOnce(Return(model::CreateTaskId(2)))
             .WillOnce(Return(model::CreateTaskId(3)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("third")));
-    EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("fourth"), model::CreateTaskId(2)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    ASSERT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("third")));
+    ASSERT_TRUE(manager_->AddSubTask(model::CreateTask("fourth"), model::CreateTaskId(2)));
 
     model::ManyCompositeTasks result =
             manager_->ShowAll(model::TasksSortBy::ID);
+    ASSERT_EQ(result.size(), 2);
     EXPECT_EQ(result[0].first.second, model::CreateTask("first"));
+    ASSERT_EQ(result[0].second.size(), 1);
     EXPECT_EQ(result[0].second[0].second, model::CreateTask("second"));
     EXPECT_EQ(result[1].first.second, model::CreateTask("third"));
+    ASSERT_EQ(result[1].second.size(), 1);
     EXPECT_EQ(result[1].second[0].second, model::CreateTask("fourth"));
 }
 
@@ -270,13 +277,14 @@ TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
     model::Task second(model::CreateTask("second", model::Task_Priority_MEDIUM, 200, {"label_2", "label_3"}));
     model::Task third(model::CreateTask("third", model::Task_Priority_NONE, 300, {"label_1", "label_3"}));
     model::Task fourth(model::CreateTask("fourth", model::Task_Priority_HIGH, 500, {"label_2"}));
-    EXPECT_TRUE(manager_->AddTask(first));
-    EXPECT_TRUE(manager_->AddSubTask(second, model::CreateTaskId(0)));
-    EXPECT_TRUE(manager_->AddTask(third));
-    EXPECT_TRUE(manager_->AddSubTask(fourth, model::CreateTaskId(2)));
+    ASSERT_TRUE(manager_->AddTask(first));
+    ASSERT_TRUE(manager_->AddSubTask(second, model::CreateTaskId(0)));
+    ASSERT_TRUE(manager_->AddTask(third));
+    ASSERT_TRUE(manager_->AddSubTask(fourth, model::CreateTaskId(2)));
 
     model::ManyTasksWithId result =
             manager_->ShowByLabel("label_2", model::TasksSortBy::ID);
+    ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0].second, first);
     EXPECT_EQ(result[1].second, second);
     EXPECT_EQ(result[2].second, fourth);
@@ -288,10 +296,11 @@ TEST_F(TaskManagerTest, shouldGetAllTasks) {
             .WillOnce(Return(model::CreateTaskId(0)))
             .WillOnce(Return(model::CreateTaskId(1)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
-    EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    ASSERT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
 
     model::ManyHierarchicalTasks result = manager_->GetAllTasks();
+    ASSERT_EQ(result.size(), 2);
     EXPECT_EQ(result[0].first, model::CreateTaskId(0));
     EXPECT_EQ(result[0].second, model::CreateHierarchicalTask(model::CreateTask("first"), std::nullopt));
     EXPECT_EQ(result[1].first, model::CreateTaskId(1));
@@ -303,7 +312,7 @@ TEST_F(TaskManagerTest, shouldRewriteTaskManager) {
             .Times(1)
             .WillOnce(Return(model::CreateTaskId(0)));
 
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    ASSERT_TRUE(manager_->AddTask(model::CreateTask("first")));
 
     model::ManyHierarchicalTasks tasks;
     tasks.emplace_back(model::CreateTaskId(1),
