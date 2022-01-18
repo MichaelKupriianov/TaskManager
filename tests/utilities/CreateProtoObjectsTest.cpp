@@ -22,6 +22,7 @@ TEST_F(CreateProtoObjectsTest, ShouldCreateTask) {
     EXPECT_EQ(task.title(), title);
     EXPECT_EQ(task.priority(), priority);
     EXPECT_EQ(task.date().seconds(), date);
+    ASSERT_EQ(task.labels().size(), 2);
     EXPECT_EQ(task.labels()[0], labels[0]);
     EXPECT_EQ(task.labels()[1], labels[1]);
     EXPECT_EQ(task.status(), model::Task_Status_IN_PROGRESS);
