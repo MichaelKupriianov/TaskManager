@@ -35,11 +35,12 @@ protected:
 TEST_F(SubStepTest, shouldReadTitle) {
     auto step = SubStepTitle(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadTitle(_))
+    EXPECT_CALL(*view_, ReadTitle("Add"))
             .Times(1)
             .WillOnce(Return("title"));
     EXPECT_CALL(*context_, command_name())
-            .Times(1);
+            .Times(1)
+            .WillOnce(Return("Add"));
     EXPECT_CALL(*context_, task())
             .Times(1)
             .WillOnce(Return(task_));
@@ -50,11 +51,12 @@ TEST_F(SubStepTest, shouldReadTitle) {
 TEST_F(SubStepTest, shouldReadPriority) {
     auto step = SubStepPriority(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadPriority(_))
+    EXPECT_CALL(*view_, ReadPriority("Add"))
             .Times(1)
             .WillOnce(Return(model::Task_Priority_LOW));
     EXPECT_CALL(*context_, command_name())
-            .Times(1);
+            .Times(1)
+            .WillOnce(Return("Add"));
     EXPECT_CALL(*context_, task())
             .Times(1)
             .WillOnce(Return(task_));
@@ -65,11 +67,12 @@ TEST_F(SubStepTest, shouldReadPriority) {
 TEST_F(SubStepTest, shouldReadDate) {
     auto step = SubStepDate(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadDate(_))
+    EXPECT_CALL(*view_, ReadDate("Add"))
             .Times(1)
             .WillOnce(Return(google::protobuf::Timestamp()));
     EXPECT_CALL(*context_, command_name())
-            .Times(1);
+            .Times(1)
+            .WillOnce(Return("Add"));
     EXPECT_CALL(*context_, task())
             .Times(1)
             .WillOnce(Return(task_));
@@ -80,11 +83,12 @@ TEST_F(SubStepTest, shouldReadDate) {
 TEST_F(SubStepTest, shouldReadLabels) {
     auto step = SubStepLabel(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadLabels(_))
+    EXPECT_CALL(*view_, ReadLabels("Add"))
             .Times(1)
             .WillOnce(Return(std::vector<std::string>{"label_1", "label_2"}));
     EXPECT_CALL(*context_, command_name())
-            .Times(1);
+            .Times(1)
+            .WillOnce(Return("Add"));
     EXPECT_CALL(*context_, task())
             .Times(2)
             .WillRepeatedly(Return(task_));
