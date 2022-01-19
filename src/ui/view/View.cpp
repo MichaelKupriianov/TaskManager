@@ -117,7 +117,7 @@ bool View::ReadIfPrintSubtasks(const std::string& command) {
 }
 
 std::string View::ReadLabel(const std::string &command) {
-    printer_->PrintString(command + " label (if there is no label, leave empty): ");
+    printer_->PrintString(command + " label: ");
     std::string label{reader_->ReadString()};
     return label;
 }
