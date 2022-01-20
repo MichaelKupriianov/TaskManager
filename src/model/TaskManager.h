@@ -25,7 +25,7 @@ public:
     virtual bool Complete(model::TaskId id);
     virtual bool Delete(model::TaskId id);
 
-    virtual model::ManyTasksWithId ShowByLabel(const std::string& label, TasksSortBy sort) const;
+    virtual model::ManyTasksWithId ShowByLabel(const std::string& label, TasksSortBy) const;
     virtual model::ManyTasksWithId ShowParents(TasksSortBy) const;
     virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, TasksSortBy) const;
     virtual model::ManyCompositeTasks ShowAll(TasksSortBy) const;
@@ -33,12 +33,12 @@ public:
     virtual model::ManyHierarchicalTasks GetAllTasks() const;
     virtual void Overwrite(const model::ManyHierarchicalTasks&);
 private:
-    static bool ComparatorPriority(const model::TaskWithId&,
-                                   const model::TaskWithId&);
-    static bool ComparatorDate(const model::TaskWithId&,
-                               const model::TaskWithId&);
-    static bool ComparatorId(const model::TaskWithId&,
-                             const model::TaskWithId&);
+    static bool ComparatorPriority(const std::unique_ptr<model::TaskWithId>&,
+                                   const std::unique_ptr<model::TaskWithId>&);
+    static bool ComparatorDate(const std::unique_ptr<model::TaskWithId>&,
+                               const std::unique_ptr<model::TaskWithId>&);
+    static bool ComparatorId(const std::unique_ptr<model::TaskWithId>&,
+                             const std::unique_ptr<model::TaskWithId>&);
 private:
     std::map<model::TaskId, model::HierarchicalTask> tasks_;
     std::shared_ptr<IdGenerator> generator_;
