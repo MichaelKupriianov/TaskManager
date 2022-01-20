@@ -1,5 +1,4 @@
 #include "ComparisonProtoObjects.h"
-#include <set>
 
 namespace model {
 
