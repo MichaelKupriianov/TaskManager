@@ -86,16 +86,15 @@ std::vector<std::string> StringToLabels(const std::string& labels) {
     std::string label;
     for (auto symbol: labels) {
         if (symbol == ' ') {
-            if (!label.empty()) result.push_back(label);
+            if (!label.empty() && std::find(result.begin(), result.end(), label) == result.end())
+                result.push_back(label);
             label.clear();
-        }
-        else {
+        } else {
             label.push_back(symbol);
         }
     }
-    if (!label.empty()) result.push_back(label);
-    std::sort(result.begin(), result.end());
-    result.erase(std::unique(result.begin(), result.end()), result.end());
+    if (!label.empty() && std::find(result.begin(), result.end(), label) == result.end())
+        result.push_back(label);
     return result;
 }
 
