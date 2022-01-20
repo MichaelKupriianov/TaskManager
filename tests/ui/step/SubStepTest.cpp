@@ -35,12 +35,11 @@ protected:
 TEST_F(SubStepTest, shouldReadTitle) {
     auto step = SubStepTitle(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadTitle("Add"))
+    EXPECT_CALL(*view_, ReadTitle(_))
             .Times(1)
             .WillOnce(Return("title"));
     EXPECT_CALL(*context_, command_name())
-            .Times(1)
-            .WillOnce(Return("Add"));
+            .Times(1);
     EXPECT_CALL(*context_, task())
             .Times(1)
             .WillOnce(Return(task_));
@@ -51,12 +50,11 @@ TEST_F(SubStepTest, shouldReadTitle) {
 TEST_F(SubStepTest, shouldReadPriority) {
     auto step = SubStepPriority(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadPriority("Add"))
+    EXPECT_CALL(*view_, ReadPriority(_))
             .Times(1)
             .WillOnce(Return(model::Task_Priority_LOW));
     EXPECT_CALL(*context_, command_name())
-            .Times(1)
-            .WillOnce(Return("Add"));
+            .Times(1);
     EXPECT_CALL(*context_, task())
             .Times(1)
             .WillOnce(Return(task_));
@@ -67,12 +65,11 @@ TEST_F(SubStepTest, shouldReadPriority) {
 TEST_F(SubStepTest, shouldReadDate) {
     auto step = SubStepDate(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadDate("Add"))
+    EXPECT_CALL(*view_, ReadDate(_))
             .Times(1)
             .WillOnce(Return(google::protobuf::Timestamp()));
     EXPECT_CALL(*context_, command_name())
-            .Times(1)
-            .WillOnce(Return("Add"));
+            .Times(1);
     EXPECT_CALL(*context_, task())
             .Times(1)
             .WillOnce(Return(task_));
