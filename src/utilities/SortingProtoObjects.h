@@ -7,5 +7,5 @@
 #include "ComparisonProtoObjects.h"
 
 namespace model {
-void SortingTasksWithId(ManyTasksWithId&, TasksSortBy);
+void SortTasksWithId(ManyTasksWithId&, const TasksSortBy&);
 }

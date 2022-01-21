@@ -17,7 +17,7 @@ bool ComparatorDate(const model::TaskWithId& first, const model::TaskWithId& sec
     return false;
 }
 
-void SortingTasksWithId(ManyTasksWithId& tasks, TasksSortBy sort_by) {
+void SortTasksWithId(ManyTasksWithId& tasks, const TasksSortBy& sort_by) {
     if (sort_by == TasksSortBy::ID)
         std::sort(tasks.begin(), tasks.end(), ComparatorId);
     if (sort_by == TasksSortBy::PRIORITY)
