@@ -1,6 +1,6 @@
 #include "Show.h"
 #include "ui/Factory.h"
-#include "model/TasksSortBy.h"
+#include "utilities/TasksSortBy.h"
 
 namespace ui::step {
 
