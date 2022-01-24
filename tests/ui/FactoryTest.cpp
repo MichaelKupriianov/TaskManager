@@ -37,8 +37,8 @@ TEST_F(FactoryTest, shouldCreateStep) {
             factory_->CreateStep(step::Type::SHOW)));
     EXPECT_TRUE(std::dynamic_pointer_cast<step::ShowTask>(
             factory_->CreateStep(step::Type::SHOW_TASK)));
-    EXPECT_TRUE(std::dynamic_pointer_cast<step::ShowLabel>(
-            factory_->CreateStep(step::Type::SHOW_LABEL)));
+    EXPECT_TRUE(std::dynamic_pointer_cast<step::ShowByLabel>(
+            factory_->CreateStep(step::Type::SHOW_BY_LABEL)));
     EXPECT_TRUE(std::dynamic_pointer_cast<step::Save>(
             factory_->CreateStep(step::Type::SAVE)));
     EXPECT_TRUE(std::dynamic_pointer_cast<step::Load>(

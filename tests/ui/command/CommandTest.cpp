@@ -179,8 +179,8 @@ TEST_F(CommandTest, shouldHandleErrorWhenShowSomeTask) {
 }
 
 TEST_F(CommandTest, shouldShowByLabel) {
-    auto command = std::make_shared<ShowLabel>("label", model::TasksSortBy::PRIORITY);
-    EXPECT_CALL(*controller_, ShowLabel("label", model::TasksSortBy::PRIORITY))
+    auto command = std::make_shared<ShowByLabel>("label", model::TasksSortBy::PRIORITY);
+    EXPECT_CALL(*controller_, ShowByLabel("label", model::TasksSortBy::PRIORITY))
             .Times(1)
             .WillOnce(Return(*array_simple_tasks_));
 

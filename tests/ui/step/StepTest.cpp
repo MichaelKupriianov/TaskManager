@@ -279,7 +279,7 @@ TEST_F(StepTest, shouldCreateCommandShowTask) {
 }
 
 TEST_F(StepTest, shouldCreateCommandShowLabel) {
-    auto step = ShowLabel(factory_, view_);
+    auto step = ShowByLabel(factory_, view_);
 
     EXPECT_CALL(*view_, ReadLabel(_))
             .Times(1);
@@ -299,9 +299,9 @@ TEST_F(StepTest, shouldAddTask) {
               .Times(1)
               .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));
 
-    EXPECT_CALL(*view_, ReadLabel(_))
+    EXPECT_CALL(*view_, ReadLabels(_))
             .Times(1)
-            .WillOnce(Return("label"));
+            .WillOnce(Return(std::vector<std::string>{"label"}));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(true));
@@ -312,7 +312,6 @@ TEST_F(StepTest, shouldAddTask) {
 
     step.execute(*context_);
 }
-
 
 TEST_F(StepTest, shouldAddSubTask) {
     auto factory = std::make_shared<FactoryMock>(view_);
@@ -325,9 +324,9 @@ TEST_F(StepTest, shouldAddSubTask) {
             .Times(1)
             .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));
 
-    EXPECT_CALL(*view_, ReadLabel(_))
+    EXPECT_CALL(*view_, ReadLabels(_))
             .Times(1)
-            .WillOnce(Return("label"));
+            .WillOnce(Return(std::vector<std::string>{"label"}));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(true));
@@ -350,9 +349,9 @@ TEST_F(StepTest, shouldEditTask) {
             .Times(1)
             .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));
 
-    EXPECT_CALL(*view_, ReadLabel(_))
+    EXPECT_CALL(*view_, ReadLabels(_))
             .Times(1)
-            .WillOnce(Return("label"));
+            .WillOnce(Return(std::vector<std::string>{"label"}));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(true));

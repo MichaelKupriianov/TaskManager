@@ -37,7 +37,7 @@ TEST_F(ConvertTest, shouldConvertStringToStepType) {
     EXPECT_EQ(convert::StringToStepType("delete"), step::Type::DELETE);
     EXPECT_EQ(convert::StringToStepType("show"), step::Type::SHOW);
     EXPECT_EQ(convert::StringToStepType("show_task"), step::Type::SHOW_TASK);
-    EXPECT_EQ(convert::StringToStepType("show_label"), step::Type::SHOW_LABEL);
+    EXPECT_EQ(convert::StringToStepType("show_by_label"), step::Type::SHOW_BY_LABEL);
     EXPECT_EQ(convert::StringToStepType("save"), step::Type::SAVE);
     EXPECT_EQ(convert::StringToStepType("load"), step::Type::LOAD);
     EXPECT_EQ(convert::StringToStepType("title"), std::nullopt);
@@ -61,6 +61,15 @@ TEST_F(ConvertTest, shouldConvertStringToSortBy) {
     EXPECT_EQ(convert::StringToSortBy(""), model::TasksSortBy::ID);
     EXPECT_EQ(convert::StringToSortBy("idd"), std::nullopt);
     EXPECT_EQ(convert::StringToSortBy("1"), std::nullopt);
+}
+
+TEST_F(ConvertTest, shouldConvertStringToVectorLabels) {
+    const std::string labels = "first  second first q";
+    std::vector<std::string> result{convert::StringToLabels(labels)};
+    ASSERT_EQ(result.size(), 3);
+    EXPECT_EQ(result[0], "first");
+    ASSERT_EQ(result[1], "q");
+    ASSERT_EQ(result[2], "second");
 }
 
 TEST_F(ConvertTest, shouldConvertPriorityToString) {
@@ -95,6 +104,9 @@ TEST_F(ConvertTest, shouldConvertTaskToString) {
     EXPECT_EQ(convert::TaskToString({model::CreateTaskId(101),
                                      model::CreateTask("third", model::Task_Priority_MEDIUM, 61594808400)}),
               "id: 101, title: third, priority: medium, date: Nov 11 23:00");
+    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(2),
+                                     model::CreateTask("fourth", model::Task_Priority_NONE, 0, {"l1 l2"})}),
+              "id: 2, title: fourth, priority: none, date: none, labels: l1 l2");
 }
 
 TEST_F(ConvertTest, shouldConvertErrorToString) {

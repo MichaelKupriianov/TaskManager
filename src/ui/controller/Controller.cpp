@@ -22,8 +22,8 @@ bool Controller::Delete(model::TaskId id) {
     return manager_->Delete(id);
 }
 
-model::ManyTasksWithId Controller::ShowLabel(const std::string& label, model::TasksSortBy sort_by) {
-    return manager_->ShowLabel(label, sort_by);
+model::ManyTasksWithId Controller::ShowByLabel(const std::string& label, model::TasksSortBy sort_by) {
+    return manager_->ShowByLabel(label, sort_by);
 }
 
 model::ManyTasksWithId Controller::ShowParents(model::TasksSortBy sort_by) {

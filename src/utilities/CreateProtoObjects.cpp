@@ -9,14 +9,15 @@ TaskId CreateTaskId(int value) {
 }
 
 Task CreateTask(const std::string& title, Task_Priority priority,
-                time_t date, const std::string& label, Task_Status status) {
+                time_t date, const std::vector<std::string>& labels, Task_Status status) {
     Task task;
     task.set_title(title);
     task.set_priority(priority);
     google::protobuf::Timestamp time;
     time.set_seconds(date);
     task.set_allocated_date(new google::protobuf::Timestamp(time));
-    task.set_label(label);
+    for(const auto& label: labels)
+        task.add_labels(label);
     task.set_status(status);
     return task;
 }

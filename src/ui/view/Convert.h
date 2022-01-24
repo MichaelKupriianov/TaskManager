@@ -15,9 +15,9 @@ std::optional<time_t> StringToDate(const std::string&);
 std::optional<step::Type> StringToStepType(const std::string&);
 std::optional<int> StringToId(const std::string&);
 std::optional<model::TasksSortBy> StringToSortBy(const std::string&);
+std::vector<std::string> StringToLabels(const std::string&);
 std::string PriorityToString(model::Task::Priority);
 std::string DateToString(const google::protobuf::Timestamp& date);
-std::string CommandToString(step::Type command);
 std::string TaskToString(const model::TaskWithId& task);
 std::string ErrorToString(command::Error);
 }

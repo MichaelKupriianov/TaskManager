@@ -13,7 +13,7 @@ enum class Type {
     DELETE,
     SHOW,
     SHOW_TASK,
-    SHOW_LABEL,
+    SHOW_BY_LABEL,
     SAVE,
     LOAD
 };

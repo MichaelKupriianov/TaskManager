@@ -63,11 +63,14 @@ bool TaskManager::Delete(model::TaskId id) {
     return true;
 }
 
-model::ManyTasksWithId TaskManager::ShowLabel(const std::string& label, TasksSortBy sort) const {
+model::ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, TasksSortBy sort) const {
     std::vector<std::unique_ptr<model::TaskWithId>> for_sorting;
-    for (const auto &[id, task]: tasks_)
-        if (task.task().label() == label && task.task().status() != model::Task_Status_COMPLETED)
-            for_sorting.emplace_back(std::make_unique<model::TaskWithId>(id, task.task()));
+    for (const auto &[id, task]: tasks_) {
+        auto begin = task.task().labels().begin();
+        auto end = task.task().labels().end();
+        if (std::count(begin, end, label) > 0 && task.task().status() != model::Task_Status_COMPLETED)
+            for_sorting.emplace_back(std::make_unique<TaskWithId>(id, task.task()));
+    }
 
     if (sort == TasksSortBy::ID)
         std::sort(for_sorting.begin(), for_sorting.end(), ComparatorId);

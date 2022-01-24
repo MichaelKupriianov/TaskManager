@@ -25,7 +25,7 @@ public:
     virtual bool Complete(model::TaskId id);
     virtual bool Delete(model::TaskId id);
 
-    virtual model::ManyTasksWithId ShowLabel(const std::string& label, TasksSortBy) const;
+    virtual model::ManyTasksWithId ShowByLabel(const std::string& label, TasksSortBy) const;
     virtual model::ManyTasksWithId ShowParents(TasksSortBy) const;
     virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, TasksSortBy) const;
     virtual model::ManyCompositeTasks ShowAll(TasksSortBy) const;

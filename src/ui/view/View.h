@@ -28,9 +28,10 @@ public:
     virtual std::string ReadTitle(const std::string &command);
     virtual model::Task::Priority ReadPriority(const std::string &command);
     virtual google::protobuf::Timestamp ReadDate(const std::string &command);
-    virtual std::string ReadLabel(const std::string &command);
+    virtual std::vector<std::string> ReadLabels(const std::string &command);
     virtual bool Confirm();
     virtual bool ReadIfPrintSubtasks(const std::string &command);
+    virtual std::string ReadLabel(const std::string &command);
     virtual model::TasksSortBy ReadSortBy(const std::string &command);
     virtual std::string ReadFilename(const std::string &command);
 

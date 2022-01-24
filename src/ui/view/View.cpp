@@ -14,7 +14,7 @@ void View::PrintHelp() {
     printer_->PrintString("delete - Delete existent task\n");
     printer_->PrintString("show - Show all tasks\n");
     printer_->PrintString("show_task - Show task with its subtasks\n");
-    printer_->PrintString("show_label - Show task with some specific label\n");
+    printer_->PrintString("show_by_label - Show tasks with some specific label\n");
     printer_->PrintString("save - GetAllTasks introduced tasks to a file\n");
     printer_->PrintString("load - Overwrite tasks for a file\n");
     printer_->PrintString("quit - finish work\n\n");
@@ -92,10 +92,10 @@ google::protobuf::Timestamp View::ReadDate(const std::string &command) {
     return ReadDate(command);
 }
 
-std::string View::ReadLabel(const std::string &command) {
-    printer_->PrintString(command + " label (if there is no label, leave empty): ");
-    std::string label{reader_->ReadString()};
-    return label;
+std::vector<std::string> View::ReadLabels(const std::string& command) {
+    printer_->PrintString(command + " labels through a space (if there is no label, leave empty): ");
+    std::string labels{reader_->ReadString()};
+    return convert::StringToLabels(labels);
 }
 
 bool View::Confirm() {
@@ -116,7 +116,13 @@ bool View::ReadIfPrintSubtasks(const std::string &command) {
     return ReadIfPrintSubtasks(command);
 }
 
-model::TasksSortBy View::ReadSortBy(const std::string &command) {
+std::string View::ReadLabel(const std::string &command) {
+    printer_->PrintString(command + " label: ");
+    std::string label{reader_->ReadString()};
+    return label;
+}
+
+model::TasksSortBy View::ReadSortBy(const std::string& command) {
     printer_->PrintString(command + " sort by? (id, date or priority): ");
     std::string answer{reader_->ReadString()};
 

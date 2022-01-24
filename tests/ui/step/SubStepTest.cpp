@@ -76,3 +76,22 @@ TEST_F(SubStepTest, shouldReadDate) {
     EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(
             step.execute(*context_)));
 }
+
+TEST_F(SubStepTest, shouldReadLabels) {
+    auto step = SubStepLabel(factory_, view_);
+
+    EXPECT_CALL(*view_, ReadLabels("Add"))
+            .Times(1)
+            .WillOnce(Return(std::vector<std::string>{"label_1", "label_2"}));
+    EXPECT_CALL(*context_, command_name())
+            .Times(1)
+            .WillOnce(Return("Add"));
+    EXPECT_CALL(*context_, task())
+            .Times(2)
+            .WillRepeatedly(Return(task_));
+    EXPECT_CALL(*context_,finished())
+            .Times(1);
+
+    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(
+            step.execute(*context_)));
+}

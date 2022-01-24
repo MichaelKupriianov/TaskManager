@@ -13,7 +13,8 @@ bool operator==(const TaskId& first, const TaskId& second) {
 bool operator==(const Task& first, const Task& second) {
     return first.title() == second.title() && first.priority() == second.priority() &&
            first.has_date() == second.has_date() && first.date().seconds() == second.date().seconds() &&
-           first.label() == second.label() && first.status() == second.status();
+           first.status() == second.status() && first.labels().size() == second.labels().size() &&
+           std::equal(first.labels().begin(), first.labels().end(), second.labels().begin());
 }
 
 bool operator==(const HierarchicalTask& first, const HierarchicalTask& second) {

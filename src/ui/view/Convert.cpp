@@ -1,5 +1,6 @@
 #include "Convert.h"
 #include <cassert>
+#include <vector>
 
 namespace ui::convert {
 
@@ -55,7 +56,7 @@ std::optional<step::Type> StringToStepType(const std::string& command) {
     if (command == "delete") return step::Type::DELETE;
     if (command == "show") return step::Type::SHOW;
     if (command == "show_task") return step::Type::SHOW_TASK;
-    if (command == "show_label") return step::Type::SHOW_LABEL;
+    if (command == "show_by_label") return step::Type::SHOW_BY_LABEL;
     if (command == "save") return step::Type::SAVE;
     if (command == "load") return step::Type::LOAD;
     return std::nullopt;
@@ -78,6 +79,23 @@ std::optional<model::TasksSortBy> StringToSortBy(const std::string& sort) {
     if (sort == "date") return model::TasksSortBy::DATE;
     if (sort == "priority") return model::TasksSortBy::PRIORITY;
     return std::nullopt;
+}
+
+std::vector<std::string> StringToLabels(const std::string& labels) {
+    std::vector<std::string> result;
+    std::string label;
+    for (auto symbol: labels) {
+        if (symbol == ' ') {
+            if (!label.empty() && std::find(result.begin(), result.end(), label) == result.end())
+                result.push_back(label);
+            label.clear();
+        } else {
+            label.push_back(symbol);
+        }
+    }
+    if (!label.empty() && std::find(result.begin(), result.end(), label) == result.end())
+        result.push_back(label);
+    return result;
 }
 
 std::string PriorityToString(model::Task::Priority priority) {
@@ -108,7 +126,10 @@ std::string TaskToString(const model::TaskWithId& task) {
     result += ", title: " + task.second.title();
     result += ", priority: " + convert::PriorityToString(task.second.priority());
     result += ", date: " + convert::DateToString(task.second.date());
-    if (!task.second.label().empty()) result += ", label: " + task.second.label();
+    if (!task.second.labels().empty()) {
+        result += ", labels:";
+        for (const auto& label: task.second.labels()) result += " " + label;
+    }
     return result;
 }
 
