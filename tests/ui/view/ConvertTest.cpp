@@ -68,8 +68,8 @@ TEST_F(ConvertTest, shouldConvertStringToVectorLabels) {
     std::vector<std::string> result{convert::StringToLabels(labels)};
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], "first");
-    ASSERT_EQ(result[1], "q");
-    ASSERT_EQ(result[2], "second");
+    ASSERT_EQ(result[1], "second");
+    ASSERT_EQ(result[2], "q");
 }
 
 TEST_F(ConvertTest, shouldConvertPriorityToString) {
