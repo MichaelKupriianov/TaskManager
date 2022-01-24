@@ -86,7 +86,7 @@ TEST_F(IntegrationTest, Scenario_1) {
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("There is no such command\n")).Times(1);
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
-    EXPECT_CALL(*printer_, PrintString(_)).Times(12);
+    EXPECT_CALL(*printer_, PrintString(_)).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(5);
@@ -451,7 +451,7 @@ TEST_F(IntegrationTest, Scenario_4) {
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString(_)).Times(2);
-    EXPECT_CALL(*printer_, PrintString("There are no outstanding tasks now.\n")).Times(1);
+    EXPECT_CALL(*printer_, PrintString("There are no such tasks now.\n")).Times(1);
 
     EXPECT_CALL(*printer_, PrintString("> ")).Times(1);
     EXPECT_CALL(*printer_, PrintString("Good luck!\n")).Times(1);
