@@ -38,7 +38,7 @@ public:
     virtual void PrintManyTasksWithId(const model::ManyTasksWithId&);
     virtual void PrintCompositeTask(const model::CompositeTask&);
     virtual void PrintManyCompositeTasks(const model::ManyCompositeTasks&);
-    virtual void PrintError(command::Error);
+    virtual void PrintError(const command::Error&);
 private:
     const std::shared_ptr<Reader> reader_;
     const std::shared_ptr<Printer> printer_;
