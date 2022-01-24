@@ -114,6 +114,16 @@ TEST_F(TaskManagerTest, shouldReturnFalseWhenEditIfIDNotExist) {
     EXPECT_FALSE(manager_->Edit(model::CreateTaskId(1), model::CreateTask("second")));
 }
 
+TEST_F(TaskManagerTest, shouldReturnFalseIfEditCompletedTask) {
+    EXPECT_CALL(*generator_, GenerateId())
+            .Times(1)
+            .WillOnce(Return(model::CreateTaskId(0)));
+
+    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
+    EXPECT_TRUE(manager_->Complete(model::CreateTaskId(0)));
+    EXPECT_FALSE(manager_->Edit(model::CreateTaskId(0), model::CreateTask("second")));
+}
+
 TEST_F(TaskManagerTest, shouldCompleteTask) {
     EXPECT_CALL(*generator_, GenerateId())
             .Times(2)
@@ -154,57 +164,6 @@ TEST_F(TaskManagerTest, shouldReturnFalseWhenDeleteIfIDNotExist) {
 
     EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
     EXPECT_FALSE(manager_->Delete(model::CreateTaskId(1)));
-}
-
-TEST_F(TaskManagerTest, shouldSortById) {
-    EXPECT_CALL(*generator_, GenerateId())
-            .Times(3)
-            .WillOnce(Return(model::CreateTaskId(0)))
-            .WillOnce(Return(model::CreateTaskId(1)))
-            .WillOnce(Return(model::CreateTaskId(2)));
-
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("second")));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("third")));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[0].second, model::CreateTask("first"));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[1].second, model::CreateTask("second"));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::ID)[2].second, model::CreateTask("third"));
-}
-
-TEST_F(TaskManagerTest, shouldSortByPriority) {
-    EXPECT_CALL(*generator_, GenerateId())
-            .Times(3)
-            .WillOnce(Return(model::CreateTaskId(0)))
-            .WillOnce(Return(model::CreateTaskId(1)))
-            .WillOnce(Return(model::CreateTaskId(2)));
-
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_LOW)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_HIGH)));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[0].second,
-              model::CreateTask("", model::Task_Priority_HIGH));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[1].second,
-              model::CreateTask("", model::Task_Priority_LOW));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::PRIORITY)[2].second,
-              model::CreateTask("", model::Task_Priority_NONE));
-}
-
-TEST_F(TaskManagerTest, shouldSortByDate) {
-    EXPECT_CALL(*generator_, GenerateId())
-            .Times(3)
-            .WillOnce(Return(model::CreateTaskId(0)))
-            .WillOnce(Return(model::CreateTaskId(1)))
-            .WillOnce(Return(model::CreateTaskId(2)));
-
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 100)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 300)));
-    EXPECT_TRUE(manager_->AddTask(model::CreateTask("", model::Task_Priority_NONE, 200)));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[0].second,
-              CreateTask("", model::Task_Priority_NONE, 100));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[1].second,
-              CreateTask("", model::Task_Priority_NONE, 200));
-    EXPECT_EQ(manager_->ShowParents(model::TasksSortBy::DATE)[2].second,
-              CreateTask("", model::Task_Priority_NONE, 300));
 }
 
 TEST_F(TaskManagerTest, shouldShowTaskWithSubtasks) {
