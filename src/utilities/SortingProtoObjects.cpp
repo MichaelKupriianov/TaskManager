@@ -3,18 +3,15 @@
 namespace model {
 
 bool ComparatorId(const model::TaskWithId& first, const model::TaskWithId& second) {
-    if (first.first < second.first) return true;
-    return false;
+    return first.first < second.first;
 }
 
 bool ComparatorPriority(const model::TaskWithId& first, const model::TaskWithId& second) {
-    if (static_cast<int>(first.second.priority()) < static_cast<int>(second.second.priority())) return true;
-    return false;
+    return static_cast<int>(first.second.priority()) < static_cast<int>(second.second.priority());
 }
 
 bool ComparatorDate(const model::TaskWithId& first, const model::TaskWithId& second) {
-    if (first.second.date().seconds() < second.second.date().seconds()) return true;
-    return false;
+    return first.second.date().seconds() < second.second.date().seconds();
 }
 
 void SortTasksWithId(ManyTasksWithId& tasks, const TasksSortBy& sort_by) {
