@@ -288,8 +288,3 @@ TEST_F(ViewTest, ShouldPrintError) {
     view_->PrintError(command::Error::NO_TASK_WITH_SUCH_ID);
     view_->PrintError(command::Error::INCORRECT_PARENT_ID);
 }
-
-//void View::PrintError(const command::Error& error) {
-//    printer_->PrintString(convert::ErrorToString(error) + '\n');
-//}
-//}
