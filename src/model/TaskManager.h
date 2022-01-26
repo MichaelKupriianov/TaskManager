@@ -7,7 +7,6 @@
 #include <optional>
 #include "Task.pb.h"
 #include "IdGenerator.h"
-#include "TasksSortBy.h"
 #include "utilities/ComparisonProtoObjects.h"
 #include "utilities/CreateProtoObjects.h"
 #include "utilities/AliasesProtoObjects.h"

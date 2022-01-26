@@ -30,3 +30,9 @@ message HierarchicalTask {
   Task task = 1;
   TaskId parent = 2;
 }
+
+enum TasksSortBy {
+    ID = 0;
+    DATE = 1;
+    PRIORITY = 2;
+}

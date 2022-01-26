@@ -5,7 +5,6 @@
 #include "Result.h"
 #include "Error.h"
 #include "ui/controller/Controller.h"
-#include "model/TasksSortBy.h"
 
 namespace ui::command {
 
