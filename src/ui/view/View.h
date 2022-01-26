@@ -11,7 +11,7 @@
 #include "Task.pb.h"
 #include "ui/step/Type.h"
 #include "ui/command/Error.h"
-#include "utilities/TasksSortBy.h"
+#include "model/TasksSortBy.h"
 #include "utilities/AliasesProtoObjects.h"
 
 namespace ui {
