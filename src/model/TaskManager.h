@@ -10,7 +10,7 @@
 #include "utilities/ComparisonProtoObjects.h"
 #include "utilities/CreateProtoObjects.h"
 #include "utilities/SortingProtoObjects.h"
-#include "utilities/TasksSortBy.h"
+#include "TasksSortBy.h"
 
 namespace model {
 class TaskManager {
