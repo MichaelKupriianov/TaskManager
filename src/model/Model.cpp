@@ -6,35 +6,35 @@ bool Model::AddTask(const model::Task& task) {
     return manager_->AddTask(task);
 }
 
-bool Model::AddSubTask(const model::Task& task, model::TaskId id) {
+bool Model::AddSubTask(const model::Task& task, const model::TaskId& id) {
     return manager_->AddSubTask(task, id);
 }
 
-bool Model::Edit(model::TaskId id, const model::Task& task) {
+bool Model::Edit(const model::TaskId& id, const model::Task& task) {
     return manager_->Edit(id, task);
 }
 
-bool Model::Complete(model::TaskId id) {
+bool Model::Complete(const model::TaskId& id) {
     return manager_->Complete(id);
 }
 
-bool Model::Delete(model::TaskId id) {
+bool Model::Delete(const model::TaskId& id) {
     return manager_->Delete(id);
 }
 
-model::ManyTasksWithId Model::ShowByLabel(const std::string& label, model::TasksSortBy sort_by) {
+model::ManyTasksWithId Model::ShowByLabel(const std::string& label, const model::TasksSortBy& sort_by) {
     return manager_->ShowByLabel(label, sort_by);
 }
 
-model::ManyTasksWithId Model::ShowParents(model::TasksSortBy sort_by) {
+model::ManyTasksWithId Model::ShowParents(const model::TasksSortBy& sort_by) {
     return manager_->ShowParents(sort_by);
 }
 
-model::CompositeTask Model::ShowTask(model::TaskId id, model::TasksSortBy sort_by) {
+model::CompositeTask Model::ShowTask(const model::TaskId& id, const model::TasksSortBy& sort_by) {
     return manager_->ShowTask(id, sort_by);
 }
 
-model::ManyCompositeTasks Model::ShowAll(model::TasksSortBy sort_by) {
+model::ManyCompositeTasks Model::ShowAll(const model::TasksSortBy& sort_by) {
     return manager_->ShowAll(sort_by);
 }
 
