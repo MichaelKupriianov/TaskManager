@@ -59,6 +59,12 @@ file(GLOB_RECURSE ui_tests_src tests/ui/* tests/model/*.h tests/persistence/*.h)
 add_executable(TaskManager ${generated_files} ${model_src} ${ui_src} src/main.cpp)
 target_link_libraries(TaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 
+add_executable(client ${generated_files} ${ui_src} src/client.cpp)
+target_link_libraries(client protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+
+add_executable(server ${generated_files} ${model_src} src/server.cpp)
+target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+
 add_executable(model_tests ${generated_files} ${model_src} ${model_tests_src})
 target_link_libraries(model_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(model_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
