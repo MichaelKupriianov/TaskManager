@@ -11,16 +11,16 @@ message AddSubTaskRequest {
   model.TaskId parent_id = 2;
 }
 
-message EditTaskRequest {
+message EditRequest {
   model.TaskId id = 1;
   model.Task task = 2;
 }
 
-message DeleteTaskRequest {
+message DeleteRequest {
   model.TaskId id = 1;
 }
 
-message CompleteTaskRequest {
+message CompleteRequest {
   model.TaskId id = 1;
 }
 

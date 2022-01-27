@@ -11,15 +11,15 @@ message AddSubTaskResponse {
   bool result = 1;
 }
 
-message EditTaskResponse {
+message EditResponse {
   bool result = 1;
 }
 
-message DeleteTaskResponse {
+message DeleteResponse {
   bool result = 1;
 }
 
-message CompleteTaskResponse {
+message CompleteResponse {
   bool result = 1;
 }
 

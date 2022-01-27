@@ -3,12 +3,12 @@ syntax = "proto3";
 import "Responses.proto";
 import "Requests.proto";
 
-service ModelControllerService {
+service ModelService {
   rpc AddTask(AddTaskRequest) returns (AddTaskResponse) {}
   rpc AddSubTask(AddSubTaskRequest) returns (AddSubTaskResponse) {}
-  rpc EditTask(EditTaskRequest) returns (EditTaskResponse) {}
-  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
-  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse) {}
+  rpc Edit(EditRequest) returns (EditResponse) {}
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+  rpc Complete(CompleteRequest) returns (CompleteResponse) {}
   rpc ShowByLabel(ShowByLabelRequest) returns (ShowByLabelResponse) {}
   rpc ShowParents(ShowParentsRequest) returns (ShowParentsResponse) {}
   rpc ShowTask(ShowTaskRequest) returns (ShowTaskResponse) {}
