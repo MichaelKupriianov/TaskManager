@@ -27,7 +27,7 @@ public:
 
     virtual ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy&) const;
     virtual ManyTasksWithId ShowParents(const TasksSortBy&) const;
-    virtual std::optional<CompositeTask> ShowTask(const TaskId& id, const TasksSortBy&) const;
+    virtual CompositeTask ShowTask(const TaskId& id, const TasksSortBy&) const;
     virtual ManyCompositeTasks ShowAll(const TasksSortBy&) const;
 
     virtual ManyHierarchicalTasks GetAllTasks() const;

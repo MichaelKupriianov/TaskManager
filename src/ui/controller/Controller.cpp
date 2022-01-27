@@ -30,7 +30,7 @@ model::ManyTasksWithId Controller::ShowParents(model::TasksSortBy sort_by) {
     return manager_->ShowParents(sort_by);
 }
 
-std::optional<model::CompositeTask> Controller::ShowTask(model::TaskId id, model::TasksSortBy sort_by) {
+model::CompositeTask Controller::ShowTask(model::TaskId id, model::TasksSortBy sort_by) {
     return manager_->ShowTask(id, sort_by);
 }
 

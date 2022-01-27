@@ -18,7 +18,7 @@ public:
 
     virtual model::ManyTasksWithId ShowByLabel(const std::string& label, model::TasksSortBy);
     virtual model::ManyTasksWithId ShowParents(model::TasksSortBy);
-    virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, model::TasksSortBy);
+    virtual model::CompositeTask ShowTask(model::TaskId id, model::TasksSortBy);
     virtual model::ManyCompositeTasks ShowAll(model::TasksSortBy);
 
     virtual bool Save(const std::string& filename);

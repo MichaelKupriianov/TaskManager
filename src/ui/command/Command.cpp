@@ -64,8 +64,8 @@ ShowTask::ShowTask(model::TaskId id, model::TasksSortBy sort_by)
         : id_{id}, sort_by_{sort_by} {}
 
 Result ShowTask::execute(const std::shared_ptr<Controller>& controller) {
-    if (auto result = controller->ShowTask(id_, sort_by_); result.has_value())
-        return Result(result.value());
+    if (auto result = controller->ShowTask(id_, sort_by_); result.has_task())
+        return Result(result);
     else
         return Result(Error::NO_TASK_WITH_SUCH_ID);
 }

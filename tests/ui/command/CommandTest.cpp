@@ -173,7 +173,7 @@ TEST_F(CommandTest, shouldHandleErrorWhenShowSomeTask) {
     auto command = std::make_shared<ShowTask>(*id_, model::TasksSortBy::ID);
     EXPECT_CALL(*controller_, ShowTask(*id_, model::TasksSortBy::ID))
             .Times(1)
-            .WillOnce(Return(std::nullopt));
+            .WillOnce(Return(model::CompositeTask()));
 
     Result result{command->execute(controller_)};
     EXPECT_TRUE(result.error.has_value());

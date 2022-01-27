@@ -78,18 +78,17 @@ ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) const {
     return result;
 }
 
-std::optional<CompositeTask> TaskManager::ShowTask(const TaskId& parent,
-                                                   const TasksSortBy& sort_by) const {
+CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sort_by) const {
+    CompositeTask result;
     if (!tasks_.count(parent))
-        return std::nullopt;
+        return result;
 
     ManyTasksWithId child;
     for (const auto &[id, task]: tasks_)
         if (task.has_parent() && task.parent() == parent && task.task().status() != Task_Status_COMPLETED)
             child.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
-
     SortTasksWithId(child, sort_by);
-    model::CompositeTask result;
+
     result.set_allocated_task(new TaskWithId(CreateTaskWithId(parent, tasks_.at(parent).task())));
     result.mutable_children()->Add(child.tasks().begin(), child.tasks().end());
 
@@ -101,7 +100,7 @@ ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) const {
     ManyTasksWithId parents = ShowParents(sort);
 
     for (const auto& parent: parents.tasks())
-        result.mutable_tasks()->Add(ShowTask(parent.id(), sort).value());
+        result.mutable_tasks()->Add(ShowTask(parent.id(), sort));
     return result;
 }
 
