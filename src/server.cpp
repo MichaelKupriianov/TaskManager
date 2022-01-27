@@ -1,30 +1,22 @@
-#include "model/GRPCServerEndPoint.h"
-#include "Service.grpc.pb.h"
-#include "model/controller/DefaultModelController.h"
-#include "model/TaskManager.h"
-
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
+#include "model/GRPCEndPoint.h"
+#include "Service.grpc.pb.h"
+#include "model/Model.h"
 
 int main() {
-    std::unique_ptr<ModelController> model_controller = std::make_unique<DefaultModelController>(
-            std::make_unique<TaskManager>(std::make_unique<IdGenerator>()),
-            std::make_unique<TaskValidator>(),
-            std::make_unique<persistence::PersistenceFactory>());
-
-    GRPCServerEndPoint service { std::move(model_controller) };
-
-    std::string server_address("0.0.0.0:8586");
+    auto model = std::make_shared<model::Model>(
+            std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
+    model::GRPCEndPoint service{model};
+    std::string server_address("0.0.0.0:1488");
 
     grpc::ServerBuilder builder;
-
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-
     builder.RegisterService(&service);
 
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << std::endl;
+    std::cout << "Server listening on " << server_address << '\n';
 
     server->Wait();
 }
