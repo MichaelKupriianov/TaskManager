@@ -1,10 +1,12 @@
+#pragma once
+
 #include "TaskManager.h"
 #include "persistence/TaskPersister.h"
 
 namespace model {
 class Model {
 public:
-    Model(const std::shared_ptr<model::TaskManager>& manager) :
+    explicit Model(const std::shared_ptr<model::TaskManager>& manager) :
             manager_{manager} {}
     virtual ~Model() = default;
 

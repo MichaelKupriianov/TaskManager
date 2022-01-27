@@ -4,11 +4,10 @@
 #include <utility>
 #include <grpcpp/grpcpp.h>
 #include "ModelService.grpc.pb.h"
-#include "model/Model.h" //?
-#include "Controller.h"  //?
+#include "Controller.h"
 
 namespace ui {
-class GRPCEndPoint : public model::Model {
+class GRPCEndPoint : public Controller {
 public:
     explicit GRPCEndPoint(const std::shared_ptr<ModelService::StubInterface>& stub) :
             stub_{stub} {}
