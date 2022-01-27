@@ -30,10 +30,10 @@ TEST_F(TaskManagerTest, shouldAddTask) {
             .WillOnce(Return(model::CreateTaskId(1)));
 
     EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
-    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(0), model::TasksSortBy::ID).value().first.second,
+    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(0), model::TasksSortBy::ID).value().task().task(),
               model::CreateTask("first"));
     EXPECT_TRUE(manager_->AddTask(model::CreateTask("second")));
-    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID).value().first.second,
+    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID).value().task().task(),
               model::CreateTask("second"));
 }
 
@@ -55,7 +55,7 @@ TEST_F(TaskManagerTest, shouldAddSubTask) {
 
     EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
     EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
-    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID).value().first.second,
+    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID).value().task().task(),
               model::CreateTask("second"));
 }
 
@@ -99,9 +99,9 @@ TEST_F(TaskManagerTest, shouldEditTask) {
     EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
     EXPECT_TRUE(manager_->Edit(model::CreateTaskId(0), model::CreateTask("third")));
     EXPECT_TRUE(manager_->Edit(model::CreateTaskId(1), model::CreateTask("fourth")));
-    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(0), model::TasksSortBy::ID).value().first.second,
+    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(0), model::TasksSortBy::ID).value().task().task(),
               model::CreateTask("third"));
-    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID).value().first.second,
+    EXPECT_EQ(manager_->ShowTask(model::CreateTaskId(1), model::TasksSortBy::ID).value().task().task(),
               model::CreateTask("fourth"));
 }
 
@@ -133,7 +133,7 @@ TEST_F(TaskManagerTest, shouldCompleteTask) {
     EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
     EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
     EXPECT_TRUE(manager_->Complete(model::CreateTaskId(0)));
-    EXPECT_EQ(manager_->ShowAll(model::TasksSortBy::ID).size(), 0);
+    EXPECT_EQ(manager_->ShowAll(model::TasksSortBy::ID).tasks().size(), 0);
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseWhenCompleteIfIDNotExist) {
@@ -154,7 +154,7 @@ TEST_F(TaskManagerTest, shouldDeleteTask) {
     EXPECT_TRUE(manager_->AddTask(model::CreateTask("first")));
     EXPECT_TRUE(manager_->AddSubTask(model::CreateTask("second"), model::CreateTaskId(0)));
     EXPECT_TRUE(manager_->Delete(model::CreateTaskId(0)));
-    EXPECT_EQ(manager_->ShowAll(model::TasksSortBy::ID).size(), 0);
+    EXPECT_EQ(manager_->ShowAll(model::TasksSortBy::ID).tasks().size(), 0);
 }
 
 TEST_F(TaskManagerTest, shouldReturnFalseWhenDeleteIfIDNotExist) {
@@ -180,9 +180,9 @@ TEST_F(TaskManagerTest, shouldShowTaskWithSubtasks) {
     std::optional<model::CompositeTask> result =
             manager_->ShowTask(model::CreateTaskId(0), model::TasksSortBy::ID);
     ASSERT_TRUE(result.has_value());
-    EXPECT_EQ(result.value().first.second, model::CreateTask("first"));
-    EXPECT_EQ(result.value().second[0].second, model::CreateTask("second"));
-    EXPECT_EQ(result.value().second[1].second, model::CreateTask("third"));
+    EXPECT_EQ(result.value().task().task(), model::CreateTask("first"));
+    EXPECT_EQ(result.value().children()[0].task(), model::CreateTask("second"));
+    EXPECT_EQ(result.value().children()[1].task(), model::CreateTask("third"));
 }
 
 TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
@@ -204,10 +204,10 @@ TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
 
     model::ManyTasksWithId result =
             manager_->ShowByLabel("label_2", model::TasksSortBy::ID);
-    ASSERT_EQ(result.size(), 3);
-    EXPECT_EQ(result[0].second, first);
-    EXPECT_EQ(result[1].second, second);
-    EXPECT_EQ(result[2].second, fourth);
+    ASSERT_EQ(result.tasks().size(), 3);
+    EXPECT_EQ(result.tasks()[0].task(), first);
+    EXPECT_EQ(result.tasks()[1].task(), second);
+    EXPECT_EQ(result.tasks()[2].task(), fourth);
 }
 
 TEST_F(TaskManagerTest, shouldReturnNullptrIfIDNotExist) {
@@ -236,10 +236,10 @@ TEST_F(TaskManagerTest, shouldShowAll) {
 
     model::ManyCompositeTasks result =
             manager_->ShowAll(model::TasksSortBy::ID);
-    EXPECT_EQ(result[0].first.second, model::CreateTask("first"));
-    EXPECT_EQ(result[0].second[0].second, model::CreateTask("second"));
-    EXPECT_EQ(result[1].first.second, model::CreateTask("third"));
-    EXPECT_EQ(result[1].second[0].second, model::CreateTask("fourth"));
+    EXPECT_EQ(result.tasks()[0].task().task(), model::CreateTask("first"));
+    EXPECT_EQ(result.tasks()[0].children()[0].task(), model::CreateTask("second"));
+    EXPECT_EQ(result.tasks()[1].task().task(), model::CreateTask("third"));
+    EXPECT_EQ(result.tasks()[1].children()[0].task(), model::CreateTask("fourth"));
 }
 
 TEST_F(TaskManagerTest, shouldGetAllTasks) {

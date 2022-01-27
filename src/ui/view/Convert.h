@@ -4,9 +4,9 @@
 #include <string>
 #include <optional>
 #include "Task.pb.h"
+#include "TaskStructures.pb.h"
 #include "ui/step/Type.h"
 #include "ui/command/Error.h"
-#include "utilities/AliasesProtoObjects.h"
 
 namespace ui::convert {
 std::optional<model::Task::Priority> StringToPriority(const std::string&);

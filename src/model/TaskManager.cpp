@@ -59,8 +59,9 @@ ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSo
     for (const auto &[id, task]: tasks_) {
         auto begin = task.task().labels().begin();
         auto end = task.task().labels().end();
-        if (std::find(begin, end, label) != end && task.task().status() != Task_Status_COMPLETED)
-            result.emplace_back(id, task.task());
+        if (std::find(begin, end, label) != end && task.task().status() != Task_Status_COMPLETED) {
+            result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+        }
     }
 
     SortTasksWithId(result, sort_by);
@@ -71,7 +72,7 @@ ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) const {
     ManyTasksWithId result;
     for (const auto &[id, task]: tasks_)
         if (!task.has_parent() && task.task().status() != Task_Status_COMPLETED)
-            result.emplace_back(id, task.task());
+            result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
 
     SortTasksWithId(result, sort_by);
     return result;
@@ -85,21 +86,22 @@ std::optional<CompositeTask> TaskManager::ShowTask(const TaskId& parent,
     ManyTasksWithId child;
     for (const auto &[id, task]: tasks_)
         if (task.has_parent() && task.parent() == parent && task.task().status() != Task_Status_COMPLETED)
-            child.emplace_back(id, task.task());
+            child.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
 
     SortTasksWithId(child, sort_by);
-    model::CompositeTask result{{parent, tasks_.at(parent).task()},
-                                {child}};
+    model::CompositeTask result;
+    result.set_allocated_task(new TaskWithId(CreateTaskWithId(parent, tasks_.at(parent).task())));
+    result.mutable_children()->Add(child.tasks().begin(), child.tasks().end());
 
     return result;
 }
 
 ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) const {
-    std::vector<CompositeTask> result;
+    ManyCompositeTasks result;
     ManyTasksWithId parents = ShowParents(sort);
 
-    for (const auto& parent: parents)
-        result.emplace_back(ShowTask(parent.first, sort).value());
+    for (const auto& parent: parents.tasks())
+        result.mutable_tasks()->Add(ShowTask(parent.id(), sort).value());
     return result;
 }
 

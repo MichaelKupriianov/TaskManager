@@ -2,6 +2,7 @@
 #include "gmock/gmock.h"
 #include "ui/command/Command.h"
 #include "ui/controller/ControllerMock.h"
+#include "utilities/CreateProtoObjects.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -15,9 +16,9 @@ public:
     void SetUp() override {
         task_ = std::make_shared<model::Task>();
         id_ = std::make_shared<model::TaskId>();
-        simple_task_ = std::make_shared<model::TaskWithId>(*id_, *task_);
+        simple_task_ = std::make_shared<model::TaskWithId>(CreateTaskWithId(*id_, *task_));
         array_simple_tasks_ = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>(*simple_task_, *array_simple_tasks_);
+        composite_task_ = std::make_shared<model::CompositeTask>(CreateCompositeTask(*simple_task_, *array_simple_tasks_));
         array_composite_tasks_=std::make_shared<model::ManyCompositeTasks>();
         array_hierarchical_tasks_=std::make_shared<model::ManyHierarchicalTasks>();
 

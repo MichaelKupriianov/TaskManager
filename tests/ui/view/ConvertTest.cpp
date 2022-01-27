@@ -96,16 +96,16 @@ TEST_F(ConvertTest, shouldConvertDateToString) {
 }
 
 TEST_F(ConvertTest, shouldConvertTaskToString) {
-    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(0), model::CreateTask("first")}),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(0), model::CreateTask("first"))),
               "id: 0, title: first, priority: none, date: none");
-    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(11),
-                                     model::CreateTask("second", model::Task_Priority_LOW)}),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(11),
+                                     model::CreateTask("second", model::Task_Priority_LOW))),
               "id: 11, title: second, priority: low, date: none");
-    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(101),
-                                     model::CreateTask("third", model::Task_Priority_MEDIUM, 61594808400)}),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(101),
+                                     model::CreateTask("third", model::Task_Priority_MEDIUM, 61594808400))),
               "id: 101, title: third, priority: medium, date: Nov 11 23:00");
-    EXPECT_EQ(convert::TaskToString({model::CreateTaskId(2),
-                                     model::CreateTask("fourth", model::Task_Priority_NONE, 0, {"l1 l2"})}),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(2),
+                                     model::CreateTask("fourth", model::Task_Priority_NONE, 0, {"l1 l2"}))),
               "id: 2, title: fourth, priority: none, date: none, labels: l1 l2");
 }
 

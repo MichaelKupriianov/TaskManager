@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include "Task.pb.h"
-#include "AliasesProtoObjects.h"
+#include "TaskStructures.pb.h"
 #include "ComparisonProtoObjects.h"
 
 namespace model {

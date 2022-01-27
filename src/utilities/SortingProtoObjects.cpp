@@ -2,24 +2,24 @@
 
 namespace model {
 
-bool ComparatorId(const model::TaskWithId& first, const model::TaskWithId& second) {
-    return first.first < second.first;
+bool ComparatorId(const TaskWithId& first, const TaskWithId& second) {
+    return first.id() < second.id();
 }
 
-bool ComparatorPriority(const model::TaskWithId& first, const model::TaskWithId& second) {
-    return static_cast<int>(first.second.priority()) < static_cast<int>(second.second.priority());
+bool ComparatorPriority(const TaskWithId& first, const TaskWithId& second) {
+    return static_cast<int>(first.task().priority()) < static_cast<int>(second.task().priority());
 }
 
-bool ComparatorDate(const model::TaskWithId& first, const model::TaskWithId& second) {
-    return first.second.date().seconds() < second.second.date().seconds();
+bool ComparatorDate(const TaskWithId& first, const TaskWithId& second) {
+    return first.task().date().seconds() < second.task().date().seconds();
 }
 
 void SortTasksWithId(ManyTasksWithId& tasks, const TasksSortBy& sort_by) {
     if (sort_by == TasksSortBy::ID)
-        std::sort(tasks.begin(), tasks.end(), ComparatorId);
+        std::sort(tasks.mutable_tasks()->begin(), tasks.mutable_tasks()->end(), ComparatorId);
     if (sort_by == TasksSortBy::PRIORITY)
-        std::sort(tasks.begin(), tasks.end(), ComparatorPriority);
+        std::sort(tasks.mutable_tasks()->begin(), tasks.mutable_tasks()->end(), ComparatorPriority);
     if (sort_by == TasksSortBy::DATE)
-        std::sort(tasks.begin(), tasks.end(), ComparatorDate);
+        std::sort(tasks.mutable_tasks()->begin(), tasks.mutable_tasks()->end(), ComparatorDate);
 }
 }

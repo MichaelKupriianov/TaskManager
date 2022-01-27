@@ -122,13 +122,13 @@ std::string DateToString(const google::protobuf::Timestamp& date) {
 
 std::string TaskToString(const model::TaskWithId& task) {
     std::string result;
-    result += "id: " + std::to_string(task.first.value());
-    result += ", title: " + task.second.title();
-    result += ", priority: " + convert::PriorityToString(task.second.priority());
-    result += ", date: " + convert::DateToString(task.second.date());
-    if (!task.second.labels().empty()) {
+    result += "id: " + std::to_string(task.id().value());
+    result += ", title: " + task.task().title();
+    result += ", priority: " + convert::PriorityToString(task.task().priority());
+    result += ", date: " + convert::DateToString(task.task().date());
+    if (!task.task().labels().empty()) {
         result += ", labels:";
-        for (const auto& label: task.second.labels()) result += " " + label;
+        for (const auto& label: task.task().labels()) result += " " + label;
     }
     return result;
 }

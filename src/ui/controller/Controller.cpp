@@ -39,7 +39,7 @@ model::ManyCompositeTasks Controller::ShowAll(model::TasksSortBy sort_by) {
 }
 
 bool Controller::Save(const std::string& filename) {
-    model::ManyHierarchicalTasks tasks{manager_->GetAllTasks()};
+    std::vector<std::pair<model::TaskId, model::HierarchicalTask>> tasks{manager_->GetAllTasks()};
     TaskPersister persister{filename};
     if (!persister.Save(tasks))
         return false;
@@ -49,7 +49,7 @@ bool Controller::Save(const std::string& filename) {
 
 bool Controller::Load(const std::string& filename) {
     TaskPersister persister{filename};
-    std::optional<model::ManyHierarchicalTasks> tasks{persister.Load()};
+    std::optional<std::vector<std::pair<model::TaskId, model::HierarchicalTask>>> tasks{persister.Load()};
     if (!tasks.has_value())
         return false;
     manager_->Overwrite(tasks.value());

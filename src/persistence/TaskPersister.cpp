@@ -3,7 +3,7 @@
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/util/delimited_message_util.h>
 
-bool TaskPersister::Save(const model::ManyHierarchicalTasks& tasks) {
+bool TaskPersister::Save(const ManyHierarchicalTasks& tasks) {
     std::ofstream file(filename_);
     if (!file.is_open()) return false;
 
@@ -15,8 +15,8 @@ bool TaskPersister::Save(const model::ManyHierarchicalTasks& tasks) {
     return true;
 }
 
-std::optional<model::ManyHierarchicalTasks> TaskPersister::Load() {
-    model::ManyHierarchicalTasks result;
+std::optional<ManyHierarchicalTasks> TaskPersister::Load() {
+    ManyHierarchicalTasks result;
     std::ifstream file(filename_);
     if (!file.is_open()) return std::nullopt;
 

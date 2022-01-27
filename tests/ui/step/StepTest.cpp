@@ -18,9 +18,9 @@ public:
     void SetUp() override {
         task_ = std::make_shared<model::Task>();
         id_ = std::make_shared<model::TaskId>();
-        task_with_id_ = std::make_shared<model::TaskWithId>(*id_, *task_);
+        task_with_id_ = std::make_shared<model::TaskWithId>();
         many_simple_tasks_ = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>(*task_with_id_, *many_simple_tasks_);
+        composite_task_ = std::make_shared<model::CompositeTask>();
         many_composite_tasks_=std::make_shared<model::ManyCompositeTasks>();
 
         auto reader = std::make_shared<Reader>();
