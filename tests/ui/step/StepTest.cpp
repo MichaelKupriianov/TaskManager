@@ -4,6 +4,7 @@
 #include "ui/view/ViewMock.h"
 #include "ui/FactoryMock.h"
 #include "ui/ContextMock.h"
+#include "utilities/CreateProtoObjects.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -142,7 +143,6 @@ TEST_F(StepTest, shouldPrintManyCompositeTasks) {
 
 TEST_F(StepTest, shouldCreateCommandComplete) {
     auto step = Complete(factory_, view_);
-
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
             .WillOnce(Return(model::CreateTaskId(0)));

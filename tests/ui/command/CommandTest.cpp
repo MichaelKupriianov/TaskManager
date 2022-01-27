@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "ui/command/Command.h"
-#include "ui/controller/ControllerMock.h"
+#include "ui/controller/DefaultControllerMock.h"
 #include "utilities/CreateProtoObjects.h"
 
 using ::testing::Return;
@@ -20,11 +20,11 @@ public:
         array_simple_tasks_ = std::make_shared<model::ManyTasksWithId>();
         composite_task_ = std::make_shared<model::CompositeTask>(CreateCompositeTask(*simple_task_, *array_simple_tasks_));
         array_composite_tasks_=std::make_shared<model::ManyCompositeTasks>();
-        array_hierarchical_tasks_=std::make_shared<model::ManyHierarchicalTasks>();
 
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
-        controller_ = std::make_shared<ControllerMock>(manager);
+        auto model = std::make_shared<model::Model>(manager);
+        controller_ = std::make_shared<DefaultControllerMock>(model);
     }
 
 protected:
@@ -34,9 +34,8 @@ protected:
     std::shared_ptr<model::ManyTasksWithId> array_simple_tasks_;
     std::shared_ptr<model::CompositeTask> composite_task_;
     std::shared_ptr<model::ManyCompositeTasks> array_composite_tasks_;
-    std::shared_ptr<model::ManyHierarchicalTasks> array_hierarchical_tasks_;
 
-    std::shared_ptr<ControllerMock> controller_;
+    std::shared_ptr<DefaultControllerMock> controller_;
 };
 
 TEST_F(CommandTest, shouldQuit) {

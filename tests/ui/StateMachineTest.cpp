@@ -5,7 +5,7 @@
 #include "ContextMock.h"
 #include "step/StepMock.h"
 #include "view/ViewMock.h"
-#include "controller/ControllerMock.h"
+#include "controller/DefaultControllerMock.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -26,13 +26,14 @@ public:
 
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
-        controller_ = std::make_shared<ControllerMock>(manager);
+        auto model = std::make_shared<model::Model>(manager);
+        controller_ = std::make_shared<DefaultControllerMock>(model);
     }
 protected:
     std::shared_ptr<ViewMock> view_;
     std::shared_ptr<Factory> factory_;
     std::shared_ptr<ContextMock> context_;
-    std::shared_ptr<ControllerMock> controller_;
+    std::shared_ptr<DefaultControllerMock> controller_;
 };
 
 TEST_F(StepMachineTest, shouldRunWuthContext) {

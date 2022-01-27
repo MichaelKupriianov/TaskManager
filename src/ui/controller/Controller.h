@@ -1,7 +1,7 @@
 #pragma once
 
-#include "model/TaskManager.h"
-#include "persistence/TaskPersister.h"
+#include "Task.pb.h"
+#include "TaskStructures.pb.h"
 
 namespace ui {
 class Controller {
