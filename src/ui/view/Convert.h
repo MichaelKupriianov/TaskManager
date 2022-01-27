@@ -5,7 +5,6 @@
 #include <optional>
 #include "Task.pb.h"
 #include "ui/step/Type.h"
-#include "model/TasksSortBy.h"
 #include "ui/command/Error.h"
 #include "utilities/AliasesProtoObjects.h"
 
