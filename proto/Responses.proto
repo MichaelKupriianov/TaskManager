@@ -24,11 +24,11 @@ message CompleteResponse {
 }
 
 message ShowByLabelResponse {
-  model.TaskWithId tasks = 1;
+  model.ManyTasksWithId tasks = 1;
 }
 
 message ShowParentsResponse {
-  model.TaskWithId tasks = 1;
+  model.ManyTasksWithId tasks = 1;
 }
 
 message ShowTaskResponse {
