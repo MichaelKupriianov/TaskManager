@@ -1,10 +1,10 @@
+#include <grpcpp/ext/proto_server_reflection_plugin.h>
+#include <grpcpp/grpcpp.h>
+#include <grpcpp/health_check_service_interface.h>
 #include "Requests.pb.h"
 #include "Responses.pb.h"
 #include "ModelService.grpc.pb.h"
 #include "Model.h"
-#include <grpcpp/ext/proto_server_reflection_plugin.h>
-#include <grpcpp/grpcpp.h>
-#include <grpcpp/health_check_service_interface.h>
 
 namespace model {
 class GRPCEndPoint : public ModelService::Service {
