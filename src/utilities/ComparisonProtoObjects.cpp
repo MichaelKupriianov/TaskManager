@@ -17,6 +17,23 @@ bool operator==(const Task& first, const Task& second) {
            std::equal(first.labels().begin(), first.labels().end(), second.labels().begin());
 }
 
+bool operator==(const TaskWithId& first, const TaskWithId& second) {
+    return first.task() == second.task() && first.id() == second.id();
+}
+
+bool operator==(const ManyTasksWithId& first, const ManyTasksWithId& second) {
+    return std::equal(first.tasks().begin(), first.tasks().end(), second.tasks().begin());
+}
+
+bool operator==(const CompositeTask& first, const CompositeTask& second) {
+    return first.task() == second.task() &&
+           std::equal(first.children().begin(), first.children().end(), second.children().begin());
+}
+
+bool operator==(const ManyCompositeTasks& first, const ManyCompositeTasks& second) {
+    return std::equal(first.tasks().begin(), first.tasks().end(), second.tasks().begin());
+}
+
 bool operator==(const HierarchicalTask& first, const HierarchicalTask& second) {
     return first.has_task() && second.has_task() && first.task() == second.task() &&
            ((!first.has_parent() && !second.has_parent()) ||

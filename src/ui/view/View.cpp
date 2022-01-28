@@ -141,36 +141,36 @@ std::string View::ReadFilename(const std::string &command) {
 }
 
 void View::PrintManyTasksWithId(const model::ManyTasksWithId& tasks) {
-    for (const auto& task: tasks) {
+    for (const auto& task: tasks.tasks()) {
         std::string result = convert::TaskToString(task) + '\n';
         printer_->PrintString(result);
     }
 }
 
 void View::PrintCompositeTask(const model::CompositeTask& task) {
-    std::string result = convert::TaskToString(task.first);
-    if (task.second.empty())
+    std::string result = convert::TaskToString(task.task());
+    if (task.children().empty())
         result += "\n";
     else
         result += "  :\n";
 
     printer_->PrintString(result);
-    for (const auto& subtask: task.second) {
+    for (const auto& subtask: task.children()) {
         result = "   " + convert::TaskToString(subtask) + '\n';
         printer_->PrintString(result);
     }
 }
 
 void View::PrintManyCompositeTasks(const model::ManyCompositeTasks& tasks) {
-    if (tasks.empty()) {
+    if (tasks.tasks().empty()) {
         printer_->PrintString("There are no outstanding tasks now.\n");
         return;
     }
-    for (const auto &[task, subtasks]: tasks) {
-        if (!subtasks.empty())
-            PrintCompositeTask({task, subtasks});
+    for (const auto &task: tasks.tasks()) {
+        if (!task.children().empty())
+            PrintCompositeTask(task);
         else
-            printer_->PrintString(convert::TaskToString(task) + '\n');
+            printer_->PrintString(convert::TaskToString(task.task()) + '\n');
     }
 }
 

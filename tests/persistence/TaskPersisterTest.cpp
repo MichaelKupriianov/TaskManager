@@ -7,21 +7,21 @@ class TaskPersisterTest : public ::testing::Test {
 };
 
 TEST_F(TaskPersisterTest, shouldSaveLoadOneTask) {
-    model::ManyHierarchicalTasks tasks;
+    ManyHierarchicalTasks tasks;
     tasks.emplace_back(model::CreateTaskId(1),
                        model::CreateHierarchicalTask(model::CreateTask("first"),
                                                      std::nullopt));
     TaskPersister persister("persister_test_1");
     ASSERT_TRUE(persister.Save(tasks));
 
-    std::optional<model::ManyHierarchicalTasks> result = persister.Load();
+    std::optional<ManyHierarchicalTasks> result = persister.Load();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), tasks);
     remove("persister_test_1");
 }
 
 TEST_F(TaskPersisterTest, shouldSaveLoadSeveralTasks) {
-    model::ManyHierarchicalTasks tasks;
+    ManyHierarchicalTasks tasks;
     tasks.emplace_back(model::CreateTaskId(3),
                        model::CreateHierarchicalTask(model::CreateTask("first"),
                                                      model::CreateTaskId(0)));
@@ -34,14 +34,14 @@ TEST_F(TaskPersisterTest, shouldSaveLoadSeveralTasks) {
     TaskPersister persister("persister_test_2");
     ASSERT_TRUE(persister.Save(tasks));
 
-    std::optional<model::ManyHierarchicalTasks> result = persister.Load();
+    std::optional<ManyHierarchicalTasks> result = persister.Load();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), tasks);
     remove("persister_test_2");
 }
 
 TEST_F(TaskPersisterTest, shouldSaveLoadTasksWithAndWithoutAParent) {
-    model::ManyHierarchicalTasks tasks;
+    ManyHierarchicalTasks tasks;
     tasks.emplace_back(model::CreateTaskId(1),
                        model::CreateHierarchicalTask(model::CreateTask("first"),
                                                      std::nullopt));
@@ -51,7 +51,7 @@ TEST_F(TaskPersisterTest, shouldSaveLoadTasksWithAndWithoutAParent) {
     TaskPersister persister("persister_test_3");
     ASSERT_TRUE(persister.Save(tasks));
 
-    std::optional<model::ManyHierarchicalTasks> result;
+    std::optional<ManyHierarchicalTasks> result;
     result = persister.Load();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), tasks);

@@ -4,8 +4,8 @@
 #include <optional>
 #include <vector>
 #include "Task.pb.h"
+#include "TaskStructures.pb.h"
 #include "Error.h"
-#include "utilities/AliasesProtoObjects.h"
 
 namespace ui::command {
 struct Result {

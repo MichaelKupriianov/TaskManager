@@ -5,13 +5,15 @@
 #include <vector>
 #include <optional>
 #include "Task.pb.h"
+#include "TaskStructures.pb.h"
 #include "IdGenerator.h"
-#include "utilities/AliasesProtoObjects.h"
 #include "utilities/ComparisonProtoObjects.h"
 #include "utilities/CreateProtoObjects.h"
 #include "utilities/SortingProtoObjects.h"
 
 namespace model {
+using ManyHierarchicalTasks = std::vector<std::pair<TaskId, HierarchicalTask>>;
+
 class TaskManager {
 public:
     explicit TaskManager(const std::shared_ptr<IdGenerator>& generator);
@@ -25,7 +27,7 @@ public:
 
     virtual ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy&) const;
     virtual ManyTasksWithId ShowParents(const TasksSortBy&) const;
-    virtual std::optional<CompositeTask> ShowTask(const TaskId& id, const TasksSortBy&) const;
+    virtual CompositeTask ShowTask(const TaskId& id, const TasksSortBy&) const;
     virtual ManyCompositeTasks ShowAll(const TasksSortBy&) const;
 
     virtual ManyHierarchicalTasks GetAllTasks() const;

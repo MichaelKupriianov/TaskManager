@@ -4,6 +4,7 @@
 #include "ui/view/ViewMock.h"
 #include "ui/FactoryMock.h"
 #include "ui/ContextMock.h"
+#include "utilities/CreateProtoObjects.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -18,9 +19,9 @@ public:
     void SetUp() override {
         task_ = std::make_shared<model::Task>();
         id_ = std::make_shared<model::TaskId>();
-        task_with_id_ = std::make_shared<model::TaskWithId>(*id_, *task_);
+        task_with_id_ = std::make_shared<model::TaskWithId>();
         many_simple_tasks_ = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>(*task_with_id_, *many_simple_tasks_);
+        composite_task_ = std::make_shared<model::CompositeTask>();
         many_composite_tasks_=std::make_shared<model::ManyCompositeTasks>();
 
         auto reader = std::make_shared<Reader>();
@@ -142,7 +143,6 @@ TEST_F(StepTest, shouldPrintManyCompositeTasks) {
 
 TEST_F(StepTest, shouldCreateCommandComplete) {
     auto step = Complete(factory_, view_);
-
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
             .WillOnce(Return(model::CreateTaskId(0)));
