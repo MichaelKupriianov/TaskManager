@@ -6,7 +6,7 @@
 namespace model {
 class Model {
 public:
-    explicit Model(const std::shared_ptr<model::TaskManager>& manager) :
+    Model(const std::shared_ptr<model::TaskManager>& manager) :
             manager_{manager} {}
     virtual ~Model() = default;
 
