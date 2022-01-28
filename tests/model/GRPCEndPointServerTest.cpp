@@ -35,12 +35,11 @@ protected:
 };
 
 TEST_F(GRPCEndPointServerTest, ShouldAddTask) {
-    Task task{CreateTask("first")};
     AddTaskResponse response;
     AddTaskRequest request;
-    request.set_allocated_task(new Task(task));
+    request.set_allocated_task(new Task(*task_));
 
-    EXPECT_CALL(*model_, AddTask(task))
+    EXPECT_CALL(*model_, AddTask(*task_))
             .WillOnce(Return(true));
     auto result = end_point_->AddTask(nullptr, &request, &response);
 
@@ -49,14 +48,12 @@ TEST_F(GRPCEndPointServerTest, ShouldAddTask) {
 }
 
 TEST_F(GRPCEndPointServerTest, ShouldAddSubTask) {
-    Task task{CreateTask("first")};
-    TaskId id{CreateTaskId(0)};
     AddSubTaskResponse response;
     AddSubTaskRequest request;
-    request.set_allocated_task(new Task(task));
-    request.set_allocated_parent_id(new TaskId(id));
+    request.set_allocated_task(new Task(*task_));
+    request.set_allocated_parent_id(new TaskId(*id_));
 
-    EXPECT_CALL(*model_, AddSubTask(task, id))
+    EXPECT_CALL(*model_, AddSubTask(*task_, *id_))
             .WillOnce(Return(false));
     auto result = end_point_->AddSubTask(nullptr, &request, &response);
 
@@ -65,14 +62,12 @@ TEST_F(GRPCEndPointServerTest, ShouldAddSubTask) {
 }
 
 TEST_F(GRPCEndPointServerTest, ShouldEditTask) {
-    Task task{CreateTask("first")};
-    TaskId id{CreateTaskId(0)};
     EditResponse response;
     EditRequest request;
-    request.set_allocated_task(new Task(task));
-    request.set_allocated_id(new TaskId(id));
+    request.set_allocated_task(new Task(*task_));
+    request.set_allocated_id(new TaskId(*id_));
 
-    EXPECT_CALL(*model_, Edit(id, task))
+    EXPECT_CALL(*model_, Edit(*id_, *task_))
             .WillOnce(Return(true));
     auto result = end_point_->Edit(nullptr, &request, &response);
 
@@ -81,12 +76,11 @@ TEST_F(GRPCEndPointServerTest, ShouldEditTask) {
 }
 
 TEST_F(GRPCEndPointServerTest, ShouldCompleteTask) {
-    TaskId id{CreateTaskId(1)};
     CompleteResponse response;
     CompleteRequest request;
-    request.set_allocated_id(new TaskId(id));
+    request.set_allocated_id(new TaskId(*id_));
 
-    EXPECT_CALL(*model_, Complete(id))
+    EXPECT_CALL(*model_, Complete(*id_))
             .WillOnce(Return(true));
     auto result = end_point_->Complete(nullptr, &request, &response);
 
@@ -95,12 +89,11 @@ TEST_F(GRPCEndPointServerTest, ShouldCompleteTask) {
 }
 
 TEST_F(GRPCEndPointServerTest, ShouldDeleteTask) {
-    TaskId id{CreateTaskId(2)};
     DeleteResponse response;
     DeleteRequest request;
-    request.set_allocated_id(new TaskId(id));
+    request.set_allocated_id(new TaskId(*id_));
 
-    EXPECT_CALL(*model_, Delete(id))
+    EXPECT_CALL(*model_, Delete(*id_))
             .WillOnce(Return(true));
     auto result = end_point_->Delete(nullptr, &request, &response);
 
@@ -122,119 +115,68 @@ TEST_F(GRPCEndPointServerTest, ShouldShowTasksByLabel) {
     EXPECT_EQ(response.tasks(), *many_tasks_with_id);
 }
 
-//TEST_F(GRPCServerEndPointTests, DeleteTask_ShouldAskModelToDeleteTaskAndReturnResult) {
-//    // Arrange
-//    const auto expected_model_result = TaskActionResult::FAIL_NOT_DELETED_SUBTASKS;
-//    const bool expected_force_delete = true;
-//    EXPECT_CALL(*model_, DeleteTask(expected_task_id_, expected_force_delete)).WillOnce(Return(expected_model_result));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    DeleteTaskResponse response;
-//    DeleteTaskRequest request;
-//    request.set_allocated_task_id(new TaskId(expected_task_id_));
-//    request.set_force_delete_subtasks(expected_force_delete);
-//    // Act
-//    const auto actual_result = server_end_point.DeleteTask(nullptr, &request, &response);
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    EXPECT_EQ(TaskManagerServiceResult::FAIL_NOT_DELETED_SUBTASKS, response.result());
-//}
-//
-//TEST_F(GRPCServerEndPointTests, CompleteTask_ShouldAskModelToCompleteTaskAndReturnResult) {
-//    // Arrange
-//    const auto expected_model_result = TaskActionResult::FAIL_UNCOMPLETED_SUBTASKS;
-//    const bool expected_force_complete = true;
-//    EXPECT_CALL(*model_, CompleteTask(expected_task_id_, expected_force_complete)).WillOnce(
-//            Return(expected_model_result));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    CompleteTaskResponse response;
-//    CompleteTaskRequest request;
-//    request.set_allocated_task_id(new TaskId(expected_task_id_));
-//    request.set_force_complete_subtasks(expected_force_complete);
-//    // Act
-//    const auto actual_result = server_end_point.CompleteTask(nullptr, &request, &response);
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    EXPECT_EQ(TaskManagerServiceResult::FAIL_UNCOMPLETED_SUBTASKS, response.result());
-//}
-//
-//TEST_F(GRPCServerEndPointTests, AddTaskLabel_ShouldAskModelToAddTaskLabelAndReturnResult) {
-//    // Arrange
-//    const auto expected_model_result = TaskActionResult::SUCCESS;
-//    EXPECT_CALL(*model_, AddTaskLabel(expected_task_id_, expected_label_)).WillOnce(Return(expected_model_result));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    AddTaskLabelResponse response;
-//    AddTaskLabelRequest request;
-//    request.set_allocated_task_id(new TaskId(expected_task_id_));
-//    request.set_label(expected_label_);
-//    // Act
-//    const auto actual_result = server_end_point.AddTaskLabel(nullptr, &request, &response);
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    EXPECT_EQ(TaskManagerServiceResult::SUCCESS, response.result());
-//}
-//
-//TEST_F(GRPCServerEndPointTests, RemoveTaskLabel_ShouldAskModelToRemoveTaskLabelAndReturnResult) {
-//    // Arrange
-//    const auto expected_model_result = TaskActionResult::FAIL_NO_SUCH_LABEL;
-//    EXPECT_CALL(*model_, RemoveTaskLabel(expected_task_id_, expected_label_)).WillOnce(Return(expected_model_result));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    RemoveTaskLabelResponse response;
-//    RemoveTaskLabelRequest request;
-//    request.set_allocated_task_id(new TaskId(expected_task_id_));
-//    request.set_label(expected_label_);
-//    // Act
-//    const auto actual_result = server_end_point.RemoveTaskLabel(nullptr, &request, &response);
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    EXPECT_EQ(TaskManagerServiceResult::FAIL_NO_SUCH_LABEL, response.result());
-//}
-//
-//TEST_F(GRPCServerEndPointTests, GetTasks_ShouldGetTasksFromModelAndReturnThem) {
-//    // Arrange
-//    const std::vector<RelationalTask> expected_returned_tasks{expected_relational_task_, expected_relational_task_};
-//    EXPECT_CALL(*model_, GetTasks()).WillOnce(Return(expected_returned_tasks));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    GetTasksResponse response;
-//    GetTasksRequest request;
-//    // Act
-//    const auto actual_result = server_end_point.GetTasks(nullptr, &request, &response);
-//    const auto actual_returned_tasks = response.tasks();
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    ASSERT_EQ(expected_returned_tasks.size(), actual_returned_tasks.size());
-//    for (int i = 0; i < expected_returned_tasks.size(); ++i)
-//        EXPECT_EQ(expected_returned_tasks[i], actual_returned_tasks[i]);
-//}
-//
-//TEST_F(GRPCServerEndPointTests, GetTask_ShouldGetTaskFromModelAndReturnIt) {
-//    // Arrange
-//    EXPECT_CALL(*model_, GetTask(expected_task_id_)).WillOnce(Return(expected_relational_task_));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    GetTaskResponse response;
-//    GetTaskRequest request;
-//    request.set_allocated_task_id(new TaskId(expected_task_id_));
-//    // Act
-//    const auto actual_result = server_end_point.GetTask(nullptr, &request, &response);
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    ASSERT_TRUE(response.has_task());
-//    EXPECT_EQ(expected_relational_task_, response.task());
-//}
-//
-//TEST_F(GRPCServerEndPointTests, LoadTasks_ShouldGiveModelTasksToLoad) {
-//    // Arrange
-//    const std::vector<RelationalTask> expected_returned_tasks{expected_relational_task_, expected_relational_task_};
-//    const bool expected_model_result = true;
-//    EXPECT_CALL(*model_, LoadModelState(expected_returned_tasks)).WillOnce(Return(expected_model_result));
-//    GRPCServerEndPoint server_end_point{std::move(model_)};
-//    LoadTasksResponse response;
-//    LoadTasksRequest request;
-//    for (const auto& task: expected_returned_tasks) {
-//        request.mutable_tasks()->AddAllocated(new RelationalTask(task));
-//    }
-//    // Act
-//    const auto actual_result = server_end_point.LoadTasks(nullptr, &request, &response);
-//    // Assert
-//    EXPECT_TRUE(actual_result.ok());
-//    EXPECT_EQ(expected_model_result, response.result());
-//}
+TEST_F(GRPCEndPointServerTest, ShouldShowParents) {
+    ShowParentsResponse response;
+    ShowParentsRequest request;
+    request.set_sort_by(TasksSortBy::DATE);
+
+    EXPECT_CALL(*model_, ShowParents(TasksSortBy::DATE))
+            .WillOnce(Return(*many_tasks_with_id));
+    auto result = end_point_->ShowParents(nullptr, &request, &response);
+
+    EXPECT_TRUE(result.ok());
+    EXPECT_EQ(response.tasks(), *many_tasks_with_id);
+}
+
+TEST_F(GRPCEndPointServerTest, ShouldShowTask) {
+    ShowTaskResponse response;
+    ShowTaskRequest request;
+    request.set_sort_by(TasksSortBy::DATE);
+    request.set_allocated_id(new TaskId(*id_));
+
+    EXPECT_CALL(*model_, ShowTask(*id_, TasksSortBy::DATE))
+            .WillOnce(Return(*composite_task_));
+    auto result = end_point_->ShowTask(nullptr, &request, &response);
+
+    EXPECT_TRUE(result.ok());
+    EXPECT_EQ(response.task(), *composite_task_);
+}
+
+TEST_F(GRPCEndPointServerTest, ShouldShowAllTasks) {
+    ShowAllResponse response;
+    ShowAllRequest request;
+    request.set_sort_by(TasksSortBy::ID);
+
+    EXPECT_CALL(*model_, ShowAll(TasksSortBy::ID))
+            .WillOnce(Return(*many_composite_tasks_));
+    auto result = end_point_->ShowAll(nullptr, &request, &response);
+
+    EXPECT_TRUE(result.ok());
+    EXPECT_EQ(response.tasks(), *many_composite_tasks_);
+}
+
+TEST_F(GRPCEndPointServerTest, ShouldSave) {
+    SaveResponse response;
+    SaveRequest request;
+    request.set_filename("filename");
+
+    EXPECT_CALL(*model_, Save("filename"))
+            .WillOnce(Return(false));
+    auto result = end_point_->Save(nullptr, &request, &response);
+
+    EXPECT_TRUE(result.ok());
+    EXPECT_EQ(response.result(), false);
+}
+
+TEST_F(GRPCEndPointServerTest, ShouldLoad) {
+    LoadResponse response;
+    LoadRequest request;
+    request.set_filename("filename");
+
+    EXPECT_CALL(*model_, Load("filename"))
+            .WillOnce(Return(true));
+    auto result = end_point_->Load(nullptr, &request, &response);
+
+    EXPECT_TRUE(result.ok());
+    EXPECT_EQ(response.result(), true);
+}
