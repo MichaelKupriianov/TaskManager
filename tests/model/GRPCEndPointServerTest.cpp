@@ -1,9 +1,9 @@
-#include <memory>
-#include <utility>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "model/GRPCEndPoint.h"
 #include "ModelMock.h"
+#include "utilities/CreateProtoObjects.h"
+#include "utilities/ComparisonProtoObjects.h"
 
 using namespace model;
 using ::testing::Return;
@@ -34,7 +34,7 @@ protected:
     std::shared_ptr<model::ManyCompositeTasks> many_composite_tasks_;
 };
 
-TEST_F(GRPCEndPointServerTest, ShouldAddTask) {
+TEST_F(GRPCEndPointServerTest, shouldAddTask) {
     AddTaskResponse response;
     AddTaskRequest request;
     request.set_allocated_task(new Task(*task_));
@@ -47,7 +47,7 @@ TEST_F(GRPCEndPointServerTest, ShouldAddTask) {
     EXPECT_EQ(response.result(), true);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldAddSubTask) {
+TEST_F(GRPCEndPointServerTest, shouldAddSubTask) {
     AddSubTaskResponse response;
     AddSubTaskRequest request;
     request.set_allocated_task(new Task(*task_));
@@ -61,7 +61,7 @@ TEST_F(GRPCEndPointServerTest, ShouldAddSubTask) {
     EXPECT_EQ(response.result(), false);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldEditTask) {
+TEST_F(GRPCEndPointServerTest, shouldEditTask) {
     EditResponse response;
     EditRequest request;
     request.set_allocated_task(new Task(*task_));
@@ -75,7 +75,7 @@ TEST_F(GRPCEndPointServerTest, ShouldEditTask) {
     EXPECT_EQ(response.result(), true);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldCompleteTask) {
+TEST_F(GRPCEndPointServerTest, shouldCompleteTask) {
     CompleteResponse response;
     CompleteRequest request;
     request.set_allocated_id(new TaskId(*id_));
@@ -88,7 +88,7 @@ TEST_F(GRPCEndPointServerTest, ShouldCompleteTask) {
     EXPECT_EQ(response.result(), true);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldDeleteTask) {
+TEST_F(GRPCEndPointServerTest, shouldDeleteTask) {
     DeleteResponse response;
     DeleteRequest request;
     request.set_allocated_id(new TaskId(*id_));
@@ -101,7 +101,7 @@ TEST_F(GRPCEndPointServerTest, ShouldDeleteTask) {
     EXPECT_EQ(response.result(), true);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldShowTasksByLabel) {
+TEST_F(GRPCEndPointServerTest, shouldShowTasksByLabel) {
     ShowByLabelResponse response;
     ShowByLabelRequest request;
     request.set_label("label");
@@ -115,7 +115,7 @@ TEST_F(GRPCEndPointServerTest, ShouldShowTasksByLabel) {
     EXPECT_EQ(response.tasks(), *many_tasks_with_id);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldShowParents) {
+TEST_F(GRPCEndPointServerTest, shouldShowParents) {
     ShowParentsResponse response;
     ShowParentsRequest request;
     request.set_sort_by(TasksSortBy::DATE);
@@ -128,7 +128,7 @@ TEST_F(GRPCEndPointServerTest, ShouldShowParents) {
     EXPECT_EQ(response.tasks(), *many_tasks_with_id);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldShowTask) {
+TEST_F(GRPCEndPointServerTest, shouldShowTask) {
     ShowTaskResponse response;
     ShowTaskRequest request;
     request.set_sort_by(TasksSortBy::DATE);
@@ -142,7 +142,7 @@ TEST_F(GRPCEndPointServerTest, ShouldShowTask) {
     EXPECT_EQ(response.task(), *composite_task_);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldShowAllTasks) {
+TEST_F(GRPCEndPointServerTest, shouldShowAllTasks) {
     ShowAllResponse response;
     ShowAllRequest request;
     request.set_sort_by(TasksSortBy::ID);
@@ -155,7 +155,7 @@ TEST_F(GRPCEndPointServerTest, ShouldShowAllTasks) {
     EXPECT_EQ(response.tasks(), *many_composite_tasks_);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldSave) {
+TEST_F(GRPCEndPointServerTest, shouldSave) {
     SaveResponse response;
     SaveRequest request;
     request.set_filename("filename");
@@ -168,7 +168,7 @@ TEST_F(GRPCEndPointServerTest, ShouldSave) {
     EXPECT_EQ(response.result(), false);
 }
 
-TEST_F(GRPCEndPointServerTest, ShouldLoad) {
+TEST_F(GRPCEndPointServerTest, shouldLoad) {
     LoadResponse response;
     LoadRequest request;
     request.set_filename("filename");
