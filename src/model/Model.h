@@ -27,3 +27,4 @@ private:
     const std::shared_ptr<TaskManager> manager_;
 };
 }
+
