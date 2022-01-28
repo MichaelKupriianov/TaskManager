@@ -9,7 +9,7 @@
 namespace model {
 class GRPCEndPoint : public ModelService::Service {
 public:
-    explicit GRPCEndPoint(std::shared_ptr<Model> model) : model_{model} {}
+    explicit GRPCEndPoint(const std::shared_ptr<Model>& model) : model_{model} {}
 
     grpc::Status AddTask(::grpc::ServerContext* context, const ::AddTaskRequest* request,
                          ::AddTaskResponse* response) override;

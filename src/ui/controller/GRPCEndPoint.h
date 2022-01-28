@@ -9,8 +9,7 @@
 namespace ui {
 class GRPCEndPoint : public Controller {
 public:
-    explicit GRPCEndPoint(const std::shared_ptr<ModelService::StubInterface>& stub) :
-            stub_{stub} {}
+    explicit GRPCEndPoint(const std::shared_ptr<ModelService::StubInterface>& stub) : stub_{stub} {}
 
     bool AddTask(const model::Task& task) override;
     bool AddSubTask(const model::Task& task, const model::TaskId& id) override;
