@@ -30,7 +30,7 @@ macro(compile_proto_file filename)
             COMMAND ${_PROTOBUF_PROTOC} ${PROTO_DIR}/${basename}.proto
             --proto_path=${GENERATED_DIR}
             --cpp_out=${GENERATED_DIR}
-            --grpc_out=${GENERATED_DIR}
+            --grpc_out=generate_mock_code=true:${GENERATED_DIR}
             --plugin=protoc-gen-grpc=${_GRPC_CPP_PLUGIN_EXECUTABLE}
             -I ${PROTO_DIR}
             VERBATIM
@@ -55,9 +55,18 @@ file(GLOB_RECURSE model_src src/model/* src/utilities/* src/persistence/*)
 file(GLOB_RECURSE ui_src src/ui/* src/utilities/* src/model/* src/persistence/*)
 file(GLOB_RECURSE model_tests_src tests/model/* tests/utilities/* tests/persistence/*)
 file(GLOB_RECURSE ui_tests_src tests/ui/* tests/model/*.h tests/persistence/*.h)
+file(GLOB_RECURSE server_src src/model/* src/utilities/* src/persistence/*)
+file(GLOB_RECURSE client_src src/ui/* src/utilities/*)
+file(GLOB_RECURSE grpc_tests_src tests/model/GRPCEndPointServerTest.cpp tests/ui/controller/GRPCEndPointClientTest.cpp)
 
 add_executable(TaskManager ${generated_files} ${model_src} ${ui_src} src/main.cpp)
 target_link_libraries(TaskManager protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+
+add_executable(client ${generated_files} ${client_src} src/client.cpp)
+target_link_libraries(client protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+
+add_executable(server ${generated_files} ${server_src} src/server.cpp)
+target_link_libraries(server protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 
 add_executable(model_tests ${generated_files} ${model_src} ${model_tests_src})
 target_link_libraries(model_tests GTest::gtest GTest::gmock GTest::gmock_main)
@@ -73,3 +82,8 @@ add_executable(integration_tests ${generated_files} ${model_src} ${ui_src} tests
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(integration_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
 gtest_discover_tests(integration_tests)
+
+add_executable(grpc_tests ${generated_files} ${client_src} ${server_src} ${grpc_tests_src})
+target_link_libraries(grpc_tests GTest::gtest GTest::gmock GTest::gmock_main)
+target_link_libraries(grpc_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection)
+gtest_discover_tests(grpc_tests)
