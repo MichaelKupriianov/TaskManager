@@ -2,8 +2,8 @@
 #include "gmock/gmock.h"
 #include "ui/StateMachine.h"
 #include "ui/Factory.h"
-#include "model/TaskManager.h"
-#include "persistence/TaskPersister.h"
+#include "model/Model.h"
+#include "ui/controller/DefaultController.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -25,7 +25,8 @@ public:
     void SetUp() override {
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
-        controller_= std::make_shared<ui::Controller>(manager);
+        auto model =std::make_shared<model::Model>(manager);
+        controller_= std::make_shared<ui::DefaultController>(model);
 
         reader_ = std::make_shared<ReaderMock>();
         printer_ = std::make_shared<PrinterMock>();

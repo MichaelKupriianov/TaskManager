@@ -153,26 +153,26 @@ std::string View::ReadFilename(const std::string& command) {
 }
 
 void View::PrintManyTasksWithId(const model::ManyTasksWithId& tasks) {
-    for (const auto& task: tasks)
+    for (const auto& task: tasks.tasks())
         printer_->PrintString(convert::TaskToString(task) + '\n');
     if (tasks.empty())
         printer_->PrintString("There are no such tasks now.\n");
 }
 
 void View::PrintCompositeTask(const model::CompositeTask& task) {
-    std::string result = convert::TaskToString(task.first);
-    if (!task.second.empty())
+    std::string result = convert::TaskToString(task.task());
+    if (!task.children().empty())
         result += "  :";
     printer_->PrintString(result + '\n');
 
-    for (const auto& subtask: task.second)
+    for (const auto& subtask: task.children())
         printer_->PrintString("   " + convert::TaskToString(subtask) + '\n');
 }
 
 void View::PrintManyCompositeTasks(const model::ManyCompositeTasks& tasks) {
-    for (const auto& task: tasks)
+    for (const auto& task: tasks.tasks())
         PrintCompositeTask(task);
-    if (tasks.empty())
+    if (tasks.tasks().empty())
         printer_->PrintString("There are no such tasks now.\n");
 }
 

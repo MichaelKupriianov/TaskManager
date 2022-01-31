@@ -1,46 +1,39 @@
 #pragma once
 
 #include <map>
-#include <utility>
 #include <memory>
 #include <vector>
 #include <optional>
 #include "Task.pb.h"
+#include "TaskStructures.pb.h"
 #include "IdGenerator.h"
-#include "TasksSortBy.h"
 #include "utilities/ComparisonProtoObjects.h"
 #include "utilities/CreateProtoObjects.h"
-#include "utilities/AliasesProtoObjects.h"
-#include "persistence/TaskPersister.h"
+#include "utilities/SortingProtoObjects.h"
 
 namespace model {
+using ManyHierarchicalTasks = std::vector<std::pair<TaskId, HierarchicalTask>>;
+
 class TaskManager {
 public:
     explicit TaskManager(const std::shared_ptr<IdGenerator>& generator);
     virtual ~TaskManager() = default;
 
-    virtual bool AddTask(const model::Task& task);
-    virtual bool AddSubTask(const model::Task& task, model::TaskId id);
-    virtual bool Edit(model::TaskId id, const model::Task& task);
-    virtual bool Complete(model::TaskId id);
-    virtual bool Delete(model::TaskId id);
+    virtual bool AddTask(const Task& task);
+    virtual bool AddSubTask(const Task& task, const TaskId& id);
+    virtual bool Edit(const TaskId& id, const Task& task);
+    virtual bool Complete(const TaskId& id);
+    virtual bool Delete(const TaskId& id);
 
-    virtual model::ManyTasksWithId ShowByLabel(const std::string& label, TasksSortBy) const;
-    virtual model::ManyTasksWithId ShowParents(TasksSortBy) const;
-    virtual std::optional<model::CompositeTask> ShowTask(model::TaskId id, TasksSortBy) const;
-    virtual model::ManyCompositeTasks ShowAll(TasksSortBy) const;
+    virtual ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy&) const;
+    virtual ManyTasksWithId ShowParents(const TasksSortBy&) const;
+    virtual CompositeTask ShowTask(const TaskId& id, const TasksSortBy&) const;
+    virtual ManyCompositeTasks ShowAll(const TasksSortBy&) const;
 
-    virtual model::ManyHierarchicalTasks GetAllTasks() const;
-    virtual void Overwrite(const model::ManyHierarchicalTasks&);
+    virtual ManyHierarchicalTasks GetAllTasks() const;
+    virtual void Overwrite(const ManyHierarchicalTasks&);
 private:
-    static bool ComparatorPriority(const std::unique_ptr<model::TaskWithId>&,
-                                   const std::unique_ptr<model::TaskWithId>&);
-    static bool ComparatorDate(const std::unique_ptr<model::TaskWithId>&,
-                               const std::unique_ptr<model::TaskWithId>&);
-    static bool ComparatorId(const std::unique_ptr<model::TaskWithId>&,
-                             const std::unique_ptr<model::TaskWithId>&);
-private:
-    std::map<model::TaskId, model::HierarchicalTask> tasks_;
+    std::map<TaskId, HierarchicalTask> tasks_;
     std::shared_ptr<IdGenerator> generator_;
 };
 }

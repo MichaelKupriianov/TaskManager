@@ -9,10 +9,9 @@
 #include "Printer.h"
 #include "Convert.h"
 #include "Task.pb.h"
+#include "TaskStructures.pb.h"
 #include "ui/step/Type.h"
 #include "ui/command/Error.h"
-#include "model/TasksSortBy.h"
-#include "utilities/AliasesProtoObjects.h"
 
 namespace ui {
 class View {
