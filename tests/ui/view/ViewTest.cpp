@@ -206,9 +206,9 @@ TEST_F(ViewTest, ShouldReadFilename) {
 }
 
 TEST_F(ViewTest, ShouldPrintManyTasksWithId) {
-    model::TaskWithId task_1{model::CreateTaskId(0), model::CreateTask("first")},
-            task_2{model::CreateTaskId(2), model::CreateTask("second")};
-    model::ManyTasksWithId tasks{task_1, task_2};
+    model::ManyTasksWithId tasks;
+    tasks.mutable_tasks()->Add(CreateTaskWithId(model::CreateTaskId(0), model::CreateTask("first")));
+    tasks.mutable_tasks()->Add(CreateTaskWithId(model::CreateTaskId(2), model::CreateTask("second")));
 
     EXPECT_CALL(*printer_, PrintString("id: 0, title: first, priority: none, date: none\n"))
             .Times(1);
@@ -228,10 +228,11 @@ TEST_F(ViewTest, ShouldPrintZeroTasksWithId) {
 }
 
 TEST_F(ViewTest, ShouldPrintCompositeTask) {
-    model::TaskWithId task_1{model::CreateTaskId(0), model::CreateTask("first")},
-            task_2{model::CreateTaskId(2), model::CreateTask("second")},
-            task_3{model::CreateTaskId(4), model::CreateTask("third")};
-    model::CompositeTask tasks{task_1, {task_2, task_3}};
+    model::CompositeTask task;
+    task.set_allocated_task(new model::TaskWithId(CreateTaskWithId(model::CreateTaskId(0),
+                                                                   model::CreateTask("first"))));
+    task.mutable_children()->Add(CreateTaskWithId(model::CreateTaskId(2), model::CreateTask("second")));
+    task.mutable_children()->Add(CreateTaskWithId(model::CreateTaskId(4), model::CreateTask("third")));
 
     EXPECT_CALL(*printer_, PrintString("id: 0, title: first, priority: none, date: none  :\n"))
             .Times(1);
@@ -240,25 +241,31 @@ TEST_F(ViewTest, ShouldPrintCompositeTask) {
     EXPECT_CALL(*printer_, PrintString("   id: 4, title: third, priority: none, date: none\n"))
             .Times(1);
 
-    view_->PrintCompositeTask(tasks);
+    view_->PrintCompositeTask(task);
 }
 
 TEST_F(ViewTest, ShouldPrintCompositeTaskWithoutChild) {
-    model::TaskWithId task_1{model::CreateTaskId(0), model::CreateTask("first")};
-    model::CompositeTask tasks{task_1, {}};
+    model::CompositeTask task;
+    task.set_allocated_task(new model::TaskWithId(CreateTaskWithId(model::CreateTaskId(0),
+                                                                   model::CreateTask("first"))));
 
     EXPECT_CALL(*printer_, PrintString("id: 0, title: first, priority: none, date: none\n"))
             .Times(1);
 
-    view_->PrintCompositeTask(tasks);
+    view_->PrintCompositeTask(task);
 }
 
 TEST_F(ViewTest, ShouldPrintManyCompositeTask) {
-    model::TaskWithId task_1{model::CreateTaskId(0), model::CreateTask("first")},
-            task_2{model::CreateTaskId(2), model::CreateTask("second")},
-            task_3{model::CreateTaskId(4), model::CreateTask("third")};
-    model::ManyCompositeTasks tasks{{task_1, {}},
-                                    {task_2, {task_3}}};
+    model::CompositeTask task_1;
+    task_1.set_allocated_task(new model::TaskWithId(CreateTaskWithId(model::CreateTaskId(0),
+                                                                     model::CreateTask("first"))));
+    model::CompositeTask task_2;
+    task_2.set_allocated_task(new model::TaskWithId(CreateTaskWithId(model::CreateTaskId(2),
+                                                                     model::CreateTask("second"))));
+    task_2.mutable_children()->Add(CreateTaskWithId(model::CreateTaskId(4), model::CreateTask("third")));
+    model::ManyCompositeTasks tasks;
+    tasks.mutable_tasks()->Add(std::move(task_1));
+    tasks.mutable_tasks()->Add(std::move(task_2));
 
     EXPECT_CALL(*printer_, PrintString("id: 0, title: first, priority: none, date: none\n"))
             .Times(1);

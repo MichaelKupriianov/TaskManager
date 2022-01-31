@@ -155,7 +155,7 @@ std::string View::ReadFilename(const std::string& command) {
 void View::PrintManyTasksWithId(const model::ManyTasksWithId& tasks) {
     for (const auto& task: tasks.tasks())
         printer_->PrintString(convert::TaskToString(task) + '\n');
-    if (tasks.empty())
+    if (tasks.tasks().empty())
         printer_->PrintString("There are no such tasks now.\n");
 }
 
