@@ -3,7 +3,6 @@
 #include <memory>
 #include "step/Step.h"
 #include "step/SubStepOwners.h"
-#include "step/Show.h"
 #include "step/SubSteps.h"
 #include "step/Type.h"
 #include "view/View.h"
