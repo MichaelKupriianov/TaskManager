@@ -2,6 +2,7 @@
 #include "ui/Factory.h"
 #include "ui/controller/DefaultController.h"
 #include "model/Model.h"
+#include <boost/log/trivial.hpp>
 
 int main() {
     auto generator = std::make_shared<model::IdGenerator>();
@@ -19,5 +20,6 @@ int main() {
     std::shared_ptr<ui::Controller> controller = std::make_shared<ui::DefaultController>(model);
     machine->Run(controller);
 
+    BOOST_LOG_TRIVIAL(info) << "boost log works!\n";
     return 0;
 }
