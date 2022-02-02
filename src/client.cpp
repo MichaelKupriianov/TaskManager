@@ -8,7 +8,7 @@
 
 int main() {
     InitialisationLoggingToConsole(boost::log::trivial::warning);
-    InitialisationLoggingToFile("main.log", boost::log::trivial::info);
+    InitialisationLoggingToFile("client.log", boost::log::trivial::info);
 
     std::string target_str = "localhost:1234";
 
