@@ -1,7 +1,5 @@
 #include "CreateProtoObjects.h"
 
-namespace model {
-
 TaskId CreateTaskId(int value) {
     TaskId id;
     id.set_value(value);
@@ -16,7 +14,7 @@ Task CreateTask(const std::string& title, Task_Priority priority,
     google::protobuf::Timestamp time;
     time.set_seconds(date);
     task.set_allocated_date(new google::protobuf::Timestamp(time));
-    for(const auto& label: labels)
+    for (const auto& label: labels)
         task.add_labels(label);
     task.set_status(status);
     return task;
@@ -49,5 +47,4 @@ HierarchicalTask CreateHierarchicalTask(const Task& task, std::optional<TaskId> 
     if (parent.has_value())
         hierarchical_task.set_allocated_parent(new TaskId(parent.value()));
     return hierarchical_task;
-}
 }

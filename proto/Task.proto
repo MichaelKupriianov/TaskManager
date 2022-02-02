@@ -2,8 +2,6 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-package model;
-
 message TaskId {
   int32 value = 1;
 }

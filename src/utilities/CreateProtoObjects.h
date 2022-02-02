@@ -3,7 +3,6 @@
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
 
-namespace model {
 TaskId CreateTaskId(int value);
 
 Task CreateTask(const std::string& title, Task_Priority = Task_Priority_NONE,
@@ -16,4 +15,3 @@ TaskWithId CreateTaskWithId(const int& id, const std::string& task);
 CompositeTask CreateCompositeTask(const TaskWithId& task, const ManyTasksWithId& child);
 
 HierarchicalTask CreateHierarchicalTask(const Task& task, std::optional<TaskId> id);
-}

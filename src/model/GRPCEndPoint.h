@@ -16,11 +16,11 @@ public:
     grpc::Status AddSubTask(::grpc::ServerContext* context, const ::AddSubTaskRequest* request,
                             ::AddSubTaskResponse* response) override;
     grpc::Status Edit(::grpc::ServerContext* context, const ::EditRequest* request,
-                          ::EditResponse* response) override;
+                      ::EditResponse* response) override;
     grpc::Status Delete(::grpc::ServerContext* context, const ::DeleteRequest* request,
-                            ::DeleteResponse* response) override;
+                        ::DeleteResponse* response) override;
     grpc::Status Complete(::grpc::ServerContext* context, const ::CompleteRequest* request,
-                              ::CompleteResponse* response) override;
+                          ::CompleteResponse* response) override;
     grpc::Status ShowByLabel(::grpc::ServerContext* context, const ::ShowByLabelRequest* request,
                              ::ShowByLabelResponse* response) override;
     grpc::Status ShowParents(::grpc::ServerContext* context, const ::ShowParentsRequest* request,

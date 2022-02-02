@@ -6,25 +6,25 @@
 namespace ui {
 class DefaultController : public Controller {
 public:
-    DefaultController(const std::shared_ptr<model::Model>& model) : model_{model} {}
+    explicit DefaultController(const std::shared_ptr<model::Model>& model) : model_{model} {}
     ~DefaultController() override = default;
 
-    bool AddTask(const model::Task& task) override { return model_->AddTask(task); }
-    bool AddSubTask(const model::Task& task, const model::TaskId& id) override { return model_->AddSubTask(task, id); }
-    bool Edit(const model::TaskId& id, const model::Task& task) override { return model_->Edit(id, task); }
-    bool Complete(const model::TaskId& id) override { return model_->Complete(id); }
-    bool Delete(const model::TaskId& id) override { return model_->Delete(id); }
+    bool AddTask(const Task& task) override { return model_->AddTask(task); }
+    bool AddSubTask(const Task& task, const TaskId& id) override { return model_->AddSubTask(task, id); }
+    bool Edit(const TaskId& id, const Task& task) override { return model_->Edit(id, task); }
+    bool Complete(const TaskId& id) override { return model_->Complete(id); }
+    bool Delete(const TaskId& id) override { return model_->Delete(id); }
 
-    model::ManyTasksWithId ShowByLabel(const std::string& label, const model::TasksSortBy& sort_by) override {
+    ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy& sort_by) override {
         return model_->ShowByLabel(label, sort_by);
     }
-    model::ManyTasksWithId ShowParents(const model::TasksSortBy& sort_by) override {
+    ManyTasksWithId ShowParents(const TasksSortBy& sort_by) override {
         return model_->ShowParents(sort_by);
     }
-    model::CompositeTask ShowTask(const model::TaskId& id, const model::TasksSortBy& sort_by) override {
+    CompositeTask ShowTask(const TaskId& id, const TasksSortBy& sort_by) override {
         return model_->ShowTask(id, sort_by);
     }
-    model::ManyCompositeTasks ShowAll(const model::TasksSortBy& sort_by) override {
+    ManyCompositeTasks ShowAll(const TasksSortBy& sort_by) override {
         return model_->ShowAll(sort_by);
     }
 

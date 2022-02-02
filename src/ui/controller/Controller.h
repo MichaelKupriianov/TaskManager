@@ -8,16 +8,16 @@ class Controller {
 public:
     virtual ~Controller() = default;
 
-    virtual bool AddTask(const model::Task& task) = 0;
-    virtual bool AddSubTask(const model::Task& task, const model::TaskId& id) = 0;
-    virtual bool Edit(const model::TaskId& id, const model::Task& task) = 0;
-    virtual bool Complete(const model::TaskId& id) = 0;
-    virtual bool Delete(const model::TaskId& id) = 0;
+    virtual bool AddTask(const Task& task) = 0;
+    virtual bool AddSubTask(const Task& task, const TaskId& id) = 0;
+    virtual bool Edit(const TaskId& id, const Task& task) = 0;
+    virtual bool Complete(const TaskId& id) = 0;
+    virtual bool Delete(const TaskId& id) = 0;
 
-    virtual model::ManyTasksWithId ShowByLabel(const std::string& label, const model::TasksSortBy&) = 0;
-    virtual model::ManyTasksWithId ShowParents(const model::TasksSortBy&) = 0;
-    virtual model::CompositeTask ShowTask(const model::TaskId& id, const model::TasksSortBy&) = 0;
-    virtual model::ManyCompositeTasks ShowAll(const model::TasksSortBy&) = 0;
+    virtual ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy&) = 0;
+    virtual ManyTasksWithId ShowParents(const TasksSortBy&) = 0;
+    virtual CompositeTask ShowTask(const TaskId& id, const TasksSortBy&) = 0;
+    virtual ManyCompositeTasks ShowAll(const TasksSortBy&) = 0;
 
     virtual bool Save(const std::string& filename) = 0;
     virtual bool Load(const std::string& filename) = 0;

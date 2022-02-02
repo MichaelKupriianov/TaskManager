@@ -1,7 +1,5 @@
 #include "SortingProtoObjects.h"
 
-namespace model {
-
 bool ComparatorId(const TaskWithId& first, const TaskWithId& second) {
     return first.id() < second.id();
 }
@@ -21,5 +19,4 @@ void SortTasksWithId(ManyTasksWithId& tasks, const TasksSortBy& sort_by) {
         std::sort(tasks.mutable_tasks()->begin(), tasks.mutable_tasks()->end(), ComparatorPriority);
     if (sort_by == TasksSortBy::DATE)
         std::sort(tasks.mutable_tasks()->begin(), tasks.mutable_tasks()->end(), ComparatorDate);
-}
 }

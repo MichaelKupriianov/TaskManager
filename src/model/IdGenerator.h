@@ -7,7 +7,7 @@ class IdGenerator {
 public:
     explicit IdGenerator(int max_id = 0) : max_id_(max_id) {}
 
-    virtual model::TaskId GenerateId();
+    virtual TaskId GenerateId();
 
     virtual ~IdGenerator() = default;
 private:

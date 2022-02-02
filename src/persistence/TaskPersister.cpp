@@ -22,8 +22,8 @@ std::optional<ManyHierarchicalTasks> TaskPersister::Load() {
 
     std::unique_ptr<google::protobuf::io::ZeroCopyInputStream> input =
             std::make_unique<google::protobuf::io::IstreamInputStream>(&file);
-    model::HierarchicalTask task;
-    model::TaskId id;
+    HierarchicalTask task;
+    TaskId id;
 
     while (google::protobuf::util::ParseDelimitedFromZeroCopyStream(&id, input.get(), nullptr) &&
            google::protobuf::util::ParseDelimitedFromZeroCopyStream(&task, input.get(), nullptr)) {

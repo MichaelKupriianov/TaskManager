@@ -18,13 +18,13 @@ std::shared_ptr<Step> Add::execute(Context& context) {
     return factory_->GetInitialStep();
 }
 
-std::string Add::name() {return "[Add Task]";}
+std::string Add::name() { return "[Add Task]"; }
 
 AddSub::AddSub(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> AddSub::execute(Context& context) {
-    model::TaskId parent_id{view_->ReadParentId(name())};
+    TaskId parent_id{view_->ReadParentId(name())};
 
     Context sub_context(name());
     StateMachine machine{factory_->GetInitialSubStep()};
@@ -35,13 +35,13 @@ std::shared_ptr<Step> AddSub::execute(Context& context) {
     return factory_->GetInitialStep();
 }
 
-std::string AddSub::name() {return "[Add SubTask]";}
+std::string AddSub::name() { return "[Add SubTask]"; }
 
 Edit::Edit(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> Edit::execute(Context& context) {
-    model::TaskId id{view_->ReadId(name())};
+    TaskId id{view_->ReadId(name())};
 
     Context sub_context(name());
     StateMachine machine{factory_->GetInitialSubStep()};
@@ -52,5 +52,5 @@ std::shared_ptr<Step> Edit::execute(Context& context) {
     return factory_->GetInitialStep();
 }
 
-std::string Edit::name() {return "[Edit Task]";}
+std::string Edit::name() { return "[Edit Task]"; }
 }

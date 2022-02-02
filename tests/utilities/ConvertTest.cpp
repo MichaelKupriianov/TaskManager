@@ -1,18 +1,16 @@
 #include "gtest/gtest.h"
-#include "ui/view/Convert.h"
+#include "utilities/Convert.h"
 #include "utilities/CreateProtoObjects.h"
-
-using namespace ui;
 
 class ConvertTest : public ::testing::Test {
 };
 
 TEST_F(ConvertTest, shouldConvertStringToPriority) {
-    EXPECT_EQ(convert::StringToPriority("high"), model::Task_Priority_HIGH);
-    EXPECT_EQ(convert::StringToPriority("medium"), model::Task_Priority_MEDIUM);
-    EXPECT_EQ(convert::StringToPriority("low"), model::Task_Priority_LOW);
-    EXPECT_EQ(convert::StringToPriority("none"), model::Task_Priority_NONE);
-    EXPECT_EQ(convert::StringToPriority(""), model::Task_Priority_NONE);
+    EXPECT_EQ(convert::StringToPriority("high"), Task_Priority_HIGH);
+    EXPECT_EQ(convert::StringToPriority("medium"), Task_Priority_MEDIUM);
+    EXPECT_EQ(convert::StringToPriority("low"), Task_Priority_LOW);
+    EXPECT_EQ(convert::StringToPriority("none"), Task_Priority_NONE);
+    EXPECT_EQ(convert::StringToPriority(""), Task_Priority_NONE);
     EXPECT_EQ(convert::StringToPriority("priority"), std::nullopt);
 }
 

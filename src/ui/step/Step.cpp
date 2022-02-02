@@ -51,25 +51,25 @@ Complete::Complete(const std::shared_ptr<Factory>& factory, const std::shared_pt
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> Complete::execute(Context& context) {
-    model::TaskId id{view_->ReadId(name())};
+    TaskId id{view_->ReadId(name())};
     if (view_->Confirm())
         context.set_command(std::make_shared<command::Complete>(id));
     return factory_->GetInitialStep();
 }
 
-std::string Complete::name() {return "[Complete Task]";}
+std::string Complete::name() { return "[Complete Task]"; }
 
 Delete::Delete(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> Delete::execute(Context& context) {
-    model::TaskId id{view_->ReadId(name())};
+    TaskId id{view_->ReadId(name())};
     if (view_->Confirm())
         context.set_command(std::make_shared<command::Delete>(id));
     return factory_->GetInitialStep();
 }
 
-std::string Delete::name() {return "[Delete Task]";}
+std::string Delete::name() { return "[Delete Task]"; }
 
 Save::Save(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
@@ -86,41 +86,41 @@ Show::Show(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>&
 
 std::shared_ptr<Step> Show::execute(Context& context) {
     bool print_subtasks{view_->ReadIfPrintSubtasks(name())};
-    model::TasksSortBy sort_by{view_->ReadSortBy(name())};
+    TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::Show>(print_subtasks, sort_by));
     return factory_->GetInitialStep();
 }
 
-std::string Show::name() {return "[Show]";}
+std::string Show::name() { return "[Show]"; }
 
 ShowTask::ShowTask(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> ShowTask::execute(Context& context) {
-    model::TaskId id{view_->ReadId(name())};
-    model::TasksSortBy sort_by{view_->ReadSortBy(name())};
+    TaskId id{view_->ReadId(name())};
+    TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::ShowTask>(id, sort_by));
     return factory_->GetInitialStep();
 }
 
-std::string ShowTask::name() {return "[Show Task]";}
+std::string ShowTask::name() { return "[Show Task]"; }
 
 ShowByLabel::ShowByLabel(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> ShowByLabel::execute(Context& context) {
     std::string label{view_->ReadLabel(name())};
-    model::TasksSortBy sort_by{view_->ReadSortBy(name())};
+    TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::ShowByLabel>(label, sort_by));
     return factory_->GetInitialStep();
 }
 
-std::string ShowByLabel::name() {return "[Show by label]";}
+std::string ShowByLabel::name() { return "[Show by label]"; }
 
-std::string Save::name() {return "[Save to file]";}
+std::string Save::name() { return "[Save to file]"; }
 
 Load::Load(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
@@ -132,5 +132,5 @@ std::shared_ptr<Step> Load::execute(Context& context) {
     return factory_->GetInitialStep();
 }
 
-std::string Load::name() {return "[Load from file]";}
+std::string Load::name() { return "[Load from file]"; }
 }

@@ -6,14 +6,14 @@ Result Quit::execute(const std::shared_ptr<Controller>&) {
     return Result(true);
 }
 
-Add::Add(const model::Task& task) : task_{task} {}
+Add::Add(const Task& task) : task_{task} {}
 
 Result Add::execute(const std::shared_ptr<Controller>& controller) {
     controller->AddTask(task_);
     return Result(false);
 }
 
-AddSub::AddSub(const model::Task& task, model::TaskId parent)
+AddSub::AddSub(const Task& task, const TaskId& parent)
         : task_{task}, parent_id_(parent) {}
 
 Result AddSub::execute(const std::shared_ptr<Controller>& controller) {
@@ -23,7 +23,7 @@ Result AddSub::execute(const std::shared_ptr<Controller>& controller) {
         return Result(false);
 }
 
-Edit::Edit(model::TaskId id, const model::Task& task) : id_{id}, task_{task} {}
+Edit::Edit(const TaskId& id, const Task& task) : id_{id}, task_{task} {}
 
 Result Edit::execute(const std::shared_ptr<Controller>& controller) {
     if (!controller->Edit(id_, task_))
@@ -32,7 +32,7 @@ Result Edit::execute(const std::shared_ptr<Controller>& controller) {
         return Result(false);
 }
 
-Complete::Complete(model::TaskId id) : id_{id} {}
+Complete::Complete(const TaskId& id) : id_{id} {}
 
 Result Complete::execute(const std::shared_ptr<Controller>& controller) {
     if (!controller->Complete(id_))
@@ -41,7 +41,7 @@ Result Complete::execute(const std::shared_ptr<Controller>& controller) {
         return Result(false);
 }
 
-Delete::Delete(model::TaskId id) : id_{id} {}
+Delete::Delete(const TaskId& id) : id_{id} {}
 
 Result Delete::execute(const std::shared_ptr<Controller>& controller) {
     if (!controller->Delete(id_))
@@ -50,7 +50,7 @@ Result Delete::execute(const std::shared_ptr<Controller>& controller) {
         return Result(false);
 }
 
-Show::Show(bool if_print_subtasks, model::TasksSortBy sort_by)
+Show::Show(bool if_print_subtasks, const TasksSortBy& sort_by)
         : if_print_subtasks_{if_print_subtasks}, sort_by_{sort_by} {}
 
 Result Show::execute(const std::shared_ptr<Controller>& controller) {
@@ -60,7 +60,7 @@ Result Show::execute(const std::shared_ptr<Controller>& controller) {
         return Result(controller->ShowParents(sort_by_));
 }
 
-ShowTask::ShowTask(model::TaskId id, model::TasksSortBy sort_by)
+ShowTask::ShowTask(const TaskId& id, const TasksSortBy& sort_by)
         : id_{id}, sort_by_{sort_by} {}
 
 Result ShowTask::execute(const std::shared_ptr<Controller>& controller) {
@@ -70,7 +70,7 @@ Result ShowTask::execute(const std::shared_ptr<Controller>& controller) {
         return Result(Error::NO_TASK_WITH_SUCH_ID);
 }
 
-ShowByLabel::ShowByLabel(const std::string& label, model::TasksSortBy sort_by)
+ShowByLabel::ShowByLabel(const std::string& label, const TasksSortBy& sort_by)
         : label_{label}, sort_by_{sort_by} {}
 
 Result ShowByLabel::execute(const std::shared_ptr<Controller>& controller) {

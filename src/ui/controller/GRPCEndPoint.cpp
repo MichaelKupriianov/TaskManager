@@ -4,9 +4,9 @@
 
 namespace ui {
 
-bool GRPCEndPoint::AddTask(const model::Task& task) {
+bool GRPCEndPoint::AddTask(const Task& task) {
     AddTaskRequest request;
-    request.set_allocated_task(new model::Task(task));
+    request.set_allocated_task(new Task(task));
     AddTaskResponse response;
     grpc::ClientContext context;
 
@@ -14,10 +14,10 @@ bool GRPCEndPoint::AddTask(const model::Task& task) {
     return response.result();
 }
 
-bool GRPCEndPoint::AddSubTask(const model::Task& task, const model::TaskId& parent_id) {
+bool GRPCEndPoint::AddSubTask(const Task& task, const TaskId& parent_id) {
     AddSubTaskRequest request;
-    request.set_allocated_task(new model::Task(task));
-    request.set_allocated_parent_id(new model::TaskId(parent_id));
+    request.set_allocated_task(new Task(task));
+    request.set_allocated_parent_id(new TaskId(parent_id));
     AddSubTaskResponse response;
     grpc::ClientContext context;
 
@@ -25,10 +25,10 @@ bool GRPCEndPoint::AddSubTask(const model::Task& task, const model::TaskId& pare
     return response.result();
 }
 
-bool GRPCEndPoint::Edit(const model::TaskId &id, const model::Task& task) {
+bool GRPCEndPoint::Edit(const TaskId& id, const Task& task) {
     EditRequest request;
-    request.set_allocated_task(new model::Task(task));
-    request.set_allocated_id(new model::TaskId(id));
+    request.set_allocated_task(new Task(task));
+    request.set_allocated_id(new TaskId(id));
     EditResponse response;
     grpc::ClientContext context;
 
@@ -36,9 +36,9 @@ bool GRPCEndPoint::Edit(const model::TaskId &id, const model::Task& task) {
     return response.result();
 }
 
-bool GRPCEndPoint::Complete(const model::TaskId &id) {
+bool GRPCEndPoint::Complete(const TaskId& id) {
     CompleteRequest request;
-    request.set_allocated_id(new model::TaskId(id));
+    request.set_allocated_id(new TaskId(id));
     CompleteResponse response;
     grpc::ClientContext context;
 
@@ -46,9 +46,9 @@ bool GRPCEndPoint::Complete(const model::TaskId &id) {
     return response.result();
 }
 
-bool GRPCEndPoint::Delete(const model::TaskId &id) {
+bool GRPCEndPoint::Delete(const TaskId& id) {
     DeleteRequest request;
-    request.set_allocated_id(new model::TaskId(id));
+    request.set_allocated_id(new TaskId(id));
     DeleteResponse response;
     grpc::ClientContext context;
 
@@ -56,7 +56,7 @@ bool GRPCEndPoint::Delete(const model::TaskId &id) {
     return response.result();
 }
 
-model::ManyTasksWithId GRPCEndPoint::ShowByLabel(const std::string& label, const model::TasksSortBy& sort_by) {
+ManyTasksWithId GRPCEndPoint::ShowByLabel(const std::string& label, const TasksSortBy& sort_by) {
     ShowByLabelRequest request;
     request.set_label(label);
     request.set_sort_by(sort_by);
@@ -67,7 +67,7 @@ model::ManyTasksWithId GRPCEndPoint::ShowByLabel(const std::string& label, const
     return response.tasks();
 }
 
-model::ManyTasksWithId GRPCEndPoint::ShowParents(const model::TasksSortBy& sort_by) {
+ManyTasksWithId GRPCEndPoint::ShowParents(const TasksSortBy& sort_by) {
     ShowParentsRequest request;
     request.set_sort_by(sort_by);
     ShowParentsResponse response;
@@ -77,9 +77,9 @@ model::ManyTasksWithId GRPCEndPoint::ShowParents(const model::TasksSortBy& sort_
     return response.tasks();
 }
 
-model::CompositeTask GRPCEndPoint::ShowTask(const model::TaskId &id, const model::TasksSortBy& sort_by) {
+CompositeTask GRPCEndPoint::ShowTask(const TaskId& id, const TasksSortBy& sort_by) {
     ShowTaskRequest request;
-    request.set_allocated_id(new model::TaskId(id));
+    request.set_allocated_id(new TaskId(id));
     request.set_sort_by(sort_by);
     ShowTaskResponse response;
     grpc::ClientContext context;
@@ -88,7 +88,7 @@ model::CompositeTask GRPCEndPoint::ShowTask(const model::TaskId &id, const model
     return response.task();
 }
 
-model::ManyCompositeTasks GRPCEndPoint::ShowAll(const model::TasksSortBy& sort_by) {
+ManyCompositeTasks GRPCEndPoint::ShowAll(const TasksSortBy& sort_by) {
     ShowAllRequest request;
     request.set_sort_by(sort_by);
     ShowAllResponse response;
@@ -98,7 +98,7 @@ model::ManyCompositeTasks GRPCEndPoint::ShowAll(const model::TasksSortBy& sort_b
     return response.tasks();
 }
 
-bool GRPCEndPoint::Save(const std::string &filename) {
+bool GRPCEndPoint::Save(const std::string& filename) {
     SaveRequest request;
     request.set_filename(filename);
     SaveResponse response;
@@ -108,7 +108,7 @@ bool GRPCEndPoint::Save(const std::string &filename) {
     return response.result();
 }
 
-bool GRPCEndPoint::Load(const std::string &filename) {
+bool GRPCEndPoint::Load(const std::string& filename) {
     LoadRequest request;
     request.set_filename(filename);
     LoadResponse response;

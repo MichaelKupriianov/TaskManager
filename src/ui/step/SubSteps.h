@@ -5,7 +5,6 @@
 #include "Step.h"
 
 namespace ui::step {
-class Resources;
 
 class SubStepTitle : public Step {
 public:

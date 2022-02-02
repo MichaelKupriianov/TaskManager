@@ -16,7 +16,7 @@ void StateMachine::Run(const std::shared_ptr<Controller>& controller) {
     }
 }
 
-void StateMachine::Run(Context &context) {
+void StateMachine::Run(Context& context) {
     auto step{initial_step_};
     while (!context.if_finished())
         step = step->execute(context);

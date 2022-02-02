@@ -1,8 +1,8 @@
 #include "IdGenerator.h"
 
 namespace model {
-model::TaskId IdGenerator::GenerateId() {
-    model::TaskId id;
+TaskId IdGenerator::GenerateId() {
+    TaskId id;
     id.set_value(max_id_++);
     return id;
 }

@@ -11,7 +11,7 @@ public:
     virtual ~StateMachine() = default;
 
     virtual void Run(const std::shared_ptr<Controller>&);
-    virtual void Run(Context &);
+    virtual void Run(Context&);
 private:
     const std::shared_ptr<step::Step> initial_step_;
 };

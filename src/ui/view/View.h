@@ -7,7 +7,7 @@
 #include <optional>
 #include "Reader.h"
 #include "Printer.h"
-#include "Convert.h"
+#include "utilities/Convert.h"
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
 #include "ui/step/Type.h"
@@ -22,21 +22,21 @@ public:
     virtual void PrintHelp();
     virtual void PrintQuit();
     virtual step::Type ReadCommand();
-    virtual model::TaskId ReadId(const std::string &command);
-    virtual model::TaskId ReadParentId(const std::string &command);
-    virtual std::string ReadTitle(const std::string &command);
-    virtual model::Task::Priority ReadPriority(const std::string &command);
-    virtual google::protobuf::Timestamp ReadDate(const std::string &command);
-    virtual std::vector<std::string> ReadLabels(const std::string &command);
+    virtual TaskId ReadId(const std::string& command);
+    virtual TaskId ReadParentId(const std::string& command);
+    virtual std::string ReadTitle(const std::string& command);
+    virtual Task::Priority ReadPriority(const std::string& command);
+    virtual google::protobuf::Timestamp ReadDate(const std::string& command);
+    virtual std::vector<std::string> ReadLabels(const std::string& command);
     virtual bool Confirm();
-    virtual bool ReadIfPrintSubtasks(const std::string &command);
-    virtual std::string ReadLabel(const std::string &command);
-    virtual model::TasksSortBy ReadSortBy(const std::string &command);
-    virtual std::string ReadFilename(const std::string &command);
+    virtual bool ReadIfPrintSubtasks(const std::string& command);
+    virtual std::string ReadLabel(const std::string& command);
+    virtual TasksSortBy ReadSortBy(const std::string& command);
+    virtual std::string ReadFilename(const std::string& command);
 
-    virtual void PrintManyTasksWithId(const model::ManyTasksWithId&);
-    virtual void PrintCompositeTask(const model::CompositeTask&);
-    virtual void PrintManyCompositeTasks(const model::ManyCompositeTasks&);
+    virtual void PrintManyTasksWithId(const ManyTasksWithId&);
+    virtual void PrintCompositeTask(const CompositeTask&);
+    virtual void PrintManyCompositeTasks(const ManyCompositeTasks&);
     virtual void PrintError(const command::Error&);
 private:
     const std::shared_ptr<Reader> reader_;

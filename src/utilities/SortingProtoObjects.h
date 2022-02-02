@@ -5,6 +5,4 @@
 #include "TaskStructures.pb.h"
 #include "ComparisonProtoObjects.h"
 
-namespace model {
 void SortTasksWithId(ManyTasksWithId&, const TasksSortBy&);
-}

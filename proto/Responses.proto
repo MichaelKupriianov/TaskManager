@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "Task.proto";
 import "TaskStructures.proto";
 
 message AddTaskResponse {
@@ -24,19 +23,19 @@ message CompleteResponse {
 }
 
 message ShowByLabelResponse {
-  model.ManyTasksWithId tasks = 1;
+  ManyTasksWithId tasks = 1;
 }
 
 message ShowParentsResponse {
-  model.ManyTasksWithId tasks = 1;
+  ManyTasksWithId tasks = 1;
 }
 
 message ShowTaskResponse {
-  model.CompositeTask task = 1;
+  CompositeTask task = 1;
 }
 
 message ShowAllResponse {
-  model.ManyCompositeTasks tasks = 1;
+  ManyCompositeTasks tasks = 1;
 }
 
 message SaveResponse {

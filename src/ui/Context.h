@@ -11,12 +11,12 @@ namespace ui {
 class Context {
 public:
     explicit Context(const std::shared_ptr<command::Result>& result) : result_{result} {}
-    explicit Context(const std::string& name) : command_name_{name}, task_{new model::Task} {}
-    virtual ~Context() =default;
+    explicit Context(const std::string& name) : command_name_{name}, task_{new Task} {}
+    virtual ~Context() = default;
 
     virtual std::shared_ptr<command::Command> command() const { return command_; }
     virtual std::shared_ptr<command::Result> result() const { return result_; }
-    virtual std::shared_ptr<model::Task> task() const { return task_; }
+    virtual std::shared_ptr<Task> task() const { return task_; }
     virtual std::string command_name() const { return command_name_; }
     virtual bool if_finished() const { return finished_; }
 
@@ -29,7 +29,7 @@ public:
 private:
     std::shared_ptr<command::Command> command_;
     std::shared_ptr<command::Result> result_;
-    const std::shared_ptr<model::Task> task_;
+    const std::shared_ptr<Task> task_;
     const std::string command_name_;
     bool finished_ = false;
 };

@@ -2,8 +2,6 @@ syntax = "proto3";
 
 import "Task.proto";
 
-package model;
-
 message TaskWithId {
   TaskId id = 1;
   Task task = 2;

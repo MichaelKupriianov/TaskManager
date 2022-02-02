@@ -38,23 +38,23 @@ step::Type View::ReadCommand() {
     return ReadCommand();
 }
 
-model::TaskId View::ReadId(const std::string& command) {
+TaskId View::ReadId(const std::string& command) {
     printer_->PrintString(command + " ID: ");
     std::string string_id{reader_->ReadString()};
 
     if (auto result{convert::StringToId(string_id)}; result.has_value())
-        return model::CreateTaskId(result.value());
+        return CreateTaskId(result.value());
 
     printer_->PrintString("Enter the ID in the correct format\n");
     return ReadId(command);
 }
 
-model::TaskId View::ReadParentId(const std::string& command) {
+TaskId View::ReadParentId(const std::string& command) {
     printer_->PrintString(command + " Parent ID: ");
     std::string parent_id{reader_->ReadString()};
 
     if (auto result{convert::StringToId(parent_id)}; result.has_value())
-        return model::CreateTaskId(result.value());
+        return CreateTaskId(result.value());
 
     printer_->PrintString("Enter the ID in the correct format\n");
     return ReadParentId(command);
@@ -71,7 +71,7 @@ std::string View::ReadTitle(const std::string& command) {
     return ReadTitle(command);
 }
 
-model::Task::Priority View::ReadPriority(const std::string& command) {
+Task::Priority View::ReadPriority(const std::string& command) {
     printer_->PrintString(command + " priority (high, medium, low or none): ");
     std::string priority{reader_->ReadString()};
 
@@ -131,7 +131,7 @@ std::string View::ReadLabel(const std::string& command) {
     return ReadLabel(command);
 }
 
-model::TasksSortBy View::ReadSortBy(const std::string& command) {
+TasksSortBy View::ReadSortBy(const std::string& command) {
     printer_->PrintString(command + " sort by? (id, date or priority): ");
     std::string answer{reader_->ReadString()};
 
@@ -152,14 +152,14 @@ std::string View::ReadFilename(const std::string& command) {
     return ReadFilename(command);
 }
 
-void View::PrintManyTasksWithId(const model::ManyTasksWithId& tasks) {
+void View::PrintManyTasksWithId(const ManyTasksWithId& tasks) {
     for (const auto& task: tasks.tasks())
         printer_->PrintString(convert::TaskToString(task) + '\n');
     if (tasks.tasks().empty())
         printer_->PrintString("There are no such tasks now.\n");
 }
 
-void View::PrintCompositeTask(const model::CompositeTask& task) {
+void View::PrintCompositeTask(const CompositeTask& task) {
     std::string result = convert::TaskToString(task.task());
     if (!task.children().empty())
         result += "  :";
@@ -169,7 +169,7 @@ void View::PrintCompositeTask(const model::CompositeTask& task) {
         printer_->PrintString("   " + convert::TaskToString(subtask) + '\n');
 }
 
-void View::PrintManyCompositeTasks(const model::ManyCompositeTasks& tasks) {
+void View::PrintManyCompositeTasks(const ManyCompositeTasks& tasks) {
     for (const auto& task: tasks.tasks())
         PrintCompositeTask(task);
     if (tasks.tasks().empty())

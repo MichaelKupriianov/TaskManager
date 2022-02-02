@@ -45,37 +45,37 @@ grpc::Status GRPCEndPoint::ShowByLabel(::grpc::ServerContext* context, const ::S
 }
 
 grpc::Status GRPCEndPoint::ShowParents(::grpc::ServerContext* context, const ::ShowParentsRequest* request,
-                         ::ShowParentsResponse* response) {
+                                       ::ShowParentsResponse* response) {
     auto tasks = model_->ShowParents(request->sort_by());
     response->set_allocated_tasks(new ManyTasksWithId(tasks));
     return grpc::Status::OK;
 }
 
 grpc::Status GRPCEndPoint::ShowTask(::grpc::ServerContext* context, const ::ShowTaskRequest* request,
-                      ::ShowTaskResponse* response) {
+                                    ::ShowTaskResponse* response) {
     auto task = model_->ShowTask(request->id(), request->sort_by());
     response->set_allocated_task(new CompositeTask(task));
     return grpc::Status::OK;
 }
 
 grpc::Status GRPCEndPoint::ShowAll(::grpc::ServerContext* context, const ::ShowAllRequest* request,
-                     ::ShowAllResponse* response) {
+                                   ::ShowAllResponse* response) {
     auto tasks = model_->ShowAll(request->sort_by());
     response->set_allocated_tasks(new ManyCompositeTasks(tasks));
     return grpc::Status::OK;
 }
 
 grpc::Status GRPCEndPoint::Save(::grpc::ServerContext* context,
-                                            const ::SaveRequest* request,
-                                            ::SaveResponse* response) {
+                                const ::SaveRequest* request,
+                                ::SaveResponse* response) {
     auto result = model_->Save(request->filename());
     response->set_result(result);
     return grpc::Status::OK;
 }
 
 grpc::Status GRPCEndPoint::Load(::grpc::ServerContext* context,
-                                              const ::LoadRequest* request,
-                                              ::LoadResponse* response) {
+                                const ::LoadRequest* request,
+                                ::LoadResponse* response) {
     auto result = model_->Load(request->filename());
     response->set_result(result);
     return grpc::Status::OK;

@@ -6,11 +6,11 @@
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
 
-using ManyHierarchicalTasks = std::vector<std::pair<model::TaskId, model::HierarchicalTask>>;
+using ManyHierarchicalTasks = std::vector<std::pair<TaskId, HierarchicalTask>>;
 
 class TaskPersister {
 public:
-    TaskPersister(const std::string& filename) : filename_{filename} {}
+    explicit TaskPersister(const std::string& filename) : filename_{filename} {}
 
     virtual bool Save(const ManyHierarchicalTasks& tasks);
     virtual std::optional<ManyHierarchicalTasks> Load();

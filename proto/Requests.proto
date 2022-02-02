@@ -3,43 +3,43 @@ syntax = "proto3";
 import "Task.proto";
 
 message AddTaskRequest {
-  model.Task task = 1;
+  Task task = 1;
 }
 
 message AddSubTaskRequest {
-  model.Task task = 1;
-  model.TaskId parent_id = 2;
+  Task task = 1;
+  TaskId parent_id = 2;
 }
 
 message EditRequest {
-  model.TaskId id = 1;
-  model.Task task = 2;
+  TaskId id = 1;
+  Task task = 2;
 }
 
 message DeleteRequest {
-  model.TaskId id = 1;
+  TaskId id = 1;
 }
 
 message CompleteRequest {
-  model.TaskId id = 1;
+  TaskId id = 1;
 }
 
 message ShowByLabelRequest {
   string label = 1;
-  model.TasksSortBy sort_by = 2;
+  TasksSortBy sort_by = 2;
 }
 
 message ShowParentsRequest {
-  model.TasksSortBy sort_by = 1;
+  TasksSortBy sort_by = 1;
 }
 
 message ShowTaskRequest {
-  model.TaskId id = 1;
-  model.TasksSortBy sort_by = 2;
+  TaskId id = 1;
+  TasksSortBy sort_by = 2;
 }
 
 message ShowAllRequest {
-  model.TasksSortBy sort_by = 1;
+  TasksSortBy sort_by = 1;
 }
 
 message SaveRequest {
