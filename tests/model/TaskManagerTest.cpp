@@ -172,11 +172,11 @@ TEST_F(TaskManagerTest, shouldShowTaskWithSubtasks) {
     EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateTaskId(0)));
     EXPECT_TRUE(manager_->AddSubTask(CreateTask("third"), CreateTaskId(0)));
 
-    CompositeTask result = manager_->ShowTask(model::CreateTaskId(0), TasksSortBy::ID);
-    ASSERT_TRUE(result.has_value());
-    EXPECT_EQ(result.value().task().task(), CreateTask("first"));
-    EXPECT_EQ(result.value().children()[0].task(), CreateTask("second"));
-    EXPECT_EQ(result.value().children()[1].task(), CreateTask("third"));
+    CompositeTask result = manager_->ShowTask(CreateTaskId(0), TasksSortBy::ID);
+    ASSERT_TRUE(result.has_task());
+    EXPECT_EQ(result.task().task(), CreateTask("first"));
+    EXPECT_EQ(result.children()[0].task(), CreateTask("second"));
+    EXPECT_EQ(result.children()[1].task(), CreateTask("third"));
 }
 
 TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
@@ -188,9 +188,9 @@ TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
             .WillOnce(Return(CreateTaskId(3)));
 
     Task first(CreateTask("first", Task_Priority_LOW, 100, {"label_1", "label_2"}));
-    Task second(model::CreateTask("second", model::Task_Priority_MEDIUM, 200, {"label_2", "label_3"}));
-    Task third(model::CreateTask("third", model::Task_Priority_NONE, 300, {"label_1", "label_3"}));
-    Task fourth(model::CreateTask("fourth", model::Task_Priority_HIGH, 500, {"label_2"}));
+    Task second(CreateTask("second", Task_Priority_MEDIUM, 200, {"label_2", "label_3"}));
+    Task third(CreateTask("third", Task_Priority_NONE, 300, {"label_1", "label_3"}));
+    Task fourth(CreateTask("fourth", Task_Priority_HIGH, 500, {"label_2"}));
     ASSERT_TRUE(manager_->AddTask(first));
     ASSERT_TRUE(manager_->AddSubTask(second, CreateTaskId(0)));
     ASSERT_TRUE(manager_->AddTask(third));
