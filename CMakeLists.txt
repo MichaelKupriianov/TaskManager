@@ -12,7 +12,7 @@ set(Boost_USE_RELEASE_LIBS       ON)  # only find release libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-find_package(Boost REQUIRED log COMPONENTS)
+find_package(Boost REQUIRED log_setup log COMPONENTS)
 if(Boost_FOUND)
     message(STATUS "Using BOOST ${Boost_VERSION}")
     include_directories(${Boost_INCLUDE_DIRS})
@@ -63,8 +63,8 @@ set(generated_files ${proto_src} ${proto_hdr} ${task_manager_generated_files})
 include_directories(src)
 include_directories(tests)
 
-file(GLOB_RECURSE server_src src/model/* src/utilities/* src/persistence/*)
-file(GLOB_RECURSE client_src src/ui/* src/utilities/* src/model/* src/persistence/*)
+file(GLOB_RECURSE server_src src/model/* src/utilities/* src/persistence/* src/logging/*)
+file(GLOB_RECURSE client_src src/ui/* src/utilities/* src/model/* src/persistence/* src/logging/*)
 file(GLOB_RECURSE server_tests_src tests/model/* tests/utilities/* tests/persistence/*)
 file(GLOB_RECURSE client_tests_src tests/ui/* tests/model/*.h)
 

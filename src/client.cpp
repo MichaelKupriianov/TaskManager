@@ -4,8 +4,12 @@
 #include "ui/controller/GRPCEndPoint.h"
 #include "ui/StateMachine.h"
 #include "ui/Factory.h"
+#include "logging/Initialisation.h"
 
 int main() {
+    InitialisationLoggingToConsole(boost::log::trivial::warning);
+    InitialisationLoggingToFile("main.log", boost::log::trivial::info);
+
     std::string target_str = "localhost:1234";
 
     auto reader = std::make_shared<ui::Reader>();

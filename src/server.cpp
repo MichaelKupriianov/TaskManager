@@ -3,8 +3,12 @@
 #include <grpcpp/health_check_service_interface.h>
 #include "model/GRPCEndPoint.h"
 #include "model/Model.h"
+#include "logging/Initialisation.h"
 
 int main() {
+    InitialisationLoggingToConsole(boost::log::trivial::warning);
+    InitialisationLoggingToFile("main.log", boost::log::trivial::info);
+
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
     model::GRPCEndPoint service{model};
