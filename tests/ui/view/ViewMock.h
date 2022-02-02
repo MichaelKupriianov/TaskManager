@@ -12,20 +12,20 @@ public:
     MOCK_METHOD(void, PrintHelp, (), (override));
     MOCK_METHOD(void, PrintQuit, (), (override));
     MOCK_METHOD(ui::step::Type, ReadCommand, (), (override));
-    MOCK_METHOD(model::TaskId, ReadId, (const std::string&), (override));
-    MOCK_METHOD(model::TaskId, ReadParentId, (const std::string&), (override));
+    MOCK_METHOD(TaskId, ReadId, (const std::string&), (override));
+    MOCK_METHOD(TaskId, ReadParentId, (const std::string&), (override));
     MOCK_METHOD(std::string, ReadTitle, (const std::string&), (override));
-    MOCK_METHOD(model::Task::Priority, ReadPriority, (const std::string&), (override));
+    MOCK_METHOD(Task::Priority, ReadPriority, (const std::string&), (override));
     MOCK_METHOD(google::protobuf::Timestamp, ReadDate, (const std::string&), (override));
     MOCK_METHOD(std::vector<std::string>, ReadLabels, (const std::string&), (override));
     MOCK_METHOD(bool, Confirm, (), (override));
     MOCK_METHOD(bool, ReadIfPrintSubtasks, (const std::string&), (override));
     MOCK_METHOD(std::string, ReadLabel, (const std::string&), (override));
-    MOCK_METHOD(model::TasksSortBy, ReadSortBy, (const std::string&), (override));
+    MOCK_METHOD(TasksSortBy, ReadSortBy, (const std::string&), (override));
     MOCK_METHOD(std::string, ReadFilename, (const std::string&), (override));
 
-    MOCK_METHOD(void, PrintManyTasksWithId, (const model::ManyTasksWithId&), (override));
-    MOCK_METHOD(void, PrintCompositeTask, (const model::CompositeTask&), (override));
-    MOCK_METHOD(void, PrintManyCompositeTasks, (const model::ManyCompositeTasks&), (override));
+    MOCK_METHOD(void, PrintManyTasksWithId, (const ManyTasksWithId&), (override));
+    MOCK_METHOD(void, PrintCompositeTask, (const CompositeTask&), (override));
+    MOCK_METHOD(void, PrintManyCompositeTasks, (const ManyCompositeTasks&), (override));
     MOCK_METHOD(void, PrintError, (const ui::command::Error&), (override));
 };

@@ -14,12 +14,12 @@ using namespace ui::command;
 class CommandTest : public ::testing::Test {
 public:
     void SetUp() override {
-        task_ = std::make_shared<model::Task>();
-        id_ = std::make_shared<model::TaskId>();
-        simple_task_ = std::make_shared<model::TaskWithId>(CreateTaskWithId(*id_, *task_));
-        array_simple_tasks_ = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>(CreateCompositeTask(*simple_task_, *array_simple_tasks_));
-        array_composite_tasks_=std::make_shared<model::ManyCompositeTasks>();
+        task_ = std::make_shared<Task>();
+        id_ = std::make_shared<TaskId>();
+        simple_task_ = std::make_shared<TaskWithId>(CreateTaskWithId(*id_, *task_));
+        array_simple_tasks_ = std::make_shared<ManyTasksWithId>();
+        composite_task_ = std::make_shared<CompositeTask>(CreateCompositeTask(*simple_task_, *array_simple_tasks_));
+        array_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
 
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
@@ -28,12 +28,12 @@ public:
     }
 
 protected:
-    std::shared_ptr<model::Task> task_;
-    std::shared_ptr<model::TaskId> id_;
-    std::shared_ptr<model::TaskWithId> simple_task_;
-    std::shared_ptr<model::ManyTasksWithId> array_simple_tasks_;
-    std::shared_ptr<model::CompositeTask> composite_task_;
-    std::shared_ptr<model::ManyCompositeTasks> array_composite_tasks_;
+    std::shared_ptr<Task> task_;
+    std::shared_ptr<TaskId> id_;
+    std::shared_ptr<TaskWithId> simple_task_;
+    std::shared_ptr<ManyTasksWithId> array_simple_tasks_;
+    std::shared_ptr<CompositeTask> composite_task_;
+    std::shared_ptr<ManyCompositeTasks> array_composite_tasks_;
 
     std::shared_ptr<DefaultControllerMock> controller_;
 };
@@ -139,8 +139,8 @@ TEST_F(CommandTest, shouldHandleErrorWhenDeleteTask) {
 }
 
 TEST_F(CommandTest, shouldShowTasksWithSubtasks) {
-    auto command = std::make_shared<Show>(true, model::TasksSortBy::ID);
-    EXPECT_CALL(*controller_, ShowAll(model::TasksSortBy::ID))
+    auto command = std::make_shared<Show>(true, TasksSortBy::ID);
+    EXPECT_CALL(*controller_, ShowAll(TasksSortBy::ID))
             .Times(1)
             .WillOnce(Return(*array_composite_tasks_));
 
@@ -149,8 +149,8 @@ TEST_F(CommandTest, shouldShowTasksWithSubtasks) {
 }
 
 TEST_F(CommandTest, shouldShowOnlyTasks) {
-    auto command = std::make_shared<Show>(false, model::TasksSortBy::PRIORITY);
-    EXPECT_CALL(*controller_, ShowParents(model::TasksSortBy::PRIORITY))
+    auto command = std::make_shared<Show>(false, TasksSortBy::PRIORITY);
+    EXPECT_CALL(*controller_, ShowParents(TasksSortBy::PRIORITY))
             .Times(1)
             .WillOnce(Return(*array_simple_tasks_));
 
@@ -159,8 +159,8 @@ TEST_F(CommandTest, shouldShowOnlyTasks) {
 }
 
 TEST_F(CommandTest, shouldShowSomeTask) {
-    auto command = std::make_shared<ShowTask>(*id_, model::TasksSortBy::DATE);
-    EXPECT_CALL(*controller_, ShowTask(*id_, model::TasksSortBy::DATE))
+    auto command = std::make_shared<ShowTask>(*id_, TasksSortBy::DATE);
+    EXPECT_CALL(*controller_, ShowTask(*id_, TasksSortBy::DATE))
             .Times(1)
             .WillOnce(Return(*composite_task_));
 
@@ -169,18 +169,18 @@ TEST_F(CommandTest, shouldShowSomeTask) {
 }
 
 TEST_F(CommandTest, shouldHandleErrorWhenShowSomeTask) {
-    auto command = std::make_shared<ShowTask>(*id_, model::TasksSortBy::ID);
-    EXPECT_CALL(*controller_, ShowTask(*id_, model::TasksSortBy::ID))
+    auto command = std::make_shared<ShowTask>(*id_, TasksSortBy::ID);
+    EXPECT_CALL(*controller_, ShowTask(*id_, TasksSortBy::ID))
             .Times(1)
-            .WillOnce(Return(model::CompositeTask()));
+            .WillOnce(Return(CompositeTask()));
 
     Result result{command->execute(controller_)};
     EXPECT_TRUE(result.error.has_value());
 }
 
 TEST_F(CommandTest, shouldShowByLabel) {
-    auto command = std::make_shared<ShowByLabel>("label", model::TasksSortBy::PRIORITY);
-    EXPECT_CALL(*controller_, ShowByLabel("label", model::TasksSortBy::PRIORITY))
+    auto command = std::make_shared<ShowByLabel>("label", TasksSortBy::PRIORITY);
+    EXPECT_CALL(*controller_, ShowByLabel("label", TasksSortBy::PRIORITY))
             .Times(1)
             .WillOnce(Return(*array_simple_tasks_));
 

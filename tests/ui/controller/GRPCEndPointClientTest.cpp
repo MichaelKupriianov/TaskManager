@@ -17,23 +17,22 @@ public:
         stub_ = std::make_shared<MockModelServiceStub>();
         end_point_ = std::make_shared<GRPCEndPoint>(stub_);
 
-        task_ = std::make_shared<model::Task>();
-        id_ = std::make_shared<model::TaskId>();
-        auto task_with_id = std::make_shared<model::TaskWithId>(CreateTaskWithId(*id_, *task_));
-        many_tasks_with_id = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>(
-                CreateCompositeTask(*task_with_id, *many_tasks_with_id));
-        many_composite_tasks_ = std::make_shared<model::ManyCompositeTasks>();
+        task_ = std::make_shared<Task>();
+        id_ = std::make_shared<TaskId>();
+        auto task_with_id = std::make_shared<TaskWithId>(CreateTaskWithId(*id_, *task_));
+        many_tasks_with_id = std::make_shared<ManyTasksWithId>();
+        composite_task_ = std::make_shared<CompositeTask>(CreateCompositeTask(*task_with_id, *many_tasks_with_id));
+        many_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
     }
 protected:
     std::shared_ptr<MockModelServiceStub> stub_;
     std::shared_ptr<GRPCEndPoint> end_point_;
 
-    std::shared_ptr<model::Task> task_;
-    std::shared_ptr<model::TaskId> id_;
-    std::shared_ptr<model::ManyTasksWithId> many_tasks_with_id;
-    std::shared_ptr<model::CompositeTask> composite_task_;
-    std::shared_ptr<model::ManyCompositeTasks> many_composite_tasks_;
+    std::shared_ptr<Task> task_;
+    std::shared_ptr<TaskId> id_;
+    std::shared_ptr<ManyTasksWithId> many_tasks_with_id;
+    std::shared_ptr<CompositeTask> composite_task_;
+    std::shared_ptr<ManyCompositeTasks> many_composite_tasks_;
 };
 
 TEST_F(GRPCEndPointClientTest, shouldAddTask) {
@@ -106,54 +105,54 @@ TEST_F(GRPCEndPointClientTest, shouldDeleteTask) {
 TEST_F(GRPCEndPointClientTest, shouldShowByLabel) {
     auto show{[&](auto* context, auto& request, auto* response) {
         EXPECT_EQ(request.label(), "label");
-        EXPECT_EQ(request.sort_by(), model::TasksSortBy::ID);
-        response->set_allocated_tasks(new model::ManyTasksWithId(*many_tasks_with_id));
+        EXPECT_EQ(request.sort_by(), TasksSortBy::ID);
+        response->set_allocated_tasks(new ManyTasksWithId(*many_tasks_with_id));
         return grpc::Status::OK;
     }};
     EXPECT_CALL(*stub_, ShowByLabel(_, _, _))
             .WillOnce(Invoke(show));
 
-    auto result = end_point_->ShowByLabel("label", model::TasksSortBy::ID);
+    auto result = end_point_->ShowByLabel("label", TasksSortBy::ID);
     EXPECT_EQ(result, *many_tasks_with_id);
 }
 
 TEST_F(GRPCEndPointClientTest, shouldShowParents) {
     auto show{[&](auto* context, auto& request, auto* response) {
-        EXPECT_EQ(request.sort_by(), model::TasksSortBy::DATE);
-        response->set_allocated_tasks(new model::ManyTasksWithId(*many_tasks_with_id));
+        EXPECT_EQ(request.sort_by(), TasksSortBy::DATE);
+        response->set_allocated_tasks(new ManyTasksWithId(*many_tasks_with_id));
         return grpc::Status::OK;
     }};
     EXPECT_CALL(*stub_, ShowParents(_, _, _))
             .WillOnce(Invoke(show));
 
-    auto result = end_point_->ShowParents(model::TasksSortBy::DATE);
+    auto result = end_point_->ShowParents(TasksSortBy::DATE);
     EXPECT_EQ(result, *many_tasks_with_id);
 }
 
 TEST_F(GRPCEndPointClientTest, shouldShowTask) {
     auto show{[&](auto* context, auto& request, auto* response) {
         EXPECT_EQ(request.id(), *id_);
-        EXPECT_EQ(request.sort_by(), model::TasksSortBy::ID);
-        response->set_allocated_task(new model::CompositeTask(*composite_task_));
+        EXPECT_EQ(request.sort_by(), TasksSortBy::ID);
+        response->set_allocated_task(new CompositeTask(*composite_task_));
         return grpc::Status::OK;
     }};
     EXPECT_CALL(*stub_, ShowTask(_, _, _))
             .WillOnce(Invoke(show));
 
-    auto result = end_point_->ShowTask(*id_, model::TasksSortBy::ID);
+    auto result = end_point_->ShowTask(*id_, TasksSortBy::ID);
     EXPECT_EQ(result, *composite_task_);
 }
 
 TEST_F(GRPCEndPointClientTest, shouldShowAll) {
     auto show{[&](auto* context, auto& request, auto* response) {
-        EXPECT_EQ(request.sort_by(), model::TasksSortBy::ID);
-        response->set_allocated_tasks(new model::ManyCompositeTasks(*many_composite_tasks_));
+        EXPECT_EQ(request.sort_by(), TasksSortBy::ID);
+        response->set_allocated_tasks(new ManyCompositeTasks(*many_composite_tasks_));
         return grpc::Status::OK;
     }};
     EXPECT_CALL(*stub_, ShowAll(_, _, _))
             .WillOnce(Invoke(show));
 
-    auto result = end_point_->ShowAll(model::TasksSortBy::ID);
+    auto result = end_point_->ShowAll(TasksSortBy::ID);
     EXPECT_EQ(result, *many_composite_tasks_);
 }
 

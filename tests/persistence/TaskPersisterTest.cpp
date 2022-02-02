@@ -22,15 +22,9 @@ TEST_F(TaskPersisterTest, shouldSaveLoadOneTask) {
 
 TEST_F(TaskPersisterTest, shouldSaveLoadSeveralTasks) {
     ManyHierarchicalTasks tasks;
-    tasks.emplace_back(model::CreateTaskId(3),
-                       model::CreateHierarchicalTask(model::CreateTask("first"),
-                                                     model::CreateTaskId(0)));
-    tasks.emplace_back(model::CreateTaskId(4),
-                       model::CreateHierarchicalTask(model::CreateTask("second"),
-                                                     model::CreateTaskId(1)));
-    tasks.emplace_back(model::CreateTaskId(5),
-                       model::CreateHierarchicalTask(model::CreateTask("third"),
-                                                     model::CreateTaskId(2)));
+    tasks.emplace_back(CreateTaskId(3), CreateHierarchicalTask(CreateTask("first"), CreateTaskId(0)));
+    tasks.emplace_back(CreateTaskId(4), CreateHierarchicalTask(CreateTask("second"), CreateTaskId(1)));
+    tasks.emplace_back(CreateTaskId(5), CreateHierarchicalTask(CreateTask("third"), CreateTaskId(2)));
     TaskPersister persister("persister_test_2");
     ASSERT_TRUE(persister.Save(tasks));
 
@@ -42,12 +36,8 @@ TEST_F(TaskPersisterTest, shouldSaveLoadSeveralTasks) {
 
 TEST_F(TaskPersisterTest, shouldSaveLoadTasksWithAndWithoutAParent) {
     ManyHierarchicalTasks tasks;
-    tasks.emplace_back(model::CreateTaskId(1),
-                       model::CreateHierarchicalTask(model::CreateTask("first"),
-                                                     std::nullopt));
-    tasks.emplace_back(model::CreateTaskId(2),
-                       model::CreateHierarchicalTask(model::CreateTask("second"),
-                                                     model::CreateTaskId(0)));
+    tasks.emplace_back(CreateTaskId(1), CreateHierarchicalTask(CreateTask("first"), std::nullopt));
+    tasks.emplace_back(CreateTaskId(2), CreateHierarchicalTask(CreateTask("second"), CreateTaskId(0)));
     TaskPersister persister("persister_test_3");
     ASSERT_TRUE(persister.Save(tasks));
 

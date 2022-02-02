@@ -5,7 +5,7 @@ class ComparisonProtoObjectsTest : public ::testing::Test {
 };
 
 TEST_F(ComparisonProtoObjectsTest, OperatorLessForTaskIdShouldWork) {
-    model::TaskId id_1, id_2;
+    TaskId id_1, id_2;
 
     id_1.set_value(0);
     id_2.set_value(1);
@@ -17,7 +17,7 @@ TEST_F(ComparisonProtoObjectsTest, OperatorLessForTaskIdShouldWork) {
 }
 
 TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskIdShouldWork) {
-    model::TaskId id_1, id_2;
+    TaskId id_1, id_2;
 
     id_1.set_value(5);
     id_2.set_value(5);
@@ -29,7 +29,7 @@ TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskIdShouldWork) {
 }
 
 TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskShouldWork) {
-    model::Task task_1, task_2;
+    Task task_1, task_2;
 
     task_1.set_title("first");
     task_2.set_title("second");
@@ -38,8 +38,8 @@ TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskShouldWork) {
     task_2.set_title("first");
     EXPECT_TRUE(task_1 == task_2);
 
-    task_1.set_priority(model::Task_Priority_LOW);
-    task_2.set_priority(model::Task_Priority_LOW);
+    task_1.set_priority(Task_Priority_LOW);
+    task_2.set_priority(Task_Priority_LOW);
     EXPECT_TRUE(task_1 == task_2);
 
     task_1.add_labels("label_1");
@@ -53,19 +53,19 @@ TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskShouldWork) {
 }
 
 TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForHierarchicalTaskShouldWork) {
-    model::Task t_1, t_2;
+    Task t_1, t_2;
     t_1.set_title("first");
     t_2.set_title("second");
 
-    model::TaskId id_1, id_2;
+    TaskId id_1, id_2;
     id_1.set_value(5);
     id_2.set_value(5);
 
-    model::HierarchicalTask task_1, task_2;
-    task_1.set_allocated_task(new model::Task(t_1));
-    task_2.set_allocated_task(new model::Task(t_2));
-    task_1.set_allocated_parent(new model::TaskId(id_1));
-    task_2.set_allocated_parent(new model::TaskId(id_2));
+    HierarchicalTask task_1, task_2;
+    task_1.set_allocated_task(new Task(t_1));
+    task_2.set_allocated_task(new Task(t_2));
+    task_1.set_allocated_parent(new TaskId(id_1));
+    task_2.set_allocated_parent(new TaskId(id_2));
 
     EXPECT_FALSE(task_1 == task_2);
 

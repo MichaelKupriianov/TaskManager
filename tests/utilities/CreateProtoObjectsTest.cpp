@@ -7,17 +7,17 @@ class CreateProtoObjectsTest : public ::testing::Test {
 
 TEST_F(CreateProtoObjectsTest, ShiuldCreateTaskId) {
     const int value{3};
-    const model::TaskId id{model::CreateTaskId(value)};
+    const TaskId id{CreateTaskId(value)};
 
     EXPECT_EQ(id.value(), value);
 }
 
 TEST_F(CreateProtoObjectsTest, ShouldCreateTask) {
     const std::string title{"first"};
-    const model::Task_Priority priority{model::Task_Priority_MEDIUM};
+    const Task_Priority priority{Task_Priority_MEDIUM};
     const time_t date{1000};
     const std::vector<std::string> labels{"label_1", "label_2"};
-    const model::Task task{model::CreateTask(title, priority, date, labels)};
+    const Task task{CreateTask(title, priority, date, labels)};
 
     EXPECT_EQ(task.title(), title);
     EXPECT_EQ(task.priority(), priority);
@@ -25,15 +25,15 @@ TEST_F(CreateProtoObjectsTest, ShouldCreateTask) {
     ASSERT_EQ(task.labels().size(), 2);
     EXPECT_EQ(task.labels()[0], labels[0]);
     EXPECT_EQ(task.labels()[1], labels[1]);
-    EXPECT_EQ(task.status(), model::Task_Status_IN_PROGRESS);
+    EXPECT_EQ(task.status(), Task_Status_IN_PROGRESS);
 }
 
 TEST_F(CreateProtoObjectsTest, ShouldCreateHierarchicalTask) {
     const int value{3};
-    const model::TaskId id{model::CreateTaskId(value)};
+    const TaskId id{CreateTaskId(value)};
     const std::string title{"first"};
-    const model::Task task{model::CreateTask(title)};
-    const model::HierarchicalTask hierarchical_task{model::CreateHierarchicalTask(task, id)};
+    const Task task{CreateTask(title)};
+    const HierarchicalTask hierarchical_task{CreateHierarchicalTask(task, id)};
 
     ASSERT_TRUE(hierarchical_task.has_task());
     EXPECT_EQ(hierarchical_task.task(), task);
@@ -43,8 +43,8 @@ TEST_F(CreateProtoObjectsTest, ShouldCreateHierarchicalTask) {
 
 TEST_F(CreateProtoObjectsTest, ShouldCreateHierarchicalTaskWithoutParent) {
     const std::string title{"first"};
-    const model::Task task{model::CreateTask(title)};
-    const model::HierarchicalTask hierarchical_task{model::CreateHierarchicalTask(task, std::nullopt)};
+    const Task task{CreateTask(title)};
+    const HierarchicalTask hierarchical_task{CreateHierarchicalTask(task, std::nullopt)};
 
     ASSERT_TRUE(hierarchical_task.has_task());
     EXPECT_EQ(hierarchical_task.task(), task);

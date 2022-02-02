@@ -26,18 +26,18 @@ TEST_F(ConvertTest, shouldConvertStringToDate) {
 }
 
 TEST_F(ConvertTest, shouldConvertStringToStepType) {
-    EXPECT_EQ(convert::StringToStepType("quit"), step::Type::QUIT);
-    EXPECT_EQ(convert::StringToStepType("help"), step::Type::HELP);
-    EXPECT_EQ(convert::StringToStepType("add"), step::Type::ADD);
-    EXPECT_EQ(convert::StringToStepType("add_subtask"), step::Type::ADD_SUB);
-    EXPECT_EQ(convert::StringToStepType("edit"), step::Type::EDIT);
-    EXPECT_EQ(convert::StringToStepType("complete"), step::Type::COMPLETE);
-    EXPECT_EQ(convert::StringToStepType("delete"), step::Type::DELETE);
-    EXPECT_EQ(convert::StringToStepType("show"), step::Type::SHOW);
-    EXPECT_EQ(convert::StringToStepType("show_task"), step::Type::SHOW_TASK);
-    EXPECT_EQ(convert::StringToStepType("show_by_label"), step::Type::SHOW_BY_LABEL);
-    EXPECT_EQ(convert::StringToStepType("save"), step::Type::SAVE);
-    EXPECT_EQ(convert::StringToStepType("load"), step::Type::LOAD);
+    EXPECT_EQ(convert::StringToStepType("quit"), ui::step::Type::QUIT);
+    EXPECT_EQ(convert::StringToStepType("help"), ui::step::Type::HELP);
+    EXPECT_EQ(convert::StringToStepType("add"), ui::step::Type::ADD);
+    EXPECT_EQ(convert::StringToStepType("add_subtask"), ui::step::Type::ADD_SUB);
+    EXPECT_EQ(convert::StringToStepType("edit"), ui::step::Type::EDIT);
+    EXPECT_EQ(convert::StringToStepType("complete"), ui::step::Type::COMPLETE);
+    EXPECT_EQ(convert::StringToStepType("delete"), ui::step::Type::DELETE);
+    EXPECT_EQ(convert::StringToStepType("show"), ui::step::Type::SHOW);
+    EXPECT_EQ(convert::StringToStepType("show_task"), ui::step::Type::SHOW_TASK);
+    EXPECT_EQ(convert::StringToStepType("show_by_label"), ui::step::Type::SHOW_BY_LABEL);
+    EXPECT_EQ(convert::StringToStepType("save"), ui::step::Type::SAVE);
+    EXPECT_EQ(convert::StringToStepType("load"), ui::step::Type::LOAD);
     EXPECT_EQ(convert::StringToStepType("title"), std::nullopt);
     EXPECT_EQ(convert::StringToStepType("command"), std::nullopt);
     EXPECT_EQ(convert::StringToStepType(""), std::nullopt);
@@ -53,10 +53,10 @@ TEST_F(ConvertTest, shouldConvertStringToId) {
 }
 
 TEST_F(ConvertTest, shouldConvertStringToSortBy) {
-    EXPECT_EQ(convert::StringToSortBy("id"), model::TasksSortBy::ID);
-    EXPECT_EQ(convert::StringToSortBy("date"), model::TasksSortBy::DATE);
-    EXPECT_EQ(convert::StringToSortBy("priority"), model::TasksSortBy::PRIORITY);
-    EXPECT_EQ(convert::StringToSortBy(""), model::TasksSortBy::ID);
+    EXPECT_EQ(convert::StringToSortBy("id"), TasksSortBy::ID);
+    EXPECT_EQ(convert::StringToSortBy("date"), TasksSortBy::DATE);
+    EXPECT_EQ(convert::StringToSortBy("priority"), TasksSortBy::PRIORITY);
+    EXPECT_EQ(convert::StringToSortBy(""), TasksSortBy::ID);
     EXPECT_EQ(convert::StringToSortBy("idd"), std::nullopt);
     EXPECT_EQ(convert::StringToSortBy("1"), std::nullopt);
 }
@@ -71,10 +71,10 @@ TEST_F(ConvertTest, shouldConvertStringToVectorLabels) {
 }
 
 TEST_F(ConvertTest, shouldConvertPriorityToString) {
-    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_HIGH), "high");
-    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_MEDIUM), "medium");
-    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_LOW), "low");
-    EXPECT_EQ(convert::PriorityToString(model::Task_Priority_NONE), "none");
+    EXPECT_EQ(convert::PriorityToString(Task_Priority_HIGH), "high");
+    EXPECT_EQ(convert::PriorityToString(Task_Priority_MEDIUM), "medium");
+    EXPECT_EQ(convert::PriorityToString(Task_Priority_LOW), "low");
+    EXPECT_EQ(convert::PriorityToString(Task_Priority_NONE), "none");
 }
 
 TEST_F(ConvertTest, shouldConvertDateToString) {
@@ -94,27 +94,26 @@ TEST_F(ConvertTest, shouldConvertDateToString) {
 }
 
 TEST_F(ConvertTest, shouldConvertTaskToString) {
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(0), model::CreateTask("first"))),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(0), CreateTask("first"))),
               "id: 0, title: first, priority: none, date: none");
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(11),
-                                     model::CreateTask("second", model::Task_Priority_LOW))),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(11), CreateTask("second", Task_Priority_LOW))),
               "id: 11, title: second, priority: low, date: none");
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(101),
-                                     model::CreateTask("third", model::Task_Priority_MEDIUM, 61594808400))),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(101),
+                                                     CreateTask("third", Task_Priority_MEDIUM, 61594808400))),
               "id: 101, title: third, priority: medium, date: Nov 11 23:00");
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(model::CreateTaskId(2),
-                                     model::CreateTask("fourth", model::Task_Priority_NONE, 0, {"l1 l2"}))),
+    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(2),
+                                                     CreateTask("fourth", Task_Priority_NONE, 0, {"l1 l2"}))),
               "id: 2, title: fourth, priority: none, date: none, labels: l1 l2");
 }
 
 TEST_F(ConvertTest, shouldConvertErrorToString) {
-    EXPECT_EQ(convert::ErrorToString(command::Error::INCORRECT_PARENT_ID),
+    EXPECT_EQ(convert::ErrorToString(ui::command::Error::INCORRECT_PARENT_ID),
               "Incorrect parent ID (for example, subtask cannot have child)");
-    EXPECT_EQ(convert::ErrorToString(command::Error::NO_TASK_WITH_SUCH_ID),
+    EXPECT_EQ(convert::ErrorToString(ui::command::Error::NO_TASK_WITH_SUCH_ID),
               "There are no task with such ID");
-    EXPECT_EQ(convert::ErrorToString(command::Error::CANNOT_SAVE_TO_FILE),
+    EXPECT_EQ(convert::ErrorToString(ui::command::Error::CANNOT_SAVE_TO_FILE),
               "Cannot save to the specified file");
-    EXPECT_EQ(convert::ErrorToString(command::Error::CANNOT_LOAD_FROM_FILE),
+    EXPECT_EQ(convert::ErrorToString(ui::command::Error::CANNOT_LOAD_FROM_FILE),
               "Cannot load from the specified file");
 
 }

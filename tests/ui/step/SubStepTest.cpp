@@ -16,7 +16,7 @@ using namespace ui::step;
 class SubStepTest : public ::testing::Test {
 public:
     void SetUp() override {
-        task_ = std::make_shared<model::Task>();
+        task_ = std::make_shared<Task>();
         auto reader = std::make_shared<Reader>();
         auto printer = std::make_shared<Printer>();
         view_ = std::make_shared<ViewMock>(reader, printer);
@@ -26,7 +26,7 @@ public:
     }
 
 protected:
-    std::shared_ptr<model::Task> task_;
+    std::shared_ptr<Task> task_;
     std::shared_ptr<ViewMock> view_;
     std::shared_ptr<Factory> factory_;
     std::shared_ptr<ContextMock> context_;
@@ -52,7 +52,7 @@ TEST_F(SubStepTest, shouldReadPriority) {
 
     EXPECT_CALL(*view_, ReadPriority(_))
             .Times(1)
-            .WillOnce(Return(model::Task_Priority_LOW));
+            .WillOnce(Return(Task_Priority_LOW));
     EXPECT_CALL(*context_, command_name())
             .Times(1);
     EXPECT_CALL(*context_, task())
@@ -89,7 +89,7 @@ TEST_F(SubStepTest, shouldReadLabels) {
     EXPECT_CALL(*context_, task())
             .Times(2)
             .WillRepeatedly(Return(task_));
-    EXPECT_CALL(*context_,finished())
+    EXPECT_CALL(*context_, finished())
             .Times(1);
 
     EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(

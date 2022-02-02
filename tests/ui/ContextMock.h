@@ -11,7 +11,7 @@ public:
 
     MOCK_METHOD(std::shared_ptr<ui::command::Command>, command, (), (const, override));
     MOCK_METHOD(std::shared_ptr<ui::command::Result>, result, (), (const, override));
-    MOCK_METHOD(std::shared_ptr<model::Task>, task, (), (const, override));
+    MOCK_METHOD(std::shared_ptr<Task>, task, (), (const, override));
     MOCK_METHOD(std::string, command_name, (), (const, override));
     MOCK_METHOD(bool, if_finished, (), (const, override));
     MOCK_METHOD(void, set_command, (const std::shared_ptr<ui::command::Command>&), (override));

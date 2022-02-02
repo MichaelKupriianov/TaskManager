@@ -17,12 +17,12 @@ using namespace ui::step;
 class StepTest : public ::testing::Test {
 public:
     void SetUp() override {
-        task_ = std::make_shared<model::Task>();
-        id_ = std::make_shared<model::TaskId>();
-        task_with_id_ = std::make_shared<model::TaskWithId>();
-        many_simple_tasks_ = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>();
-        many_composite_tasks_=std::make_shared<model::ManyCompositeTasks>();
+        task_ = std::make_shared<Task>();
+        id_ = std::make_shared<TaskId>();
+        task_with_id_ = std::make_shared<TaskWithId>();
+        many_simple_tasks_ = std::make_shared<ManyTasksWithId>();
+        composite_task_ = std::make_shared<CompositeTask>();
+        many_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
 
         auto reader = std::make_shared<Reader>();
         auto printer = std::make_shared<Printer>();
@@ -33,12 +33,12 @@ public:
     }
 
 protected:
-    std::shared_ptr<model::Task> task_;
-    std::shared_ptr<model::TaskId> id_;
-    std::shared_ptr<model::TaskWithId> task_with_id_;
-    std::shared_ptr<model::ManyTasksWithId> many_simple_tasks_;
-    std::shared_ptr<model::CompositeTask> composite_task_;
-    std::shared_ptr<model::ManyCompositeTasks> many_composite_tasks_;
+    std::shared_ptr<Task> task_;
+    std::shared_ptr<TaskId> id_;
+    std::shared_ptr<TaskWithId> task_with_id_;
+    std::shared_ptr<ManyTasksWithId> many_simple_tasks_;
+    std::shared_ptr<CompositeTask> composite_task_;
+    std::shared_ptr<ManyCompositeTasks> many_composite_tasks_;
 
     std::shared_ptr<ViewMock> view_;
     std::shared_ptr<Factory> factory_;
@@ -145,7 +145,7 @@ TEST_F(StepTest, shouldCreateCommandComplete) {
     auto step = Complete(factory_, view_);
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
-            .WillOnce(Return(model::CreateTaskId(0)));
+            .WillOnce(Return(CreateTaskId(0)));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(true));
@@ -160,7 +160,7 @@ TEST_F(StepTest, shouldWorkIfNotConfirmComplete) {
 
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
-            .WillOnce(Return(model::CreateTaskId(0)));
+            .WillOnce(Return(CreateTaskId(0)));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(false));
@@ -173,7 +173,7 @@ TEST_F(StepTest, shouldCreateCommandDelete) {
 
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
-            .WillOnce(Return(model::CreateTaskId(0)));
+            .WillOnce(Return(CreateTaskId(0)));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(true));
@@ -188,7 +188,7 @@ TEST_F(StepTest, shouldWorkIfNotConfirmDelete) {
 
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
-            .WillOnce(Return(model::CreateTaskId(0)));
+            .WillOnce(Return(CreateTaskId(0)));
     EXPECT_CALL(*view_, Confirm())
             .Times(1)
             .WillOnce(Return(false));
@@ -296,8 +296,8 @@ TEST_F(StepTest, shouldAddTask) {
     auto step = Add(factory, view_);
 
     EXPECT_CALL(*factory, GetInitialSubStep())
-              .Times(1)
-              .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));
+            .Times(1)
+            .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));
 
     EXPECT_CALL(*view_, ReadLabels(_))
             .Times(1)
@@ -319,7 +319,7 @@ TEST_F(StepTest, shouldAddSubTask) {
 
     EXPECT_CALL(*view_, ReadParentId(_))
             .Times(1)
-            .WillOnce(Return(model::CreateTaskId(0)));
+            .WillOnce(Return(CreateTaskId(0)));
     EXPECT_CALL(*factory, GetInitialSubStep())
             .Times(1)
             .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));
@@ -344,7 +344,7 @@ TEST_F(StepTest, shouldEditTask) {
 
     EXPECT_CALL(*view_, ReadId(_))
             .Times(1)
-            .WillOnce(Return(model::CreateTaskId(0)));
+            .WillOnce(Return(CreateTaskId(0)));
     EXPECT_CALL(*factory, GetInitialSubStep())
             .Times(1)
             .WillOnce(Return(std::make_shared<SubStepLabel>(factory_, view_)));

@@ -25,11 +25,11 @@ TEST_F(ContextTest, shouldWorkWithResult) {
 TEST_F(ContextTest, shouldWorkWithTask) {
     Context context{""};
     context.task()->set_title("title");
-    context.task()->set_priority(model::Task_Priority_LOW);
+    context.task()->set_priority(Task_Priority_LOW);
     context.task()->add_labels("qwerty");
 
     EXPECT_EQ(context.task()->title(), "title");
-    EXPECT_EQ(context.task()->priority(), model::Task_Priority_LOW);
+    EXPECT_EQ(context.task()->priority(), Task_Priority_LOW);
     EXPECT_FALSE(context.task()->has_date());
     EXPECT_EQ(context.task()->labels().size(), 1);
     EXPECT_EQ(context.task()->labels()[0], "qwerty");

@@ -11,12 +11,12 @@ public:
 
 class CommandAddMock : public ui::command::Add {
 public:
-    CommandAddMock(const model::Task &task) : ui::command::Add{task} {}
+    CommandAddMock(const Task& task) : ui::command::Add{task} {}
     MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::Controller>&), (override));
 };
 
 class CommandEditMock : public ui::command::Edit {
 public:
-    CommandEditMock(model::TaskId id, const model::Task &task) : ui::command::Edit{id, task} {}
+    CommandEditMock(TaskId id, const Task& task) : ui::command::Edit{id, task} {}
     MOCK_METHOD(ui::command::Result, execute, (const std::shared_ptr<ui::Controller>&), (override));
 };
