@@ -8,9 +8,7 @@ class TaskPersisterTest : public ::testing::Test {
 
 TEST_F(TaskPersisterTest, shouldSaveLoadOneTask) {
     ManyHierarchicalTasks tasks;
-    tasks.emplace_back(model::CreateTaskId(1),
-                       model::CreateHierarchicalTask(model::CreateTask("first"),
-                                                     std::nullopt));
+    tasks.emplace_back(CreateTaskId(1), CreateHierarchicalTask(CreateTask("first"), std::nullopt));
     TaskPersister persister("persister_test_1");
     ASSERT_TRUE(persister.Save(tasks));
 

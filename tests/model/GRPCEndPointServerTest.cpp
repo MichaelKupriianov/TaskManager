@@ -15,23 +15,23 @@ public:
                 std::make_shared<TaskManager>(std::make_shared<IdGenerator>()));
         end_point_ = std::make_shared<GRPCEndPoint>(model_);
 
-        task_ = std::make_shared<model::Task>();
-        id_ = std::make_shared<model::TaskId>();
-        auto task_with_id = std::make_shared<model::TaskWithId>(CreateTaskWithId(*id_, *task_));
-        many_tasks_with_id = std::make_shared<model::ManyTasksWithId>();
-        composite_task_ = std::make_shared<model::CompositeTask>(
+        task_ = std::make_shared<Task>();
+        id_ = std::make_shared<TaskId>();
+        auto task_with_id = std::make_shared<TaskWithId>(CreateTaskWithId(*id_, *task_));
+        many_tasks_with_id = std::make_shared<ManyTasksWithId>();
+        composite_task_ = std::make_shared<CompositeTask>(
                 CreateCompositeTask(*task_with_id, *many_tasks_with_id));
-        many_composite_tasks_ = std::make_shared<model::ManyCompositeTasks>();
+        many_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
     }
 protected:
     std::shared_ptr<ModelMock> model_;
     std::shared_ptr<GRPCEndPoint> end_point_;
 
-    std::shared_ptr<model::Task> task_;
-    std::shared_ptr<model::TaskId> id_;
-    std::shared_ptr<model::ManyTasksWithId> many_tasks_with_id;
-    std::shared_ptr<model::CompositeTask> composite_task_;
-    std::shared_ptr<model::ManyCompositeTasks> many_composite_tasks_;
+    std::shared_ptr<Task> task_;
+    std::shared_ptr<TaskId> id_;
+    std::shared_ptr<ManyTasksWithId> many_tasks_with_id;
+    std::shared_ptr<CompositeTask> composite_task_;
+    std::shared_ptr<ManyCompositeTasks> many_composite_tasks_;
 };
 
 TEST_F(GRPCEndPointServerTest, shouldAddTask) {
