@@ -98,7 +98,7 @@ std::vector<std::string> StringToLabels(const std::string& labels) {
     return result;
 }
 
-std::string PriorityToString(Task::Priority priority) {
+std::string ToString(const Task::Priority& priority) {
     switch (priority) {
         case Task_Priority_HIGH:
             return "high";
@@ -111,7 +111,20 @@ std::string PriorityToString(Task::Priority priority) {
     }
 }
 
-std::string DateToString(const google::protobuf::Timestamp& date) {
+std::string ToString(const TasksSortBy& sort_by) {
+    switch (sort_by) {
+        case ID:
+            return "id";
+        case PRIORITY:
+            return "priority";
+        case DATE:
+            return "date";
+        default:
+            assert(false);
+    }
+}
+
+std::string ToString(const google::protobuf::Timestamp& date) {
     if (date.seconds() == 0) return "none";
     time_t time{date.seconds()};
     std::string result = ctime(&time);
@@ -120,20 +133,26 @@ std::string DateToString(const google::protobuf::Timestamp& date) {
     return result;
 }
 
-std::string TaskToString(const TaskWithId& task) {
+std::string ToString(const Task& task) {
     std::string result;
-    result += "id: " + std::to_string(task.id().value());
-    result += ", title: " + task.task().title();
-    result += ", priority: " + convert::PriorityToString(task.task().priority());
-    result += ", date: " + convert::DateToString(task.task().date());
-    if (!task.task().labels().empty()) {
+    result += "title: " + task.title();
+    result += ", priority: " + ToString(task.priority());
+    result += ", date: " + convert::ToString(task.date());
+    if (!task.labels().empty()) {
         result += ", labels:";
-        for (const auto& label: task.task().labels()) result += " " + label;
+        for (const auto& label: task.labels()) result += " " + label;
     }
     return result;
 }
 
-std::string ErrorToString(ui::command::Error error) {
+std::string ToString(const TaskWithId& task) {
+    std::string result;
+    result += "id: " + std::to_string(task.id().value()) + ", ";
+    result += ToString(task.task());
+    return result;
+}
+
+std::string ToString(const ui::command::Error& error) {
     if (error == ui::command::Error::INCORRECT_PARENT_ID)
         return "Incorrect parent ID (for example, subtask cannot have child)";
     if (error == ui::command::Error::NO_TASK_WITH_SUCH_ID)

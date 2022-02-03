@@ -15,9 +15,12 @@ std::optional<ui::step::Type> StringToStepType(const std::string&);
 std::optional<int> StringToId(const std::string&);
 std::optional<TasksSortBy> StringToSortBy(const std::string&);
 std::vector<std::string> StringToLabels(const std::string&);
-std::string PriorityToString(Task::Priority);
-std::string DateToString(const google::protobuf::Timestamp& date);
-std::string TaskToString(const TaskWithId& task);
-std::string ErrorToString(ui::command::Error);
+
+std::string ToString(const Task::Priority&);
+std::string ToString(const TasksSortBy&);
+std::string ToString(const google::protobuf::Timestamp& date);
+std::string ToString(const Task& task);
+std::string ToString(const TaskWithId& task);
+std::string ToString(const ui::command::Error&);
 }
 

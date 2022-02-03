@@ -71,49 +71,49 @@ TEST_F(ConvertTest, shouldConvertStringToVectorLabels) {
 }
 
 TEST_F(ConvertTest, shouldConvertPriorityToString) {
-    EXPECT_EQ(convert::PriorityToString(Task_Priority_HIGH), "high");
-    EXPECT_EQ(convert::PriorityToString(Task_Priority_MEDIUM), "medium");
-    EXPECT_EQ(convert::PriorityToString(Task_Priority_LOW), "low");
-    EXPECT_EQ(convert::PriorityToString(Task_Priority_NONE), "none");
+    EXPECT_EQ(convert::ToString(Task_Priority_HIGH), "high");
+    EXPECT_EQ(convert::ToString(Task_Priority_MEDIUM), "medium");
+    EXPECT_EQ(convert::ToString(Task_Priority_LOW), "low");
+    EXPECT_EQ(convert::ToString(Task_Priority_NONE), "none");
 }
 
 TEST_F(ConvertTest, shouldConvertDateToString) {
     google::protobuf::Timestamp date;
     date.set_seconds(0);
-    EXPECT_EQ(convert::DateToString(date), "none");
+    EXPECT_EQ(convert::ToString(date), "none");
     date.set_seconds(61594808400);
-    EXPECT_EQ(convert::DateToString(date), "Nov 11 23:00");
+    EXPECT_EQ(convert::ToString(date), "Nov 11 23:00");
     date.set_seconds(61578176400);
-    EXPECT_EQ(convert::DateToString(date), "May  3 12:00");
+    EXPECT_EQ(convert::ToString(date), "May  3 12:00");
     date.set_seconds(61583789520);
-    EXPECT_EQ(convert::DateToString(date), "Jul  7 11:12");
+    EXPECT_EQ(convert::ToString(date), "Jul  7 11:12");
     date.set_seconds(61575631200);
-    EXPECT_EQ(convert::DateToString(date), "Apr  4 01:00");
+    EXPECT_EQ(convert::ToString(date), "Apr  4 01:00");
     date.set_seconds(61594207200);
-    EXPECT_EQ(convert::DateToString(date), "Nov  5 00:00");
+    EXPECT_EQ(convert::ToString(date), "Nov  5 00:00");
 }
 
 TEST_F(ConvertTest, shouldConvertTaskToString) {
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(0), CreateTask("first"))),
+    EXPECT_EQ(convert::ToString(CreateTaskWithId(CreateTaskId(0), CreateTask("first"))),
               "id: 0, title: first, priority: none, date: none");
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(11), CreateTask("second", Task_Priority_LOW))),
+    EXPECT_EQ(convert::ToString(CreateTaskWithId(CreateTaskId(11), CreateTask("second", Task_Priority_LOW))),
               "id: 11, title: second, priority: low, date: none");
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(101),
-                                                     CreateTask("third", Task_Priority_MEDIUM, 61594808400))),
+    EXPECT_EQ(convert::ToString(CreateTaskWithId(CreateTaskId(101),
+                                                 CreateTask("third", Task_Priority_MEDIUM, 61594808400))),
               "id: 101, title: third, priority: medium, date: Nov 11 23:00");
-    EXPECT_EQ(convert::TaskToString(CreateTaskWithId(CreateTaskId(2),
-                                                     CreateTask("fourth", Task_Priority_NONE, 0, {"l1 l2"}))),
+    EXPECT_EQ(convert::ToString(CreateTaskWithId(CreateTaskId(2),
+                                                 CreateTask("fourth", Task_Priority_NONE, 0, {"l1 l2"}))),
               "id: 2, title: fourth, priority: none, date: none, labels: l1 l2");
 }
 
 TEST_F(ConvertTest, shouldConvertErrorToString) {
-    EXPECT_EQ(convert::ErrorToString(ui::command::Error::INCORRECT_PARENT_ID),
+    EXPECT_EQ(convert::ToString(ui::command::Error::INCORRECT_PARENT_ID),
               "Incorrect parent ID (for example, subtask cannot have child)");
-    EXPECT_EQ(convert::ErrorToString(ui::command::Error::NO_TASK_WITH_SUCH_ID),
+    EXPECT_EQ(convert::ToString(ui::command::Error::NO_TASK_WITH_SUCH_ID),
               "There are no task with such ID");
-    EXPECT_EQ(convert::ErrorToString(ui::command::Error::CANNOT_SAVE_TO_FILE),
+    EXPECT_EQ(convert::ToString(ui::command::Error::CANNOT_SAVE_TO_FILE),
               "Cannot save to the specified file");
-    EXPECT_EQ(convert::ErrorToString(ui::command::Error::CANNOT_LOAD_FROM_FILE),
+    EXPECT_EQ(convert::ToString(ui::command::Error::CANNOT_LOAD_FROM_FILE),
               "Cannot load from the specified file");
 
 }
