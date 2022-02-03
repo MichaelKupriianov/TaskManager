@@ -2,6 +2,7 @@
 #include "ui/StateMachine.h"
 #include "ui/Factory.h"
 #include "Task.pb.h"
+#include "logging/Log.h"
 
 namespace ui::step {
 
@@ -13,8 +14,10 @@ std::shared_ptr<Step> Add::execute(Context& context) {
     StateMachine machine{factory_->GetInitialSubStep()};
     machine.Run(sub_context);
 
-    if (view_->Confirm())
+    if (view_->Confirm()) {
+        LOG(info, "Request to AddTask with task: {" + convert::TaskToString(*sub_context.task()) + "} successfully added");
         context.set_command(std::make_shared<command::Add>(*sub_context.task()));
+    }
     return factory_->GetInitialStep();
 }
 
