@@ -7,7 +7,7 @@
 #include "logging/Initialisation.h"
 
 int main() {
-    InitialisationLoggingToConsole(boost::log::trivial::warning);
+    InitialisationLoggingToConsole(boost::log::trivial::error);
     InitialisationLoggingToFile("client.log", boost::log::trivial::info);
 
     std::string target_str = "localhost:1234";

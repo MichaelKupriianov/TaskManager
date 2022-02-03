@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "model/TaskManager.h"
+#include "logging/Initialisation.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -14,6 +15,8 @@ public:
 class TaskManagerTest : public ::testing::Test {
 public:
     void SetUp() override {
+        InitialisationLoggingToConsole(boost::log::trivial::fatal);
+
         generator_ = std::make_shared<IdGeneratorMock>();
         manager_ = std::make_shared<model::TaskManager>(generator_);
     }

@@ -5,7 +5,7 @@
 #include "logging/Initialisation.h"
 
 int main() {
-    InitialisationLoggingToConsole(boost::log::trivial::warning);
+    InitialisationLoggingToConsole(boost::log::trivial::error);
     InitialisationLoggingToFile("main.log", boost::log::trivial::info);
 
     auto generator = std::make_shared<model::IdGenerator>();

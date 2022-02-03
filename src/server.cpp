@@ -6,7 +6,7 @@
 #include "logging/Initialisation.h"
 
 int main() {
-    InitialisationLoggingToConsole(boost::log::trivial::warning);
+    InitialisationLoggingToConsole(boost::log::trivial::error);
     InitialisationLoggingToFile("server.log", boost::log::trivial::info);
 
     auto model = std::make_shared<model::Model>(

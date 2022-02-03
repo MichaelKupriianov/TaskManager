@@ -1,6 +1,6 @@
 #include "TaskManager.h"
 #include "logging/Log.h"
-#include "ui/view/Convert.h"
+#include "utilities/Convert.h"
 
 namespace model {
 TaskManager::TaskManager(const std::shared_ptr<IdGenerator>& generator) :
@@ -9,11 +9,11 @@ TaskManager::TaskManager(const std::shared_ptr<IdGenerator>& generator) :
 bool TaskManager::AddTask(const Task& task) {
     TaskId id{generator_->GenerateId()};
     if (tasks_.find(id) != tasks_.end()) {
-        LOG(warning, "IdGenerator returns the id" + std::to_string(id.value()) + ", that is already in use.");
+        LOG(error, "IdGenerator returns the id " + std::to_string(id.value()) + ", that is already in use.");
         return false;
     }
     tasks_.insert({id, CreateHierarchicalTask(task, std::nullopt)});
-    LOG(info, "Task with {" + ui::convert::TaskToString(CreateTaskWithId(id, task)) + "} successfully added.");
+    LOG(info, "Task with {" + convert::TaskToString(CreateTaskWithId(id, task)) + "} successfully added.");
     return true;
 }
 
@@ -68,7 +68,7 @@ ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSo
             result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
         }
     }
-
+    LOG(info, "Array of tasks with label: " + label + " successfully returned");
     SortTasksWithId(result, sort_by);
     return result;
 }
