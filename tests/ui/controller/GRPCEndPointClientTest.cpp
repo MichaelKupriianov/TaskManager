@@ -5,7 +5,6 @@
 #include "ui/controller/GRPCEndPoint.h"
 #include "utilities/CreateProtoObjects.h"
 #include "utilities/ComparisonProtoObjects.h"
-#include "logging/Initialisation.h"
 
 using namespace ui;
 using ::testing::Return;
@@ -15,8 +14,6 @@ using ::testing::_;
 class GRPCEndPointClientTest : public ::testing::Test {
 public:
     void SetUp() override {
-        InitialisationLoggingToConsole(boost::log::trivial::fatal);
-
         stub_ = std::make_shared<MockModelServiceStub>();
         end_point_ = std::make_shared<GRPCEndPoint>(stub_);
 
