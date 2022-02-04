@@ -4,7 +4,6 @@
 #include "ModelMock.h"
 #include "utilities/CreateProtoObjects.h"
 #include "utilities/ComparisonProtoObjects.h"
-#include "logging/Initialisation.h"
 
 using namespace model;
 using ::testing::Return;
@@ -12,9 +11,6 @@ using ::testing::Return;
 class GRPCEndPointServerTest : public ::testing::Test {
 public:
     void SetUp() override {
-        InitialisationLoggingToConsole(boost::log::trivial::fatal);
-        boost::log::core::get()->set_logging_enabled(false);
-
         model_ = std::make_shared<ModelMock>(
                 std::make_shared<TaskManager>(std::make_shared<IdGenerator>()));
         end_point_ = std::make_shared<GRPCEndPoint>(model_);

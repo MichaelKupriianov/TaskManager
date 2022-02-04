@@ -16,6 +16,7 @@ class TaskManagerTest : public ::testing::Test {
 public:
     void SetUp() override {
         InitialisationLoggingToConsole(boost::log::trivial::fatal);
+        boost::log::core::get()->set_logging_enabled(false);
 
         generator_ = std::make_shared<IdGeneratorMock>();
         manager_ = std::make_shared<model::TaskManager>(generator_);
