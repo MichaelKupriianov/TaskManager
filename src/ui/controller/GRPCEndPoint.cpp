@@ -17,7 +17,7 @@ bool GRPCEndPoint::AddTask(const Task& task) {
     grpc::Status status = stub_->AddTask(&context, request, &response);
 
     if (!status.ok()) {
-        LOG(error, status.error_message())
+        LOG(error, status.error_message());
     } else {
         LOG(debug, "Response " + static_cast<std::string>(
                 response.result() ? "{task successfully added}" : "{cannot add task}") + " received");
@@ -80,7 +80,7 @@ ManyTasksWithId GRPCEndPoint::ShowByLabel(const std::string& label, const TasksS
     grpc::Status status = stub_->ShowByLabel(&context, request, &response);
 
     if (!status.ok()) {
-        LOG(error, status.error_message())
+        LOG(error, status.error_message());
     } else {
         LOG(debug, "Response with " + std::to_string(response.tasks().tasks_size())  + " tasks received");
     }
