@@ -15,7 +15,7 @@ std::shared_ptr<Step> Add::execute(Context& context) {
     machine.Run(sub_context);
 
     if (view_->Confirm()) {
-        LOG(info, "Request to AddTask with task: {" + convert::TaskToString(*sub_context.task()) + "} successfully added");
+        LOG(debug, "Request to AddTask with task: {" + sub_context.task()->ShortDebugString() + "} created");
         context.set_command(std::make_shared<command::Add>(*sub_context.task()));
     }
     return factory_->GetInitialStep();

@@ -55,7 +55,7 @@ void InitialisationLoggingToFile(const std::string& filename, const boost::log::
     sink->locked_backend()->add_stream(boost::make_shared<std::ofstream>(filename));
 
     sink->set_formatter(&Formatter);
-    sink->set_filter(log::trivial::severity >= log::trivial::info);
+    sink->set_filter(log::trivial::severity >= severity);
 
     log::core::get()->add_sink(sink);
 }

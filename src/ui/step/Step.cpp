@@ -116,8 +116,8 @@ std::shared_ptr<Step> ShowByLabel::execute(Context& context) {
     TasksSortBy sort_by{view_->ReadSortBy(name())};
 
     context.set_command(std::make_shared<command::ShowByLabel>(label, sort_by));
-    LOG(info, "Request to ShowByLabel with label: {" + label + "} and TasksSortBy: {"
-              + std::to_string(sort_by) + "} successfully added");
+    LOG(debug, "Request to ShowByLabel with label: {" + label + "} and TasksSortBy: {"
+              + convert::ToString(sort_by) + "} created");
     return factory_->GetInitialStep();
 }
 

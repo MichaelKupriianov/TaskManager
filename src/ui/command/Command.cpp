@@ -1,6 +1,4 @@
 #include "ui/command/Command.h"
-#include "logging/Log.h"
-#include "utilities/Convert.h"
 
 namespace ui::command {
 
@@ -12,7 +10,6 @@ Add::Add(const Task& task) : task_{task} {}
 
 Result Add::execute(const std::shared_ptr<Controller>& controller) {
     controller->AddTask(task_);
-    LOG(info, "Request to AddTask with task: {" + convert::TaskToString(task_)+ "} sent to model");
     return Result(false);
 }
 
@@ -77,8 +74,6 @@ ShowByLabel::ShowByLabel(const std::string& label, const TasksSortBy& sort_by)
         : label_{label}, sort_by_{sort_by} {}
 
 Result ShowByLabel::execute(const std::shared_ptr<Controller>& controller) {
-    LOG(info, "Request to ShowByLabel with label: {" + label_ + "} and TasksSortBy: {"
-              + std::to_string(sort_by_) + "} sent to model");
     return Result(controller->ShowByLabel(label_, sort_by_));
 }
 

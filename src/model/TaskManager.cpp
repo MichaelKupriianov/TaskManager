@@ -9,11 +9,12 @@ TaskManager::TaskManager(const std::shared_ptr<IdGenerator>& generator) :
 bool TaskManager::AddTask(const Task& task) {
     TaskId id{generator_->GenerateId()};
     if (tasks_.find(id) != tasks_.end()) {
-        LOG(error, "IdGenerator returns the id " + std::to_string(id.value()) + ", that is already in use.");
+        LOG(error, "IdGenerator returns the id {" + std::to_string(id.value()) + "}, that is already in use.");
         return false;
     }
     tasks_.insert({id, CreateHierarchicalTask(task, std::nullopt)});
-    LOG(info, "Task with {" + convert::TaskToString(CreateTaskWithId(id, task)) + "} successfully added.");
+
+    LOG(debug, "Task with {" + task.ShortDebugString() + "} added.");
     return true;
 }
 
@@ -68,7 +69,9 @@ ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSo
             result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
         }
     }
-    LOG(info, "Array of tasks with label: " + label + " successfully returned");
+
+    LOG(debug, "Array from " + std::to_string(result.tasks_size()) + " tasks returned");
+
     SortTasksWithId(result, sort_by);
     return result;
 }
