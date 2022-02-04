@@ -6,7 +6,7 @@ bool Model::AddTask(const Task& task) {
     return manager_->AddTask(task);
 }
 
-bool Model::AddSubTask(const Task& task,const TaskId& id) {
+bool Model::AddSubTask(const Task& task, const TaskId& id) {
     return manager_->AddSubTask(task, id);
 }
 
