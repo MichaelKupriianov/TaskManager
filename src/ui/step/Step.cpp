@@ -82,6 +82,8 @@ std::shared_ptr<Step> Save::execute(Context& context) {
     return factory_->GetInitialStep();
 }
 
+std::string Save::name() { return "[Save to file]"; }
+
 Show::Show(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
 
@@ -122,8 +124,6 @@ std::shared_ptr<Step> ShowByLabel::execute(Context& context) {
 }
 
 std::string ShowByLabel::name() { return "[Show by label]"; }
-
-std::string Save::name() { return "[Save to file]"; }
 
 Load::Load(const std::shared_ptr<Factory>& factory, const std::shared_ptr<View>& view) :
         factory_{factory}, view_{view} {}
