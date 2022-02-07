@@ -1,14 +1,11 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "ui/step/SubSteps.h"
+#include "ui/Factory.h"
 #include "ui/view/ViewMock.h"
-#include "ui/FactoryMock.h"
 #include "ui/ContextMock.h"
 
 using ::testing::Return;
-using ::testing::AtLeast;
-using ::testing::InSequence;
-using ::testing::_;
 
 using namespace ui;
 using namespace ui::step;
@@ -17,12 +14,9 @@ class SubStepTest : public ::testing::Test {
 public:
     void SetUp() override {
         task_ = std::make_shared<Task>();
-        auto reader = std::make_shared<Reader>();
-        auto printer = std::make_shared<Printer>();
-        view_ = std::make_shared<ViewMock>(reader, printer);
+        view_ = std::make_shared<ViewMock>(std::make_shared<Reader>(), std::make_shared<Printer>());
         factory_ = std::make_shared<Factory>(view_);
-        auto Result = std::make_shared<command::Result>(false);
-        context_ = std::make_shared<ContextMock>(Result);
+        context_ = std::make_shared<ContextMock>("");
     }
 
 protected:
