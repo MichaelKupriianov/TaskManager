@@ -3,10 +3,25 @@
 #include "ui/controller/DefaultController.h"
 #include "model/Model.h"
 #include "logging/Initialisation.h"
+#include <boost/program_options.hpp>
 
-int main() {
+namespace options = boost::program_options;
+
+int main(int argc, char** argv) {
+    options::options_description general_options("Available options");
+    general_options.add_options()
+            ("debug", "debug logging mode");
+
+    options::variables_map arguments;
+    options::store(options::parse_command_line(argc, argv, general_options), arguments);
+    options::notify(arguments);
+
     ConsoleLogging{boost::log::trivial::error};
-    FileLogging{"main.log", boost::log::trivial::debug};
+
+    if (arguments.find("debug") != arguments.end())
+        FileLogging{"main.log", boost::log::trivial::debug};
+    else
+        FileLogging{"main.log", boost::log::trivial::info};
 
     auto generator = std::make_shared<model::IdGenerator>();
     auto manager = std::make_shared<model::TaskManager>(generator);
