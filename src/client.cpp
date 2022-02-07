@@ -6,12 +6,30 @@
 #include "ui/Factory.h"
 #include "logging/Initialisation.h"
 #include "logging/Log.h"
+#include <boost/program_options.hpp>
 
-int main() {
+namespace options = boost::program_options;
+
+int main(int argc, char** argv) {
+    std::string host, port;
+    options::options_description general_options("Available options");
+    general_options.add_options()
+            ("debug", "debug logging mode")
+            ("host,h", options::value<std::string>(&host)->default_value("localhost"))
+            ("port,p", options::value<std::string>(&port)->default_value("1234"));
+
+    options::variables_map arguments;
+    options::store(options::parse_command_line(argc, argv, general_options), arguments);
+    options::notify(arguments);
+
     ConsoleLogging{boost::log::trivial::error};
-    FileLogging{"client.log", boost::log::trivial::debug};
 
-    std::string target_str = "localhost:1234";
+    if (arguments.find("debug") != arguments.end())
+        FileLogging{"client.log", boost::log::trivial::debug};
+    else
+        FileLogging{"client.log", boost::log::trivial::info};
+
+    std::string target_str = host + ":" + port;
 
     auto reader = std::make_shared<ui::Reader>();
     auto printer = std::make_shared<ui::Printer>();
