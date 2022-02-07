@@ -22,17 +22,17 @@ public:
     virtual void PrintHelp();
     virtual void PrintQuit();
     virtual step::Type ReadCommand();
-    virtual TaskId ReadId(const std::string& command);
-    virtual TaskId ReadParentId(const std::string& command);
-    virtual std::string ReadTitle(const std::string& command);
-    virtual Task::Priority ReadPriority(const std::string& command);
-    virtual google::protobuf::Timestamp ReadDate(const std::string& command);
-    virtual std::vector<std::string> ReadLabels(const std::string& command);
+    virtual TaskId ReadId(const std::string& wizard);
+    virtual TaskId ReadParentId(const std::string& wizard);
+    virtual std::string ReadTitle(const std::string& wizard);
+    virtual Task::Priority ReadPriority(const std::string& wizard);
+    virtual google::protobuf::Timestamp ReadDate(const std::string& wizard);
+    virtual std::vector<std::string> ReadLabels(const std::string& wizard);
     virtual bool Confirm();
-    virtual bool ReadIfPrintSubtasks(const std::string& command);
-    virtual std::string ReadLabel(const std::string& command);
-    virtual TasksSortBy ReadSortBy(const std::string& command);
-    virtual std::string ReadFilename(const std::string& command);
+    virtual bool ReadIfPrintSubtasks(const std::string& wizard);
+    virtual std::string ReadLabel(const std::string& wizard);
+    virtual TasksSortBy ReadSortBy(const std::string& wizard);
+    virtual std::string ReadFilename(const std::string& wizard);
 
     virtual void PrintManyTasksWithId(const ManyTasksWithId&);
     virtual void PrintCompositeTask(const CompositeTask&);

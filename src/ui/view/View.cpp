@@ -38,52 +38,52 @@ step::Type View::ReadCommand() {
     return ReadCommand();
 }
 
-TaskId View::ReadId(const std::string& command) {
-    printer_->PrintString(command + " ID: ");
+TaskId View::ReadId(const std::string& wizard) {
+    printer_->PrintString(wizard + " ID: ");
     std::string string_id{reader_->ReadString()};
 
     if (auto result{convert::StringToId(string_id)}; result.has_value())
         return CreateTaskId(result.value());
 
     printer_->PrintString("Enter the ID in the correct format\n");
-    return ReadId(command);
+    return ReadId(wizard);
 }
 
-TaskId View::ReadParentId(const std::string& command) {
-    printer_->PrintString(command + " Parent ID: ");
+TaskId View::ReadParentId(const std::string& wizard) {
+    printer_->PrintString(wizard + " Parent ID: ");
     std::string parent_id{reader_->ReadString()};
 
     if (auto result{convert::StringToId(parent_id)}; result.has_value())
         return CreateTaskId(result.value());
 
     printer_->PrintString("Enter the ID in the correct format\n");
-    return ReadParentId(command);
+    return ReadParentId(wizard);
 }
 
-std::string View::ReadTitle(const std::string& command) {
-    printer_->PrintString(command + " title: ");
+std::string View::ReadTitle(const std::string& wizard) {
+    printer_->PrintString(wizard + " title: ");
     std::string title{reader_->ReadString()};
 
     if (!title.empty())
         return title;
 
     printer_->PrintString("Title should be non-empty\n");
-    return ReadTitle(command);
+    return ReadTitle(wizard);
 }
 
-Task::Priority View::ReadPriority(const std::string& command) {
-    printer_->PrintString(command + " priority (high, medium, low or none): ");
+Task::Priority View::ReadPriority(const std::string& wizard) {
+    printer_->PrintString(wizard + " priority (high, medium, low or none): ");
     std::string priority{reader_->ReadString()};
 
     if (auto result{convert::StringToPriority(priority)}; result.has_value())
         return result.value();
 
     printer_->PrintString("There is no such priority\n");
-    return ReadPriority(command);
+    return ReadPriority(wizard);
 }
 
-google::protobuf::Timestamp View::ReadDate(const std::string& command) {
-    printer_->PrintString(command + " due date (in 12:12 12/12 or 12/12 format): ");
+google::protobuf::Timestamp View::ReadDate(const std::string& wizard) {
+    printer_->PrintString(wizard + " due date (in 12:12 12/12 or 12/12 format): ");
     std::string time{reader_->ReadString()};
 
     if (auto result{convert::StringToDate(time)}; result.has_value()) {
@@ -93,11 +93,11 @@ google::protobuf::Timestamp View::ReadDate(const std::string& command) {
     }
 
     printer_->PrintString("Enter the date in the correct format (or don't enter anything):\n");
-    return ReadDate(command);
+    return ReadDate(wizard);
 }
 
-std::vector<std::string> View::ReadLabels(const std::string& command) {
-    printer_->PrintString(command + " labels through a space (if there is no label, leave empty): ");
+std::vector<std::string> View::ReadLabels(const std::string& wizard) {
+    printer_->PrintString(wizard + " labels through a space (if there is no label, leave empty): ");
     std::string labels{reader_->ReadString()};
     return convert::StringToLabels(labels);
 }
@@ -111,45 +111,45 @@ bool View::Confirm() {
     return Confirm();
 }
 
-bool View::ReadIfPrintSubtasks(const std::string& command) {
-    printer_->PrintString(command + " Print subtasks? (y/n): ");
+bool View::ReadIfPrintSubtasks(const std::string& wizard) {
+    printer_->PrintString(wizard + " Print subtasks? (y/n): ");
     std::string answer{reader_->ReadString()};
 
     if (answer == "y" || answer.empty()) return true;
     if (answer == "n") return false;
-    return ReadIfPrintSubtasks(command);
+    return ReadIfPrintSubtasks(wizard);
 }
 
-std::string View::ReadLabel(const std::string& command) {
-    printer_->PrintString(command + " label: ");
+std::string View::ReadLabel(const std::string& wizard) {
+    printer_->PrintString(wizard + " label: ");
     std::string label{reader_->ReadString()};
 
     if (!label.empty())
         return label;
 
     printer_->PrintString("Label should be non-empty\n");
-    return ReadLabel(command);
+    return ReadLabel(wizard);
 }
 
-TasksSortBy View::ReadSortBy(const std::string& command) {
-    printer_->PrintString(command + " sort by? (id, date or priority): ");
+TasksSortBy View::ReadSortBy(const std::string& wizard) {
+    printer_->PrintString(wizard + " sort by? (id, date or priority): ");
     std::string answer{reader_->ReadString()};
 
     if (auto result{convert::StringToSortBy(answer)}; result.has_value())
         return result.value();
 
-    return ReadSortBy(command);
+    return ReadSortBy(wizard);
 }
 
-std::string View::ReadFilename(const std::string& command) {
-    printer_->PrintString(command + " filename: ");
+std::string View::ReadFilename(const std::string& wizard) {
+    printer_->PrintString(wizard + " filename: ");
     std::string filename{reader_->ReadString()};
 
     if (!filename.empty())
         return filename;
 
     printer_->PrintString("Filename should be non-empty\n");
-    return ReadFilename(command);
+    return ReadFilename(wizard);
 }
 
 void View::PrintManyTasksWithId(const ManyTasksWithId& tasks) {

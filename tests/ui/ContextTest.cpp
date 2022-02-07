@@ -35,9 +35,9 @@ TEST_F(ContextTest, shouldWorkWithTask) {
     EXPECT_EQ(context.task()->labels()[0], "qwerty");
 }
 
-TEST_F(ContextTest, shouldWorkWithCommandName) {
+TEST_F(ContextTest, shouldWorkWithWizardString) {
     Context context{"Add"};
-    EXPECT_EQ(context.command_name(), "Add");
+    EXPECT_EQ(context.wizard_string(), "Add");
 }
 
 TEST_F(ContextTest, shouldFinished) {

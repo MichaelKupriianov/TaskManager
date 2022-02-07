@@ -8,7 +8,7 @@ SubStepTitle::SubStepTitle(const std::shared_ptr<Factory>& factory, const std::s
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> SubStepTitle::execute(Context& context) {
-    const std::string title{view_->ReadTitle(context.command_name())};
+    const std::string title{view_->ReadTitle(context.wizard_string())};
     context.task()->set_title(title);
     return factory_->GetNextSubStepFrom(*this);
 }
@@ -17,7 +17,7 @@ SubStepPriority::SubStepPriority(const std::shared_ptr<Factory>& factory, const 
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> SubStepPriority::execute(Context& context) {
-    Task::Priority priority(view_->ReadPriority(context.command_name()));
+    Task::Priority priority(view_->ReadPriority(context.wizard_string()));
     context.task()->set_priority(priority);
     return factory_->GetNextSubStepFrom(*this);
 }
@@ -26,7 +26,7 @@ SubStepDate::SubStepDate(const std::shared_ptr<Factory>& factory, const std::sha
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> SubStepDate::execute(Context& context) {
-    google::protobuf::Timestamp date(view_->ReadDate(context.command_name()));
+    google::protobuf::Timestamp date(view_->ReadDate(context.wizard_string()));
     context.task()->set_allocated_date(new google::protobuf::Timestamp(date));
     return factory_->GetNextSubStepFrom(*this);
 }
@@ -35,7 +35,7 @@ SubStepLabel::SubStepLabel(const std::shared_ptr<Factory>& factory, const std::s
         factory_{factory}, view_{view} {}
 
 std::shared_ptr<Step> SubStepLabel::execute(Context& context) {
-    const std::vector<std::string> labels{view_->ReadLabels(context.command_name())};
+    const std::vector<std::string> labels{view_->ReadLabels(context.wizard_string())};
     for (const auto& label: labels)
         context.task()->add_labels(label);
     context.finished();

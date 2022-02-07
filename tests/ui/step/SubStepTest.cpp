@@ -38,7 +38,7 @@ TEST_F(SubStepTest, shouldReadTitle) {
     EXPECT_CALL(*view_, ReadTitle(_))
             .Times(1)
             .WillOnce(Return("title"));
-    EXPECT_CALL(*context_, command_name())
+    EXPECT_CALL(*context_, wizard_string())
             .Times(1);
     EXPECT_CALL(*context_, task())
             .Times(1)
@@ -53,7 +53,7 @@ TEST_F(SubStepTest, shouldReadPriority) {
     EXPECT_CALL(*view_, ReadPriority(_))
             .Times(1)
             .WillOnce(Return(Task_Priority_LOW));
-    EXPECT_CALL(*context_, command_name())
+    EXPECT_CALL(*context_, wizard_string())
             .Times(1);
     EXPECT_CALL(*context_, task())
             .Times(1)
@@ -68,7 +68,7 @@ TEST_F(SubStepTest, shouldReadDate) {
     EXPECT_CALL(*view_, ReadDate(_))
             .Times(1)
             .WillOnce(Return(google::protobuf::Timestamp()));
-    EXPECT_CALL(*context_, command_name())
+    EXPECT_CALL(*context_, wizard_string())
             .Times(1);
     EXPECT_CALL(*context_, task())
             .Times(1)
@@ -83,7 +83,7 @@ TEST_F(SubStepTest, shouldReadLabels) {
     EXPECT_CALL(*view_, ReadLabels("Add"))
             .Times(1)
             .WillOnce(Return(std::vector<std::string>{"label_1", "label_2"}));
-    EXPECT_CALL(*context_, command_name())
+    EXPECT_CALL(*context_, wizard_string())
             .Times(1)
             .WillOnce(Return("Add"));
     EXPECT_CALL(*context_, task())
