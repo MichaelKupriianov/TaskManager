@@ -5,6 +5,7 @@
 #include "ui/FactoryMock.h"
 #include "ui/ContextMock.h"
 #include "utilities/CreateProtoObjects.h"
+#include "logging/Initialisation.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -17,6 +18,8 @@ using namespace ui::step;
 class StepTest : public ::testing::Test {
 public:
     void SetUp() override {
+        ConsoleLogging{boost::log::trivial::fatal};
+
         task_ = std::make_shared<Task>();
         id_ = std::make_shared<TaskId>();
         task_with_id_ = std::make_shared<TaskWithId>();
