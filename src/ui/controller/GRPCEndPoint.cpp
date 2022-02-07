@@ -1,6 +1,8 @@
 #include "GRPCEndPoint.h"
 #include "Requests.pb.h"
 #include "Responses.pb.h"
+#include "logging/Log.h"
+#include "utilities/Convert.h"
 
 namespace ui {
 
@@ -10,7 +12,17 @@ bool GRPCEndPoint::AddTask(const Task& task) {
     AddTaskResponse response;
     grpc::ClientContext context;
 
+    LOG(debug, "Request with Task: {" << task.ShortDebugString() + "} sent");
+
     grpc::Status status = stub_->AddTask(&context, request, &response);
+
+    if (!status.ok()) {
+        LOG(error, status.error_message());
+    } else {
+        LOG(debug, "Response " + static_cast<std::string>(
+                response.result() ? "{task successfully added}" : "{cannot add task}") + " received");
+    }
+
     return response.result();
 }
 
@@ -63,7 +75,16 @@ ManyTasksWithId GRPCEndPoint::ShowByLabel(const std::string& label, const TasksS
     ShowByLabelResponse response;
     grpc::ClientContext context;
 
+    LOG(debug, "Request with label: {" << label + "} and TasksSortBy: {" + convert::ToString(sort_by) + +"} sent");
+
     grpc::Status status = stub_->ShowByLabel(&context, request, &response);
+
+    if (!status.ok()) {
+        LOG(error, status.error_message());
+    } else {
+        LOG(debug, "Response with " + std::to_string(response.tasks().tasks_size())  + " tasks received");
+    }
+
     return response.tasks();
 }
 

@@ -4,8 +4,13 @@
 #include "ui/controller/GRPCEndPoint.h"
 #include "ui/StateMachine.h"
 #include "ui/Factory.h"
+#include "logging/Initialisation.h"
+#include "logging/Log.h"
 
 int main() {
+    ConsoleLogging{boost::log::trivial::error};
+    FileLogging{"client.log", boost::log::trivial::debug};
+
     std::string target_str = "localhost:1234";
 
     auto reader = std::make_shared<ui::Reader>();
@@ -19,6 +24,7 @@ int main() {
     std::shared_ptr<ui::Controller> controller =
             std::make_shared<ui::GRPCEndPoint>(
                     ModelService::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())));
+    LOG(info, "Client asks on " + target_str);
 
     machine->Run(controller);
 }

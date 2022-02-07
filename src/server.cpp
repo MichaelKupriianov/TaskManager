@@ -3,8 +3,13 @@
 #include <grpcpp/health_check_service_interface.h>
 #include "model/GRPCEndPoint.h"
 #include "model/Model.h"
+#include "logging/Initialisation.h"
+#include "logging/Log.h"
 
 int main() {
+    ConsoleLogging{boost::log::trivial::error};
+    FileLogging{"server.log", boost::log::trivial::debug};
+
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
     model::GRPCEndPoint service{model};
@@ -15,7 +20,7 @@ int main() {
     builder.RegisterService(&service);
 
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << '\n';
+    LOG(info, "Server listening on " + server_address);
 
     server->Wait();
 }
