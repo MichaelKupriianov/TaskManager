@@ -65,33 +65,31 @@ TEST_F(SubStepTest, shouldReadPriority) {
 TEST_F(SubStepTest, shouldReadDate) {
     auto step = SubStepDate(factory_, view_);
 
-    EXPECT_CALL(*view_, ReadDate(_))
-            .Times(1)
-            .WillOnce(Return(google::protobuf::Timestamp()));
-    EXPECT_CALL(*context_, wizard_string())
-            .Times(1);
-    EXPECT_CALL(*context_, task())
-            .Times(1)
-            .WillOnce(Return(task_));
-    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(
-            step.execute(*context_)));
+    EXPECT_CALL(*context_, wizard_string()).WillOnce(Return("Edit"));
+
+    google::protobuf::Timestamp date;
+    date.set_seconds(100);
+
+    EXPECT_CALL(*view_, ReadDate("Edit")).WillOnce(Return(date));
+    EXPECT_CALL(*context_, task()).WillOnce(Return(task_));
+
+    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(step.execute(*context_)));
 }
 
 TEST_F(SubStepTest, shouldReadLabels) {
     auto step = SubStepLabel(factory_, view_);
 
+    EXPECT_CALL(*context_, wizard_string()).WillOnce(Return("Add"));
     EXPECT_CALL(*view_, ReadLabels("Add"))
-            .Times(1)
             .WillOnce(Return(std::vector<std::string>{"label_1", "label_2"}));
-    EXPECT_CALL(*context_, wizard_string())
-            .Times(1)
-            .WillOnce(Return("Add"));
+
     EXPECT_CALL(*context_, task())
             .Times(2)
             .WillRepeatedly(Return(task_));
-    EXPECT_CALL(*context_, finished())
-            .Times(1);
+    EXPECT_CALL(*context_, finished()).Times(1);
 
-    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(
-            step.execute(*context_)));
+    EXPECT_TRUE(std::dynamic_pointer_cast<SubStepLabel>(step.execute(*context_)));
+    ASSERT_EQ(task_->labels().size(), 2);
+    EXPECT_EQ(task_->labels()[0], "label_1");
+    EXPECT_EQ(task_->labels()[1], "label_2");
 }
