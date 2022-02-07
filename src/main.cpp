@@ -5,8 +5,8 @@
 #include "logging/Initialisation.h"
 
 int main() {
-    InitialisationLoggingToConsole(boost::log::trivial::error);
-    InitialisationLoggingToFile("main.log", boost::log::trivial::debug);
+    ConsoleLogging{boost::log::trivial::error};
+    FileLogging{"main.log", boost::log::trivial::debug};
 
     auto generator = std::make_shared<model::IdGenerator>();
     auto manager = std::make_shared<model::TaskManager>(generator);

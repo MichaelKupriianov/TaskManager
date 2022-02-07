@@ -8,8 +8,8 @@
 #include "logging/Log.h"
 
 int main() {
-    InitialisationLoggingToConsole(boost::log::trivial::error);
-    InitialisationLoggingToFile("client.log", boost::log::trivial::debug);
+    ConsoleLogging{boost::log::trivial::error};
+    FileLogging{"client.log", boost::log::trivial::debug};
 
     std::string target_str = "localhost:1234";
 

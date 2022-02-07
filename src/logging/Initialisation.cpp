@@ -34,7 +34,7 @@ void Initialisation() {
     log::core::get()->add_global_attribute("Function", log::attributes::mutable_constant<std::string>(""));
 }
 
-void InitialisationLoggingToConsole(const boost::log::trivial::severity_level& severity) {
+ConsoleLogging::ConsoleLogging(const boost::log::trivial::severity_level& severity) {
     Initialisation();
 
     boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();
@@ -47,7 +47,7 @@ void InitialisationLoggingToConsole(const boost::log::trivial::severity_level& s
     log::core::get()->add_sink(sink);
 }
 
-void InitialisationLoggingToFile(const std::string& filename, const boost::log::trivial::severity_level& severity) {
+FileLogging::FileLogging(const std::string& filename, const boost::log::trivial::severity_level& severity) {
     Initialisation();
 
     boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();

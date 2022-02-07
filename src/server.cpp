@@ -7,8 +7,8 @@
 #include "logging/Log.h"
 
 int main() {
-    InitialisationLoggingToConsole(boost::log::trivial::error);
-    InitialisationLoggingToFile("server.log", boost::log::trivial::debug);
+    ConsoleLogging{boost::log::trivial::error};
+    FileLogging{"server.log", boost::log::trivial::debug};
 
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
