@@ -23,10 +23,8 @@ int main(int argc, char** argv) {
 
     ConsoleLogging{boost::log::trivial::error};
 
-    if (arguments.find("debug") != arguments.end())
-        FileLogging{"server.log", boost::log::trivial::debug};
-    else
-        FileLogging{"server.log", boost::log::trivial::info};
+    (arguments.find("debug") != arguments.end()) ? FileLogging{"client.log", boost::log::trivial::debug} :
+                                                   FileLogging{"client.log", boost::log::trivial::info};
 
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));

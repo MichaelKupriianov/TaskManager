@@ -24,10 +24,8 @@ int main(int argc, char** argv) {
 
     ConsoleLogging{boost::log::trivial::error};
 
-    if (arguments.find("debug") != arguments.end())
-        FileLogging{"client.log", boost::log::trivial::debug};
-    else
-        FileLogging{"client.log", boost::log::trivial::info};
+    (arguments.find("debug") != arguments.end()) ? FileLogging{"client.log", boost::log::trivial::debug} :
+                                                   FileLogging{"client.log", boost::log::trivial::info};
 
     std::string target_str = host + ":" + port;
 
