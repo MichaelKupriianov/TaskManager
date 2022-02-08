@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include <google/protobuf/util/time_util.h>
 #include "ModelService_mock.grpc.pb.h"
 #include "ui/controller/GRPCEndPoint.h"
 #include "utilities/CreateProtoObjects.h"

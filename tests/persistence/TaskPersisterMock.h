@@ -6,8 +6,7 @@
 
 class TaskPersisterMock : public TaskPersister {
 public:
-    TaskPersisterMock(const std::string& filename)
-            : TaskPersister(filename) {}
+    explicit TaskPersisterMock(const std::string& filename) : TaskPersister(filename) {}
 
     MOCK_METHOD(bool, Save, (const ManyHierarchicalTasks&), (override));
     MOCK_METHOD(std::optional<ManyHierarchicalTasks>, Load, (), (override));

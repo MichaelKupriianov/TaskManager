@@ -6,8 +6,7 @@
 
 class ModelMock : public model::Model {
 public:
-    ModelMock(const std::shared_ptr<model::TaskManager>& manager)
-            : model::Model(manager) {}
+    explicit ModelMock(const std::shared_ptr<model::TaskManager>& manager) : model::Model(manager) {}
 
     MOCK_METHOD(bool, AddTask, (const Task&), (override));
     MOCK_METHOD(bool, AddSubTask, (const Task&, const TaskId&), (override));

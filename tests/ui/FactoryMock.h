@@ -6,7 +6,7 @@
 
 class FactoryMock : public ui::Factory {
 public:
-    FactoryMock(const std::shared_ptr<ui::View>& view) : ui::Factory(view) {}
+    explicit FactoryMock(const std::shared_ptr<ui::View>& view) : ui::Factory(view) {}
 
     MOCK_METHOD(std::shared_ptr<ui::step::Step>, CreateStep, (ui::step::Type), (override));
     MOCK_METHOD(std::shared_ptr<ui::step::Step>, GetInitialStep, (), (override));

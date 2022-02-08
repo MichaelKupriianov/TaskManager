@@ -6,8 +6,8 @@
 
 class ContextMock : public ui::Context {
 public:
-    ContextMock(const std::shared_ptr<ui::command::Result>& result) : Context(result) {}
-    ContextMock(const std::string& name) : Context(name) {}
+    explicit ContextMock(const std::shared_ptr<ui::command::Result>& result) : Context(result) {}
+    explicit ContextMock(const std::string& name) : Context(name) {}
 
     MOCK_METHOD(std::shared_ptr<ui::command::Command>, command, (), (const, override));
     MOCK_METHOD(std::shared_ptr<ui::command::Result>, result, (), (const, override));

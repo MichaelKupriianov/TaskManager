@@ -20,8 +20,8 @@ void Formatter(log::record_view const& rec, log::formatting_ostream& stream) {
     stream << log::extract<unsigned int>("LineID", rec) << " ";
     stream << "[" << log::extract<boost::posix_time::ptime>("TimeStamp", rec) << "] ";
     stream << "<" << rec[log::trivial::severity] << "> ";
-    log::value_ref<std::string> fullpath = log::extract<std::string>("File", rec);
-    stream << "(" << boost::filesystem::path(fullpath.get()).filename().string() << ":";
+    log::value_ref<std::string> full_path = log::extract<std::string>("File", rec);
+    stream << "(" << boost::filesystem::path(full_path.get()).filename().string() << ":";
     stream << log::extract<int>("Line", rec) << ") ";
     stream << "|" << log::extract<std::string>("Function", rec) << "| ";
     stream << rec[log::expressions::smessage];
