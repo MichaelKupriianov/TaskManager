@@ -4,6 +4,7 @@
 #include "ui/Factory.h"
 #include "model/Model.h"
 #include "ui/controller/DefaultController.h"
+#include "logging/Initialisation.h"
 
 using ::testing::Return;
 using ::testing::AtLeast;
@@ -23,6 +24,8 @@ public:
 class IntegrationTest : public ::testing::Test {
 public:
     void SetUp() override {
+        ConsoleLogging{boost::log::trivial::fatal};
+
         auto generator = std::make_shared<model::IdGenerator>();
         auto manager = std::make_shared<model::TaskManager>(generator);
         auto model =std::make_shared<model::Model>(manager);
