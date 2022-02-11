@@ -18,8 +18,8 @@ int main(int argc, char** argv) {
 
     ConsoleLogging{boost::log::trivial::error};
 
-    (arguments.find("debug") != arguments.end()) ? FileLogging{"client.log", boost::log::trivial::debug} :
-                                                   FileLogging{"client.log", boost::log::trivial::info};
+    (arguments.find("debug") != arguments.end()) ? FileLogging{"main.log", boost::log::trivial::debug} :
+                                                   FileLogging{"main.log", boost::log::trivial::info};
 
     auto generator = std::make_shared<model::IdGenerator>();
     auto manager = std::make_shared<model::TaskManager>(generator);
