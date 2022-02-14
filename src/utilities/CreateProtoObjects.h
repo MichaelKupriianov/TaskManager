@@ -2,6 +2,7 @@
 
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
+#include <optional>
 
 TaskId CreateTaskId(int value);
 
