@@ -20,11 +20,11 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-find_package(Protobuf CONFIG REQUIRED)
+find_package(Protobuf REQUIRED)
 message(STATUS "Using protobuf ${Protobuf_VERSION}")
 find_program(_PROTOBUF_PROTOC protoc)
 
-find_package(gRPC CONFIG REQUIRED)
+find_package(gRPC REQUIRED)
 message(STATUS "Using gRPC ${gRPC_VERSION}")
 find_program(_GRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
 
