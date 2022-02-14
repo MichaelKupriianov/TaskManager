@@ -4,15 +4,31 @@
 #include "model/Model.h"
 #include "logging/Initialisation.h"
 #include "logging/Log.h"
+#include <boost/program_options.hpp>
 
-int main() {
+namespace options = boost::program_options;
+
+int main(int argc, char** argv) {
+    std::string host, port;
+    options::options_description general_options("Available options");
+    general_options.add_options()
+            ("debug", "debug logging mode")
+            ("host,h", options::value<std::string>(&host)->default_value("localhost"))
+            ("port,p", options::value<std::string>(&port)->default_value("1234"));
+
+    options::variables_map arguments;
+    options::store(options::parse_command_line(argc, argv, general_options), arguments);
+    options::notify(arguments);
+
     ConsoleLogging{boost::log::trivial::error};
-    FileLogging{"server.log", boost::log::trivial::debug};
+
+    (arguments.find("debug") != arguments.end()) ? FileLogging{"server.log", boost::log::trivial::debug} :
+                                                   FileLogging{"server.log", boost::log::trivial::info};
 
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
     model::GRPCEndPoint service{model};
-    std::string server_address("0.0.0.0:1234");
+    std::string server_address = host + ":" + port;
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
