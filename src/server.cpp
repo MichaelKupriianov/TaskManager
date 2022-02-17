@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
     model::GRPCEndPoint service{model};
-    std::string server_address = "localhost:" + port;
+    std::string server_address = "0.0.0.0:" + port;
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
