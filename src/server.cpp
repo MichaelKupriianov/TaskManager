@@ -9,11 +9,10 @@
 namespace options = boost::program_options;
 
 int main(int argc, char** argv) {
-    std::string host, port;
+    std::string port;
     options::options_description general_options("Available options");
     general_options.add_options()
             ("debug", "debug logging mode")
-            ("host,h", options::value<std::string>(&host)->default_value("localhost"))
             ("port,p", options::value<std::string>(&port)->default_value("1234"));
 
     options::variables_map arguments;
@@ -28,7 +27,7 @@ int main(int argc, char** argv) {
     auto model = std::make_shared<model::Model>(
             std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
     model::GRPCEndPoint service{model};
-    std::string server_address = host + ":" + port;
+    std::string server_address = "localhost:" + port;
 
     grpc::ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
