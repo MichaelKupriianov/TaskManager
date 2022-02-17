@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     options::options_description general_options("Available options");
     general_options.add_options()
             ("debug", "debug logging mode")
-            ("host,h", options::value<std::string>(&host)->default_value("localhost"))
+            ("host,h", options::value<std::string>(&host)->default_value("0.0.0.0"))
             ("port,p", options::value<std::string>(&port)->default_value("1234"));
 
     options::variables_map arguments;
