@@ -8,8 +8,7 @@
 namespace model {
 class Model {
 public:
-    explicit Model(const std::shared_ptr<model::TaskManager>& manager, const std::shared_ptr<std::shared_mutex>& mutex) :
-            manager_{manager}, mutex_{mutex} {}
+    explicit Model(const std::shared_ptr<model::TaskManager>& manager) : manager_{manager} {}
     virtual ~Model() = default;
 
     virtual bool AddTask(const Task& task);
@@ -27,7 +26,7 @@ public:
     virtual bool Load(const std::string& filename);
 private:
     const std::shared_ptr<TaskManager> manager_;
-    const std::shared_ptr<std::shared_mutex> mutex_;
+    std::shared_mutex mutex_;
 };
 }
 
