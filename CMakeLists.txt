@@ -6,17 +6,17 @@ include(GoogleTest)
 find_package(GTest CONFIG REQUIRED)
 enable_testing()
 
-set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
-set(Boost_USE_DEBUG_LIBS         OFF) # ignore debug libs and
-set(Boost_USE_RELEASE_LIBS       ON)  # only find release libs
-set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME    OFF)
+set(Boost_USE_STATIC_LIBS ON)  # only find static libs
+set(Boost_USE_DEBUG_LIBS OFF) # ignore debug libs and
+set(Boost_USE_RELEASE_LIBS ON)  # only find release libs
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
 
 find_package(Boost REQUIRED log_setup log program_options COMPONENTS)
-if(Boost_FOUND)
+if (Boost_FOUND)
     message(STATUS "Using BOOST ${Boost_VERSION}")
     include_directories(${Boost_INCLUDE_DIRS})
-endif()
+endif ()
 
 find_package(Protobuf CONFIG REQUIRED)
 message(STATUS "Using protobuf ${Protobuf_VERSION}")
@@ -49,12 +49,12 @@ macro(compile_proto_file filename)
     )
 endmacro(compile_proto_file)
 
-foreach(proto_file ${PROTO_SOURCES})
+foreach (proto_file ${PROTO_SOURCES})
     message("compiling ${proto_file}")
     compile_proto_file(${proto_file})
     get_filename_component(basename ${proto_file} NAME_WE)
     set(task_manager_generated_files ${task_manager_generated_files} ${GENERATED_DIR}/${basename}.pb.cc ${GENERATED_DIR}/${basename}.grpc.pb.cc)
-endforeach(proto_file)
+endforeach (proto_file)
 
 include_directories(${GENERATED_DIR})
 SET_SOURCE_FILES_PROPERTIES(${proto_src} ${proto_hdr} PROPERTIES GENERATED TRUE)
@@ -87,7 +87,7 @@ target_link_libraries(client_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(client_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
 gtest_discover_tests(client_tests)
 
-add_executable(integration_tests ${generated_files} ${server_src} ${client_src} tests/IntegrationTest.cpp)
+add_executable(integration_tests ${generated_files} ${server_src} ${client_src} tests/IntegrationTest.cpp tests/MultiThreadingTest.cpp)
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(integration_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
 gtest_discover_tests(integration_tests)
