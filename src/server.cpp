@@ -27,8 +27,7 @@ int main(int argc, char** argv) {
                                                    FileLogging{"server.log", boost::log::trivial::info};
 
     auto model = std::make_shared<model::Model>(
-            std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()),
-            std::make_shared<std::shared_mutex>());
+            std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>()));
 
     model::GRPCEndPoint service{model};
     std::string server_address = "0.0.0.0:" + port;
