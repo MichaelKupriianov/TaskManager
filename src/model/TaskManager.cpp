@@ -52,7 +52,7 @@ bool TaskManager::Delete(const TaskId& id) {
     if (tasks_.find(id) == tasks_.end())
         return false;
 
-    for (auto it = tasks_.begin();  it!=tasks_.end(); it++)
+    for (auto it = tasks_.begin();  it!=tasks_.end();)
         ((*it).second.has_parent() && (*it).second.parent() == id) ? tasks_.erase(it++) : ++it;
 
     tasks_.erase(id);
