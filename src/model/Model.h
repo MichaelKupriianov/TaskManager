@@ -1,13 +1,13 @@
 #pragma once
 
-#include <shared_mutex>
 #include "TaskManager.h"
 #include "persistence/TaskPersister.h"
 
 namespace model {
 class Model {
 public:
-    explicit Model(const std::shared_ptr<model::TaskManager>& manager) : manager_{manager} {}
+    explicit Model(const std::shared_ptr<model::TaskManager>& manager) :
+            manager_{manager} {}
     virtual ~Model() = default;
 
     virtual bool AddTask(const Task& task);
@@ -25,7 +25,6 @@ public:
     virtual bool Load(const std::string& filename);
 private:
     const std::shared_ptr<TaskManager> manager_;
-    std::shared_mutex mutex_;
 };
 }
 

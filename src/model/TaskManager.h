@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <shared_mutex>
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
 #include "IdGenerator.h"
@@ -35,5 +36,6 @@ public:
 private:
     std::map<TaskId, HierarchicalTask> tasks_;
     std::shared_ptr<IdGenerator> generator_;
+    mutable std::shared_mutex mutex_;
 };
 }

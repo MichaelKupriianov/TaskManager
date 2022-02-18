@@ -4,6 +4,7 @@
 #include <google/protobuf/util/delimited_message_util.h>
 
 bool TaskPersister::Save(const ManyHierarchicalTasks& tasks) {
+    std::unique_lock lock(mutex_);
     std::ofstream file(filename_);
     if (!file.is_open()) return false;
 
@@ -16,7 +17,9 @@ bool TaskPersister::Save(const ManyHierarchicalTasks& tasks) {
 }
 
 std::optional<ManyHierarchicalTasks> TaskPersister::Load() {
+    std::shared_lock lock(mutex_);
     ManyHierarchicalTasks result;
+
     std::ifstream file(filename_);
     if (!file.is_open()) return std::nullopt;
 

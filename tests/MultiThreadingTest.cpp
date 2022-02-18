@@ -53,8 +53,8 @@ protected:
 };
 
 TEST_F(MultiThreadingTest, shouldWorkWhenReceivesManyCommandsFromDifferentThreads) {
-    int number_of_thread = 8;
-    int number_of_commands = 512;
+    int number_of_thread = 16;
+    int number_of_commands = 2048;
 
     std::vector<std::thread> threads;
     for (int i = 0; i < number_of_thread; i++)
