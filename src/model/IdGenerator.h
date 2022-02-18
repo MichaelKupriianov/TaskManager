@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include "Task.pb.h"
 
 namespace model {
@@ -11,6 +12,6 @@ public:
 
     virtual ~IdGenerator() = default;
 private:
-    int max_id_;
+    std::atomic<int> max_id_;
 };
 }
