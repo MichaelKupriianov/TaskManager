@@ -11,8 +11,6 @@ Task CreateTask(const std::string& title, Task_Priority = Task_Priority_NONE,
 
 TaskWithId CreateTaskWithId(const TaskId& id, const Task& task);
 
-TaskWithId CreateTaskWithId(const int& id, const std::string& task);
-
 CompositeTask CreateCompositeTask(const TaskWithId& task, const ManyTasksWithId& child);
 
 HierarchicalTask CreateHierarchicalTask(const Task& task, std::optional<TaskId> id);

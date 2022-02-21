@@ -2,7 +2,6 @@
 
 namespace ui::step {
 enum class Type {
-    ROOT,
     HELP,
     QUIT,
     PRINT,
