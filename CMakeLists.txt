@@ -87,7 +87,7 @@ target_link_libraries(client_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(client_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
 gtest_discover_tests(client_tests)
 
-add_executable(integration_tests ${generated_files} ${server_src} ${client_src} tests/IntegrationTest.cpp tests/MultiThreadingTest.cpp)
+add_executable(integration_tests ${generated_files} ${server_src} ${client_src} tests/IntegrationTest.cpp)
 target_link_libraries(integration_tests GTest::gtest GTest::gmock GTest::gmock_main)
 target_link_libraries(integration_tests protobuf::libprotobuf gRPC::grpc++ gRPC::grpc++_reflection ${Boost_LIBRARIES})
 gtest_discover_tests(integration_tests)
