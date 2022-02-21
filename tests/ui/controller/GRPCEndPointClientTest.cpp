@@ -50,6 +50,17 @@ TEST_F(GRPCEndPointClientTest, shouldAddTask) {
     EXPECT_EQ(result, true);
 }
 
+TEST_F(GRPCEndPointClientTest, shouldHadleExceptionWhenAddTask) {
+    auto add{[&](auto* context, auto& request, auto* response) {
+        return grpc::Status::CANCELLED;
+    }};
+    EXPECT_CALL(*stub_, AddTask(_, _, _))
+            .WillOnce(Invoke(add));
+
+    auto result = end_point_->AddTask(*task_);
+    EXPECT_EQ(result, false);
+}
+
 TEST_F(GRPCEndPointClientTest, shouldAddSubTask) {
     auto add_sub{[&](auto* context, auto& request, auto* response) {
         EXPECT_EQ(request.task(), *task_);
@@ -116,6 +127,17 @@ TEST_F(GRPCEndPointClientTest, shouldShowByLabel) {
 
     auto result = end_point_->ShowByLabel("label", TasksSortBy::ID);
     EXPECT_EQ(result, *many_tasks_with_id);
+}
+
+TEST_F(GRPCEndPointClientTest, shouldHadleExceptionWhenShowByLabel) {
+    auto show{[&](auto* context, auto& request, auto* response) {
+        return grpc::Status::CANCELLED;
+    }};
+    EXPECT_CALL(*stub_, ShowByLabel(_, _, _))
+            .WillOnce(Invoke(show));
+
+    auto result = end_point_->ShowByLabel("label", TasksSortBy::ID);
+    EXPECT_EQ(result.tasks_size(), 0);
 }
 
 TEST_F(GRPCEndPointClientTest, shouldShowParents) {
