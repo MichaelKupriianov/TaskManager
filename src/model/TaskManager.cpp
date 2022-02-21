@@ -7,9 +7,9 @@ TaskManager::TaskManager(const std::shared_ptr<IdGenerator>& generator) :
         generator_{generator} {}
 
 bool TaskManager::AddTask(const Task& task) {
+    std::unique_lock lock(mutex_);
     TaskId id{generator_->GenerateId()};
 
-    std::unique_lock lock(mutex_);
     if (tasks_.find(id) != tasks_.end()) {
         LOG(error, "IdGenerator returns the id {" + std::to_string(id.value()) + "}, that is already in use.");
         return false;
@@ -67,7 +67,7 @@ bool TaskManager::Delete(const TaskId& id) {
     return true;
 }
 
-ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSortBy& sort_by) const {
+ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSortBy& sort_by) {
     ManyTasksWithId result;
     {
         std::shared_lock lock(mutex_);
@@ -89,7 +89,7 @@ ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSo
     return result;
 }
 
-ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) const {
+ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) {
     ManyTasksWithId result;
     {
         std::shared_lock lock(mutex_);
@@ -102,7 +102,7 @@ ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) const {
     return result;
 }
 
-CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sort_by) const {
+CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sort_by) {
     CompositeTask result;
     ManyTasksWithId child;
     {
@@ -122,7 +122,7 @@ CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sor
     return result;
 }
 
-ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) const {
+ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) {
     ManyCompositeTasks result;
     ManyTasksWithId parents = ShowParents(sort);
 
@@ -131,7 +131,7 @@ ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) const {
     return result;
 }
 
-ManyHierarchicalTasks TaskManager::GetAllTasks() const {
+ManyHierarchicalTasks TaskManager::GetAllTasks() {
     ManyHierarchicalTasks tasks;
     {
         std::shared_lock lock(mutex_);
