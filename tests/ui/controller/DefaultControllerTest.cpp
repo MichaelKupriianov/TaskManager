@@ -20,66 +20,87 @@ protected:
 
 TEST_F(DefaultControllerTest, shouldAddTask) {
     Task task{CreateTask("add")};
-    EXPECT_CALL(*model_, AddTask(*task_)).WillOnce(Return(true));
-    EXPECT_TRUE(controller_->AddTask(*task_));
+    EXPECT_CALL(*model_, AddTask(task)).WillOnce(Return(true));
+    EXPECT_TRUE(controller_->AddTask(task));
 }
 
-bool AddTask(const Task& task)
-override {
-return model_->
-AddTask(task);
-}
-bool AddSubTask(const Task& task, const TaskId& id)
-override {
-return model_->
-AddSubTask(task, id
-); }
-bool Edit(const TaskId& id, const Task& task)
-override {
-return model_->
-Edit(id, task
-); }
-bool Complete(const TaskId& id)
-override {
-return model_->
-Complete(id);
-}
-bool Delete(const TaskId& id)
-override {
-return model_->
-Delete(id);
+TEST_F(DefaultControllerTest, shouldAddSubTask) {
+    Task task{CreateTask("add_sub")};
+    TaskId id{CreateTaskId(1)};
+    EXPECT_CALL(*model_, AddSubTask(task, id)).WillOnce(Return(false));
+    EXPECT_FALSE(controller_->AddSubTask(task, id));
 }
 
-ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy& sort_by)
-override {
-return model_->
-ShowByLabel(label, sort_by
-);
-}
-ManyTasksWithId ShowParents(const TasksSortBy& sort_by)
-override {
-return model_->
-ShowParents(sort_by);
-}
-CompositeTask ShowTask(const TaskId& id, const TasksSortBy& sort_by)
-override {
-return model_->
-ShowTask(id, sort_by
-);
-}
-ManyCompositeTasks ShowAll(const TasksSortBy& sort_by)
-override {
-return model_->
-ShowAll(sort_by);
+TEST_F(DefaultControllerTest, shouldEditTask) {
+    Task task{CreateTask("edit")};
+    TaskId id{CreateTaskId(2)};
+    EXPECT_CALL(*model_, Edit(id, task)).WillOnce(Return(true));
+    EXPECT_TRUE(controller_->Edit(id, task));
 }
 
-bool Save(const std::string& filename)
-override {
-return model_->
-Save(filename);
+TEST_F(DefaultControllerTest, shouldCompleteTask) {
+    TaskId id{CreateTaskId(3)};
+    EXPECT_CALL(*model_, Complete(id)).WillOnce(Return(true));
+    EXPECT_TRUE(controller_->Complete(id));
 }
-bool Load(const std::string& filename)
-override {
-return model_->
-Load(filename);
+
+TEST_F(DefaultControllerTest, shouldDeleteTask) {
+    TaskId id{CreateTaskId(4)};
+    EXPECT_CALL(*model_, Delete(id)).WillOnce(Return(false));
+    EXPECT_FALSE(controller_->Delete(id));
+}
+
+TEST_F(DefaultControllerTest, shouldShowByLabel) {
+    std::string label = "label";
+    TasksSortBy sort_by = TasksSortBy::PRIORITY;
+    ManyTasksWithId tasks;
+    tasks.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(1), CreateTask("t")));
+
+    EXPECT_CALL(*model_, ShowByLabel(label, sort_by)).WillOnce(Return(tasks));
+    EXPECT_EQ(controller_->ShowByLabel(label, sort_by).tasks_size(), tasks.tasks_size());
+}
+
+TEST_F(DefaultControllerTest, shouldShowParents) {
+    TasksSortBy sort_by = TasksSortBy::DATE;
+    ManyTasksWithId tasks;
+    tasks.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(1), CreateTask("t")));
+    tasks.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(2), CreateTask("w")));
+
+    EXPECT_CALL(*model_, ShowParents(sort_by)).WillOnce(Return(tasks));
+    EXPECT_EQ(controller_->ShowParents(sort_by).tasks_size(), tasks.tasks_size());
+}
+
+TEST_F(DefaultControllerTest, shouldShowTask) {
+    TaskId id{CreateTaskId(5)};
+    TasksSortBy sort_by = TasksSortBy::ID;
+    CompositeTask task;
+    task.set_allocated_task(new TaskWithId(CreateTaskWithId(id, CreateTask("y"))));
+
+    EXPECT_CALL(*model_, ShowTask(id, sort_by)).WillOnce(Return(task));
+
+    auto result = controller_->ShowTask(id, sort_by);
+    EXPECT_EQ(result.task().task(), task.task().task());
+    EXPECT_EQ(result.task().id(), task.task().id());
+}
+
+TEST_F(DefaultControllerTest, shouldShowAllTasks) {
+    TasksSortBy sort_by = TasksSortBy::DATE;
+    ManyCompositeTasks tasks;
+
+    EXPECT_CALL(*model_, ShowAll(sort_by)).WillOnce(Return(tasks));
+
+    auto result = controller_->ShowAll(sort_by);
+    EXPECT_EQ(result.tasks_size(), tasks.tasks_size());
+}
+
+TEST_F(DefaultControllerTest, shouldSaveToFile) {
+    std::string filename = "file1";
+    EXPECT_CALL(*model_, Save(filename)).WillOnce(Return(true));
+    EXPECT_TRUE(controller_->Save(filename));
+}
+
+TEST_F(DefaultControllerTest, shouldLoadFromFile) {
+    std::string filename = "file2";
+    EXPECT_CALL(*model_, Load(filename)).WillOnce(Return(false));
+    EXPECT_FALSE(controller_->Load(filename));
 }
