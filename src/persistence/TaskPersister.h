@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <optional>
+#include <shared_mutex>
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
 
@@ -18,5 +19,6 @@ public:
     virtual ~TaskPersister() = default;
 private:
     const std::string filename_;
+    std::shared_mutex mutex_;
 };
 

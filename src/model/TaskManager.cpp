@@ -7,7 +7,9 @@ TaskManager::TaskManager(const std::shared_ptr<IdGenerator>& generator) :
         generator_{generator} {}
 
 bool TaskManager::AddTask(const Task& task) {
+    std::unique_lock lock(mutex_);
     TaskId id{generator_->GenerateId()};
+
     if (tasks_.find(id) != tasks_.end()) {
         LOG(error, "IdGenerator returns the id {" + std::to_string(id.value()) + "}, that is already in use.");
         return false;
@@ -19,16 +21,19 @@ bool TaskManager::AddTask(const Task& task) {
 }
 
 bool TaskManager::AddSubTask(const Task& task, const TaskId& parent) {
+    std::unique_lock lock(mutex_);
     if (tasks_.find(parent) == tasks_.end() || tasks_[parent].has_parent() ||
         tasks_[parent].task().status() == Task_Status_COMPLETED)
         return false;
 
     TaskId id{generator_->GenerateId()};
+
     tasks_.insert({id, CreateHierarchicalTask(task, parent)});
     return true;
 }
 
 bool TaskManager::Edit(const TaskId& id, const Task& task) {
+    std::unique_lock lock(mutex_);
     if (tasks_.find(id) == tasks_.end() || tasks_[id].task().status() == Task_Status_COMPLETED)
         return false;
 
@@ -37,6 +42,7 @@ bool TaskManager::Edit(const TaskId& id, const Task& task) {
 }
 
 bool TaskManager::Complete(const TaskId& id) {
+    std::unique_lock lock(mutex_);
     if (tasks_.find(id) == tasks_.end())
         return false;
 
@@ -49,10 +55,11 @@ bool TaskManager::Complete(const TaskId& id) {
 }
 
 bool TaskManager::Delete(const TaskId& id) {
+    std::unique_lock lock(mutex_);
     if (tasks_.find(id) == tasks_.end())
         return false;
 
-    for (auto it = tasks_.begin();  it!=tasks_.end();)
+    for (auto it = tasks_.begin(); it != tasks_.end();)
         ((*it).second.has_parent() && (*it).second.parent() == id) ? tasks_.erase(it++) : ++it;
 
     tasks_.erase(id);
@@ -60,50 +67,62 @@ bool TaskManager::Delete(const TaskId& id) {
     return true;
 }
 
-ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSortBy& sort_by) const {
+ManyTasksWithId TaskManager::ShowByLabel(const std::string& label, const TasksSortBy& sort_by) {
     ManyTasksWithId result;
-    for (const auto &[id, task]: tasks_) {
-        auto begin = task.task().labels().begin();
-        auto end = task.task().labels().end();
-        if (std::find(begin, end, label) != end && task.task().status() != Task_Status_COMPLETED) {
-            result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+    {
+        std::shared_lock lock(mutex_);
+        for (const auto &[id, task]: tasks_) {
+            auto begin = task.task().labels().begin();
+            auto end = task.task().labels().end();
+            if (std::find(begin, end, label) != end && task.task().status() != Task_Status_COMPLETED) {
+                result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+            }
         }
     }
 
-    LOG(debug, "Array from " + std::to_string(result.tasks_size()) + " tasks returned");
+    {
+        std::unique_lock lock(mutex_);
+        LOG(debug, "Array from " + std::to_string(result.tasks_size()) + " tasks returned");
+    }
 
     SortTasksWithId(result, sort_by);
     return result;
 }
 
-ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) const {
+ManyTasksWithId TaskManager::ShowParents(const TasksSortBy& sort_by) {
     ManyTasksWithId result;
-    for (const auto &[id, task]: tasks_)
-        if (!task.has_parent() && task.task().status() != Task_Status_COMPLETED)
-            result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+    {
+        std::shared_lock lock(mutex_);
+        for (const auto &[id, task]: tasks_)
+            if (!task.has_parent() && task.task().status() != Task_Status_COMPLETED)
+                result.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+    }
 
     SortTasksWithId(result, sort_by);
     return result;
 }
 
-CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sort_by) const {
+CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sort_by) {
     CompositeTask result;
-    if (!tasks_.count(parent))
-        return result;
-
     ManyTasksWithId child;
-    for (const auto &[id, task]: tasks_)
-        if (task.has_parent() && task.parent() == parent && task.task().status() != Task_Status_COMPLETED)
-            child.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+    {
+        std::shared_lock lock(mutex_);
+        if (!tasks_.count(parent))
+            return result;
+
+        for (const auto &[id, task]: tasks_)
+            if (task.has_parent() && task.parent() == parent && task.task().status() != Task_Status_COMPLETED)
+                child.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
+
+        result.set_allocated_task(new TaskWithId(CreateTaskWithId(parent, tasks_.at(parent).task())));
+    }
     SortTasksWithId(child, sort_by);
 
-    result.set_allocated_task(new TaskWithId(CreateTaskWithId(parent, tasks_.at(parent).task())));
     result.mutable_children()->Add(child.tasks().begin(), child.tasks().end());
-
     return result;
 }
 
-ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) const {
+ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) {
     ManyCompositeTasks result;
     ManyTasksWithId parents = ShowParents(sort);
 
@@ -112,14 +131,18 @@ ManyCompositeTasks TaskManager::ShowAll(const TasksSortBy& sort) const {
     return result;
 }
 
-ManyHierarchicalTasks TaskManager::GetAllTasks() const {
+ManyHierarchicalTasks TaskManager::GetAllTasks() {
     ManyHierarchicalTasks tasks;
-    for (const auto& task: tasks_)
-        tasks.push_back(task);
+    {
+        std::shared_lock lock(mutex_);
+        for (const auto& task: tasks_)
+            tasks.push_back(task);
+    }
     return tasks;
 }
 
 void TaskManager::Overwrite(const ManyHierarchicalTasks& tasks) {
+    std::unique_lock lock(mutex_);
     tasks_.clear();
     for (const auto& task: tasks)
         tasks_.insert(task);

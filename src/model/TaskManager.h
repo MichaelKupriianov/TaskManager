@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <shared_mutex>
 #include "Task.pb.h"
 #include "TaskStructures.pb.h"
 #include "IdGenerator.h"
@@ -25,15 +26,16 @@ public:
     virtual bool Complete(const TaskId& id);
     virtual bool Delete(const TaskId& id);
 
-    virtual ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy&) const;
-    virtual ManyTasksWithId ShowParents(const TasksSortBy&) const;
-    virtual CompositeTask ShowTask(const TaskId& id, const TasksSortBy&) const;
-    virtual ManyCompositeTasks ShowAll(const TasksSortBy&) const;
+    virtual ManyTasksWithId ShowByLabel(const std::string& label, const TasksSortBy&);
+    virtual ManyTasksWithId ShowParents(const TasksSortBy&);
+    virtual CompositeTask ShowTask(const TaskId& id, const TasksSortBy&);
+    virtual ManyCompositeTasks ShowAll(const TasksSortBy&);
 
-    virtual ManyHierarchicalTasks GetAllTasks() const;
+    virtual ManyHierarchicalTasks GetAllTasks();
     virtual void Overwrite(const ManyHierarchicalTasks&);
 private:
     std::map<TaskId, HierarchicalTask> tasks_;
     std::shared_ptr<IdGenerator> generator_;
+    std::shared_mutex mutex_;
 };
 }
