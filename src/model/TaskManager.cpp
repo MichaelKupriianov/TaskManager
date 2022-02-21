@@ -21,42 +21,31 @@ bool TaskManager::AddTask(const Task& task) {
 }
 
 bool TaskManager::AddSubTask(const Task& task, const TaskId& parent) {
-    {
-        std::shared_lock lock(mutex_);
-        if (tasks_.find(parent) == tasks_.end() || tasks_[parent].has_parent() ||
-            tasks_[parent].task().status() == Task_Status_COMPLETED)
-            return false;
-    }
+    std::unique_lock lock(mutex_);
+    if (tasks_.find(parent) == tasks_.end() || tasks_[parent].has_parent() ||
+        tasks_[parent].task().status() == Task_Status_COMPLETED)
+        return false;
 
     TaskId id{generator_->GenerateId()};
 
-    {
-        std::unique_lock lock(mutex_);
-        tasks_.insert({id, CreateHierarchicalTask(task, parent)});
-    }
+    tasks_.insert({id, CreateHierarchicalTask(task, parent)});
     return true;
 }
 
 bool TaskManager::Edit(const TaskId& id, const Task& task) {
-    {
-        std::shared_lock lock(mutex_);
-        if (tasks_.find(id) == tasks_.end() || tasks_[id].task().status() == Task_Status_COMPLETED)
-            return false;
-    }
-
     std::unique_lock lock(mutex_);
+    if (tasks_.find(id) == tasks_.end() || tasks_[id].task().status() == Task_Status_COMPLETED)
+        return false;
+
     tasks_[id].set_allocated_task(new Task(task));
     return true;
 }
 
 bool TaskManager::Complete(const TaskId& id) {
-    {
-        std::shared_lock lock(mutex_);
-        if (tasks_.find(id) == tasks_.end())
-            return false;
-    }
-
     std::unique_lock lock(mutex_);
+    if (tasks_.find(id) == tasks_.end())
+        return false;
+
     tasks_[id].mutable_task()->set_status(Task_Status_COMPLETED);
     for (const auto &[child_id, task]: tasks_)
         if (task.has_parent() && task.parent() == id)
@@ -66,13 +55,10 @@ bool TaskManager::Complete(const TaskId& id) {
 }
 
 bool TaskManager::Delete(const TaskId& id) {
-    {
-        std::shared_lock lock(mutex_);
-        if (tasks_.find(id) == tasks_.end())
-            return false;
-    }
-
     std::unique_lock lock(mutex_);
+    if (tasks_.find(id) == tasks_.end())
+        return false;
+
     for (auto it = tasks_.begin(); it != tasks_.end();)
         ((*it).second.has_parent() && (*it).second.parent() == id) ? tasks_.erase(it++) : ++it;
 
