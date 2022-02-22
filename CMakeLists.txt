@@ -63,7 +63,7 @@ set(generated_files ${proto_src} ${proto_hdr} ${task_manager_generated_files})
 include_directories(src)
 include_directories(tests)
 
-file(GLOB_RECURSE server_src src/model/* src/utilities/* src/persistence/* src/logging/*)
+file(GLOB_RECURSE server_src src/model/* src/persistence/* src/utilities/* src/logging/*)
 file(GLOB_RECURSE client_src src/ui/* src/utilities/* src/logging/*)
 file(GLOB_RECURSE tests_src tests/*)
 
