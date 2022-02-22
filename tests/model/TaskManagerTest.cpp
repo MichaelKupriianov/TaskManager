@@ -178,6 +178,7 @@ TEST_F(TaskManagerTest, shouldShowTaskWithSubtasks) {
     CompositeTask result = manager_->ShowTask(CreateTaskId(0), TasksSortBy::ID);
     ASSERT_TRUE(result.has_task());
     EXPECT_EQ(result.task().task(), CreateTask("first"));
+    ASSERT_EQ(result.children_size(), 2);
     EXPECT_EQ(result.children()[0].task(), CreateTask("second"));
     EXPECT_EQ(result.children()[1].task(), CreateTask("third"));
 }
@@ -208,7 +209,6 @@ TEST_F(TaskManagerTest, shouldShowTasksByLabel) {
 
 TEST_F(TaskManagerTest, shouldReturnNullptrIfIDNotExist) {
     EXPECT_CALL(*generator_, GenerateId())
-            .Times(1)
             .WillOnce(Return(CreateTaskId(0)));
 
     EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
@@ -230,6 +230,7 @@ TEST_F(TaskManagerTest, shouldShowAll) {
     EXPECT_TRUE(manager_->AddSubTask(CreateTask("fourth"), CreateTaskId(2)));
 
     ManyCompositeTasks result = manager_->ShowAll(TasksSortBy::ID);
+    ASSERT_EQ(result.tasks_size(), 2);
     EXPECT_EQ(result.tasks()[0].task().task(), CreateTask("first"));
     EXPECT_EQ(result.tasks()[0].children()[0].task(), CreateTask("second"));
     EXPECT_EQ(result.tasks()[1].task().task(), CreateTask("third"));
@@ -246,6 +247,7 @@ TEST_F(TaskManagerTest, shouldGetAllTasks) {
     EXPECT_TRUE(manager_->AddSubTask(CreateTask("second"), CreateTaskId(0)));
 
     model::ManyHierarchicalTasks result = manager_->GetAllTasks();
+    ASSERT_EQ(result.size(), 2);
     EXPECT_EQ(result[0].first, CreateTaskId(0));
     EXPECT_EQ(result[0].second, CreateHierarchicalTask(CreateTask("first"), std::nullopt));
     EXPECT_EQ(result[1].first, CreateTaskId(1));
@@ -254,7 +256,6 @@ TEST_F(TaskManagerTest, shouldGetAllTasks) {
 
 TEST_F(TaskManagerTest, shouldRewriteTaskManager) {
     EXPECT_CALL(*generator_, GenerateId())
-            .Times(1)
             .WillOnce(Return(CreateTaskId(0)));
 
     EXPECT_TRUE(manager_->AddTask(CreateTask("first")));
