@@ -29,13 +29,10 @@ int main(int argc, char** argv) {
 
     std::string target_str = host + ":" + port;
 
-    auto reader = std::make_shared<ui::Reader>();
-    auto printer = std::make_shared<ui::Printer>();
-    auto view = std::make_shared<ui::View>(reader, printer);
-    auto factory = std::make_shared<ui::Factory>(view);
+    auto factory = std::make_shared<ui::Factory>(
+            std::make_shared<ui::View>(std::make_shared<ui::Reader>(), std::make_shared<ui::Printer>()));
 
-    auto initial_step{factory->GetInitialStep()};
-    auto machine = std::make_shared<ui::StateMachine>(initial_step);
+    auto machine = std::make_shared<ui::StateMachine>(factory->GetInitialStep());
 
     std::shared_ptr<ui::Controller> controller =
             std::make_shared<ui::GRPCEndPoint>(
