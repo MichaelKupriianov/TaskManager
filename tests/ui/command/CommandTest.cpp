@@ -5,18 +5,14 @@
 #include "utilities/CreateProtoObjects.h"
 
 using ::testing::Return;
-using ::testing::AtLeast;
-using ::testing::InSequence;
-using ::testing::_;
 
 using namespace ui::command;
 
 class CommandTest : public ::testing::Test {
 public:
     void SetUp() override {
-        task_ = std::make_shared<Task>();
-        id_ = std::make_shared<TaskId>();
-        simple_task_ = std::make_shared<TaskWithId>(CreateTaskWithId(*id_, *task_));
+        task_ = std::make_shared<Task>(CreateTask("title"));
+        id_ = std::make_shared<TaskId>(CreateTaskId(3));
         array_simple_tasks_ = std::make_shared<ManyTasksWithId>();
         composite_task_ = std::make_shared<CompositeTask>();
         array_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
@@ -30,7 +26,6 @@ public:
 protected:
     std::shared_ptr<Task> task_;
     std::shared_ptr<TaskId> id_;
-    std::shared_ptr<TaskWithId> simple_task_;
     std::shared_ptr<ManyTasksWithId> array_simple_tasks_;
     std::shared_ptr<CompositeTask> composite_task_;
     std::shared_ptr<ManyCompositeTasks> array_composite_tasks_;
@@ -51,6 +46,7 @@ TEST_F(CommandTest, shouldAddTask) {
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST_F(CommandTest, shouldAddSubTask) {
@@ -60,6 +56,7 @@ TEST_F(CommandTest, shouldAddSubTask) {
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST_F(CommandTest, shouldHandleErrorWhenAddSubTask) {
@@ -69,7 +66,8 @@ TEST_F(CommandTest, shouldHandleErrorWhenAddSubTask) {
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
-    EXPECT_TRUE(result.error.has_value());
+    ASSERT_TRUE(result.error.has_value());
+    EXPECT_EQ(result.error.value(), Error::INCORRECT_PARENT_ID);
 }
 
 TEST_F(CommandTest, shouldEditTask) {
@@ -79,6 +77,7 @@ TEST_F(CommandTest, shouldEditTask) {
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST_F(CommandTest, shouldHandleErrorWhenEditTask) {
@@ -88,45 +87,50 @@ TEST_F(CommandTest, shouldHandleErrorWhenEditTask) {
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
-    EXPECT_TRUE(result.error.has_value());
+    ASSERT_TRUE(result.error.has_value());
+    EXPECT_EQ(result.error.value(), Error::NO_TASK_WITH_SUCH_ID);
 }
 
 TEST_F(CommandTest, shouldCompleteTask) {
     auto command = std::make_shared<Complete>(*id_);
-    EXPECT_CALL(*controller_, Complete(* id_))
+    EXPECT_CALL(*controller_, Complete(*id_))
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST_F(CommandTest, shouldHandleErrorWhenCompletetTask) {
     auto command = std::make_shared<Complete>(*id_);
-    EXPECT_CALL(*controller_, Complete(* id_))
+    EXPECT_CALL(*controller_, Complete(*id_))
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
-    EXPECT_TRUE(result.error.has_value());
+    ASSERT_TRUE(result.error.has_value());
+    EXPECT_EQ(result.error.value(), Error::NO_TASK_WITH_SUCH_ID);
 }
 
 TEST_F(CommandTest, shouldDeleteTask) {
     auto command = std::make_shared<Delete>(*id_);
-    EXPECT_CALL(*controller_, Delete(* id_))
+    EXPECT_CALL(*controller_, Delete(*id_))
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST_F(CommandTest, shouldHandleErrorWhenDeleteTask) {
     auto command = std::make_shared<Delete>(*id_);
-    EXPECT_CALL(*controller_, Delete(* id_))
+    EXPECT_CALL(*controller_, Delete(*id_))
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
     EXPECT_FALSE(result.finished);
-    EXPECT_TRUE(result.error.has_value());
+    ASSERT_TRUE(result.error.has_value());
+    EXPECT_EQ(result.error.value(), Error::NO_TASK_WITH_SUCH_ID);
 }
 
 TEST_F(CommandTest, shouldShowTasksWithSubtasks) {
@@ -207,5 +211,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenLoadFromFile) {
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
-    EXPECT_TRUE(result.error.has_value());
+    ASSERT_TRUE(result.error.has_value());
+    EXPECT_EQ(result.error.value(), Error::CANNOT_LOAD_FROM_FILE);
 }
