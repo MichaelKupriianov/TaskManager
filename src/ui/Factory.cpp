@@ -1,5 +1,4 @@
 #include "ui/Factory.h"
-#include <cassert>
 
 namespace ui {
 
@@ -34,8 +33,6 @@ std::shared_ptr<step::Step> Factory::CreateStep(step::Type type) {
             return std::make_shared<step::Save>(shared_from_this(), view_);
         case step::Type::LOAD:
             return std::make_shared<step::Load>(shared_from_this(), view_);
-        default:
-            assert(false);
     }
 }
 
