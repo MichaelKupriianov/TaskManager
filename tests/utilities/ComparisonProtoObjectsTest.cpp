@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "utilities/ComparisonProtoObjects.h"
+#include "utilities/CreateProtoObjects.h"
 
 class ComparisonProtoObjectsTest : public ::testing::Test {
 };
@@ -52,23 +53,67 @@ TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTaskShouldWork) {
     EXPECT_TRUE(task_1 == task_2);
 }
 
-TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForHierarchicalTaskShouldWork) {
-    Task t_1, t_2;
-    t_1.set_title("first");
-    t_2.set_title("second");
+TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForTasksWithIdShouldWork) {
+    EXPECT_TRUE(CreateTaskWithId(CreateTaskId(1), CreateTask("first")) ==
+                 CreateTaskWithId(CreateTaskId(1), CreateTask("first")));
+    EXPECT_FALSE(CreateTaskWithId(CreateTaskId(2), CreateTask("first")) ==
+                CreateTaskWithId(CreateTaskId(1), CreateTask("first")));
+    EXPECT_FALSE(CreateTaskWithId(CreateTaskId(1), CreateTask("first")) ==
+                CreateTaskWithId(CreateTaskId(1), CreateTask("second")));
+}
 
-    TaskId id_1, id_2;
-    id_1.set_value(5);
-    id_2.set_value(5);
+TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForManyTasksWithIdShouldWork) {
+    ManyTasksWithId tasks_1, tasks_2;
 
-    HierarchicalTask task_1, task_2;
-    task_1.set_allocated_task(new Task(t_1));
-    task_2.set_allocated_task(new Task(t_2));
-    task_1.set_allocated_parent(new TaskId(id_1));
-    task_2.set_allocated_parent(new TaskId(id_2));
+    tasks_1.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(1), CreateTask("first")));
+    EXPECT_FALSE(tasks_1 == tasks_2);
 
+    tasks_2.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(1), CreateTask("first")));
+    EXPECT_TRUE(tasks_1 == tasks_2);
+
+    tasks_1.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(2), CreateTask("first")));
+    tasks_2.mutable_tasks()->Add(CreateTaskWithId(CreateTaskId(2), CreateTask("second")));
+    EXPECT_FALSE(tasks_1 == tasks_2);
+}
+
+TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForCompositeTaskShouldWork) {
+    CompositeTask task_1, task_2;
+
+    task_1.set_allocated_task(new TaskWithId(CreateTaskWithId(CreateTaskId(1), CreateTask("first"))));
     EXPECT_FALSE(task_1 == task_2);
 
-    task_1.mutable_task()->set_title("second");
+    task_2.set_allocated_task(new TaskWithId(CreateTaskWithId(CreateTaskId(1), CreateTask("first"))));
     EXPECT_TRUE(task_1 == task_2);
+
+    task_1.mutable_children()->Add(CreateTaskWithId(CreateTaskId(2), CreateTask("first")));
+    task_2.mutable_children()->Add(CreateTaskWithId(CreateTaskId(1), CreateTask("first")));
+    EXPECT_FALSE(task_1 == task_2);
+}
+
+TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForManyCompositeTasksShouldWork) {
+    ManyCompositeTasks tasks_1, tasks_2;
+    CompositeTask task_1, task_2;
+    task_1.set_allocated_task(new TaskWithId(CreateTaskWithId(CreateTaskId(1), CreateTask("first"))));
+    task_2.set_allocated_task(new TaskWithId(CreateTaskWithId(CreateTaskId(1), CreateTask("first"))));
+
+    tasks_1.mutable_tasks()->Add(std::move(task_1));
+    EXPECT_FALSE(tasks_1 == tasks_2);
+
+    tasks_2.mutable_tasks()->Add(std::move(task_2));
+    EXPECT_TRUE(tasks_1 == tasks_2);
+
+    task_1.mutable_children()->Add(CreateTaskWithId(CreateTaskId(2), CreateTask("first")));
+    task_2.mutable_children()->Add(CreateTaskWithId(CreateTaskId(1), CreateTask("first")));
+    tasks_1.mutable_tasks()->Add(std::move(task_1));
+    tasks_2.mutable_tasks()->Add(std::move(task_2));
+    EXPECT_FALSE(tasks_1 == tasks_2);
+}
+
+TEST_F(ComparisonProtoObjectsTest, OperatorEqualsForHierarchicalTaskShouldWork) {
+    EXPECT_FALSE(CreateHierarchicalTask(CreateTask("first"), CreateTaskId(1)) ==
+                 CreateHierarchicalTask(CreateTask("second"), CreateTaskId(1)));
+    EXPECT_TRUE(CreateHierarchicalTask(CreateTask("second"), CreateTaskId(2)) ==
+                CreateHierarchicalTask(CreateTask("second"), CreateTaskId(2)));
+    EXPECT_FALSE(CreateHierarchicalTask(CreateTask("third"), std::nullopt) ==
+                 CreateHierarchicalTask(CreateTask("third"), CreateTaskId(1)));
 }
