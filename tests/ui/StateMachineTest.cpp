@@ -8,8 +8,6 @@
 #include "controller/DefaultControllerMock.h"
 
 using ::testing::Return;
-using ::testing::AtLeast;
-using ::testing::InSequence;
 using ::testing::_;
 
 using namespace ui;
@@ -17,17 +15,12 @@ using namespace ui;
 class StepMachineTest : public ::testing::Test {
 public:
     void SetUp() override {
-        auto reader = std::make_shared<Reader>();
-        auto printer = std::make_shared<Printer>();
-        view_ = std::make_shared<ViewMock>(reader, printer);
+        view_ = std::make_shared<ViewMock>(std::make_shared<Reader>(), std::make_shared<Printer>());
         factory_ = std::make_shared<Factory>(view_);
-        auto Result = std::make_shared<command::Result>(false);
-        context_ = std::make_shared<ContextMock>(Result);
+        context_ = std::make_shared<ContextMock>(std::make_shared<command::Result>(false));
 
-        auto generator = std::make_shared<model::IdGenerator>();
-        auto manager = std::make_shared<model::TaskManager>(generator);
-        auto model = std::make_shared<model::Model>(manager);
-        controller_ = std::make_shared<DefaultControllerMock>(model);
+        controller_ = std::make_shared<DefaultControllerMock>(std::make_shared<model::Model>(
+                std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>())));
     }
 protected:
     std::shared_ptr<ViewMock> view_;
@@ -43,17 +36,11 @@ TEST_F(StepMachineTest, shouldRunWuthContext) {
 
     StateMachine machine(step_root);
 
-    EXPECT_CALL(*step_root, execute(_))
-            .Times(1)
-            .WillOnce(Return(step_help));
-    EXPECT_CALL(*step_help, execute(_))
-            .Times(1)
-            .WillOnce(Return(step_quit));
-    EXPECT_CALL(*step_quit, execute(_))
-            .Times(1)
-            .WillOnce(Return(step_root));
-    EXPECT_CALL(*context_, if_finished())
-            .Times(4)
+    EXPECT_CALL(*step_root, execute(_)).WillOnce(Return(step_help));
+    EXPECT_CALL(*step_help, execute(_)).WillOnce(Return(step_quit));
+    EXPECT_CALL(*step_quit, execute(_)).WillOnce(Return(step_root));
+
+    EXPECT_CALL(*context_, if_finished()).Times(4)
             .WillOnce(Return(false))
             .WillOnce(Return(false))
             .WillOnce(Return(false))
@@ -70,14 +57,9 @@ TEST_F(StepMachineTest, shouldRunWuthController) {
 
     StateMachine machine(step_root);
 
-    EXPECT_CALL(*step_root, execute(_))
-            .Times(1)
-            .WillOnce(Return(step_help));
-    EXPECT_CALL(*step_help, execute(_))
-            .Times(1)
-            .WillOnce(Return(step_quit));
-    EXPECT_CALL(*view_, PrintQuit())
-            .Times(1);
+    EXPECT_CALL(*step_root, execute(_)).WillOnce(Return(step_help));
+    EXPECT_CALL(*step_help, execute(_)).WillOnce(Return(step_quit));
+    EXPECT_CALL(*view_, PrintQuit()).Times(1);
 
     machine.Run(controller_);
 }
