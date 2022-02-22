@@ -18,7 +18,7 @@ public:
         id_ = std::make_shared<TaskId>();
         simple_task_ = std::make_shared<TaskWithId>(CreateTaskWithId(*id_, *task_));
         array_simple_tasks_ = std::make_shared<ManyTasksWithId>();
-        composite_task_ = std::make_shared<CompositeTask>(CreateCompositeTask(*simple_task_, *array_simple_tasks_));
+        composite_task_ = std::make_shared<CompositeTask>();
         array_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
 
         auto generator = std::make_shared<model::IdGenerator>();
@@ -47,7 +47,6 @@ TEST_F(CommandTest, shouldQuit) {
 TEST_F(CommandTest, shouldAddTask) {
     auto command = std::make_shared<Add>(*task_);
     EXPECT_CALL(*controller_, AddTask(*task_))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -57,7 +56,6 @@ TEST_F(CommandTest, shouldAddTask) {
 TEST_F(CommandTest, shouldAddSubTask) {
     auto command = std::make_shared<AddSub>(*task_, *id_);
     EXPECT_CALL(*controller_, AddSubTask(*task_, *id_))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -67,7 +65,6 @@ TEST_F(CommandTest, shouldAddSubTask) {
 TEST_F(CommandTest, shouldHandleErrorWhenAddSubTask) {
     auto command = std::make_shared<AddSub>(*task_, *id_);
     EXPECT_CALL(*controller_, AddSubTask(*task_, *id_))
-            .Times(1)
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
@@ -78,7 +75,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenAddSubTask) {
 TEST_F(CommandTest, shouldEditTask) {
     auto command = std::make_shared<Edit>(*id_, *task_);
     EXPECT_CALL(*controller_, Edit(*id_, *task_))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -88,7 +84,6 @@ TEST_F(CommandTest, shouldEditTask) {
 TEST_F(CommandTest, shouldHandleErrorWhenEditTask) {
     auto command = std::make_shared<Edit>(*id_, *task_);
     EXPECT_CALL(*controller_, Edit(*id_, *task_))
-            .Times(1)
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
@@ -99,7 +94,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenEditTask) {
 TEST_F(CommandTest, shouldCompleteTask) {
     auto command = std::make_shared<Complete>(*id_);
     EXPECT_CALL(*controller_, Complete(* id_))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -109,7 +103,6 @@ TEST_F(CommandTest, shouldCompleteTask) {
 TEST_F(CommandTest, shouldHandleErrorWhenCompletetTask) {
     auto command = std::make_shared<Complete>(*id_);
     EXPECT_CALL(*controller_, Complete(* id_))
-            .Times(1)
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
@@ -120,7 +113,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenCompletetTask) {
 TEST_F(CommandTest, shouldDeleteTask) {
     auto command = std::make_shared<Delete>(*id_);
     EXPECT_CALL(*controller_, Delete(* id_))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -130,7 +122,6 @@ TEST_F(CommandTest, shouldDeleteTask) {
 TEST_F(CommandTest, shouldHandleErrorWhenDeleteTask) {
     auto command = std::make_shared<Delete>(*id_);
     EXPECT_CALL(*controller_, Delete(* id_))
-            .Times(1)
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
@@ -141,7 +132,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenDeleteTask) {
 TEST_F(CommandTest, shouldShowTasksWithSubtasks) {
     auto command = std::make_shared<Show>(true, TasksSortBy::ID);
     EXPECT_CALL(*controller_, ShowAll(TasksSortBy::ID))
-            .Times(1)
             .WillOnce(Return(*array_composite_tasks_));
 
     Result result{command->execute(controller_)};
@@ -151,7 +141,6 @@ TEST_F(CommandTest, shouldShowTasksWithSubtasks) {
 TEST_F(CommandTest, shouldShowOnlyTasks) {
     auto command = std::make_shared<Show>(false, TasksSortBy::PRIORITY);
     EXPECT_CALL(*controller_, ShowParents(TasksSortBy::PRIORITY))
-            .Times(1)
             .WillOnce(Return(*array_simple_tasks_));
 
     Result result{command->execute(controller_)};
@@ -161,7 +150,6 @@ TEST_F(CommandTest, shouldShowOnlyTasks) {
 TEST_F(CommandTest, shouldShowSomeTask) {
     auto command = std::make_shared<ShowTask>(*id_, TasksSortBy::DATE);
     EXPECT_CALL(*controller_, ShowTask(*id_, TasksSortBy::DATE))
-            .Times(1)
             .WillOnce(Return(*composite_task_));
 
     Result result{command->execute(controller_)};
@@ -171,7 +159,6 @@ TEST_F(CommandTest, shouldShowSomeTask) {
 TEST_F(CommandTest, shouldHandleErrorWhenShowSomeTask) {
     auto command = std::make_shared<ShowTask>(*id_, TasksSortBy::ID);
     EXPECT_CALL(*controller_, ShowTask(*id_, TasksSortBy::ID))
-            .Times(1)
             .WillOnce(Return(CompositeTask()));
 
     Result result{command->execute(controller_)};
@@ -181,7 +168,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenShowSomeTask) {
 TEST_F(CommandTest, shouldShowByLabel) {
     auto command = std::make_shared<ShowByLabel>("label", TasksSortBy::PRIORITY);
     EXPECT_CALL(*controller_, ShowByLabel("label", TasksSortBy::PRIORITY))
-            .Times(1)
             .WillOnce(Return(*array_simple_tasks_));
 
     Result result{command->execute(controller_)};
@@ -191,7 +177,6 @@ TEST_F(CommandTest, shouldShowByLabel) {
 TEST_F(CommandTest, shouldSaveToFile) {
     auto command = std::make_shared<Save>("filename");
     EXPECT_CALL(*controller_, Save("filename"))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -201,7 +186,6 @@ TEST_F(CommandTest, shouldSaveToFile) {
 TEST_F(CommandTest, shouldHandleErrorWhenSaveToFile) {
     auto command = std::make_shared<Save>("filename");
     EXPECT_CALL(*controller_, Save("filename"))
-            .Times(1)
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
@@ -211,7 +195,6 @@ TEST_F(CommandTest, shouldHandleErrorWhenSaveToFile) {
 TEST_F(CommandTest, shouldLoadFromFile) {
     auto command = std::make_shared<Load>("filename");
     EXPECT_CALL(*controller_, Load("filename"))
-            .Times(1)
             .WillOnce(Return(true));
 
     Result result{command->execute(controller_)};
@@ -221,7 +204,6 @@ TEST_F(CommandTest, shouldLoadFromFile) {
 TEST_F(CommandTest, shouldHandleErrorWhenLoadFromFile) {
     auto command = std::make_shared<Load>("filename");
     EXPECT_CALL(*controller_, Load("filename"))
-            .Times(1)
             .WillOnce(Return(false));
 
     Result result{command->execute(controller_)};
