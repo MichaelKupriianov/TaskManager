@@ -6,8 +6,8 @@
 #include "utilities/ComparisonProtoObjects.h"
 #include "logging/Initialisation.h"
 
-using namespace model;
 using ::testing::Return;
+using namespace model;
 
 class GRPCEndPointServerTest : public ::testing::Test {
 public:

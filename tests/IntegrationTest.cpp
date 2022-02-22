@@ -7,7 +7,6 @@
 #include "logging/Initialisation.h"
 
 using ::testing::Return;
-using ::testing::AtLeast;
 using ::testing::InSequence;
 using ::testing::_;
 

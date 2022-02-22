@@ -4,8 +4,6 @@
 #include "logging/Initialisation.h"
 
 using ::testing::Return;
-using ::testing::AtLeast;
-using ::testing::_;
 
 class IdGeneratorMock : public model::IdGenerator {
 public:

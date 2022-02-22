@@ -5,9 +5,6 @@
 #include "utilities/ComparisonProtoObjects.h"
 
 using ::testing::Return;
-using ::testing::AtLeast;
-using ::testing::InSequence;
-using ::testing::_;
 
 using namespace ui;
 
@@ -36,7 +33,7 @@ protected:
 };
 
 TEST_F(ViewTest, ShouldPrintHelp) {
-    EXPECT_CALL(*printer_, PrintString(_))
+    EXPECT_CALL(*printer_, PrintString(testing::_))
             .Times(1);
     view_->PrintHelp();
 }
