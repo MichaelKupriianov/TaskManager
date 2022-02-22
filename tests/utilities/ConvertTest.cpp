@@ -77,6 +77,12 @@ TEST_F(ConvertTest, shouldConvertPriorityToString) {
     EXPECT_EQ(convert::ToString(Task_Priority_NONE), "none");
 }
 
+TEST_F(ConvertTest, shouldConvertTasksSortByToString) {
+    EXPECT_EQ(convert::ToString(TasksSortBy::ID), "id");
+    EXPECT_EQ(convert::ToString(TasksSortBy::DATE), "date");
+    EXPECT_EQ(convert::ToString(TasksSortBy::PRIORITY), "priority");
+}
+
 TEST_F(ConvertTest, shouldConvertDateToString) {
     google::protobuf::Timestamp date;
     date.set_seconds(0);
