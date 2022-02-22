@@ -27,13 +27,6 @@ TaskWithId CreateTaskWithId(const TaskId& id, const Task& task) {
     return task_with_id;
 }
 
-CompositeTask CreateCompositeTask(const TaskWithId& task, const ManyTasksWithId& child) {
-    CompositeTask composite_task;
-    composite_task.set_allocated_task(new TaskWithId(task));
-    composite_task.mutable_children()->Add(child.tasks().begin(), child.tasks().end());
-    return composite_task;
-}
-
 HierarchicalTask CreateHierarchicalTask(const Task& task, std::optional<TaskId> parent) {
     HierarchicalTask hierarchical_task;
     hierarchical_task.set_allocated_task(new Task(task));
