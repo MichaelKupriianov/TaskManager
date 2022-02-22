@@ -41,10 +41,8 @@ ManyCompositeTasks Model::ShowAll(const TasksSortBy& sort_by) {
 bool Model::Save(const std::string& filename) {
     std::vector<std::pair<TaskId, HierarchicalTask>> tasks{manager_->GetAllTasks()};
     TaskPersister persister{filename};
-    if (!persister.Save(tasks))
-        return false;
-    else
-        return true;
+    if (!persister.Save(tasks)) return false;
+    else return true;
 }
 
 bool Model::Load(const std::string& filename) {
