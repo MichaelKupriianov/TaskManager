@@ -22,18 +22,25 @@ TEST_F(CreateProtoObjectsTest, ShouldCreateTask) {
     EXPECT_EQ(task.title(), title);
     EXPECT_EQ(task.priority(), priority);
     EXPECT_EQ(task.date().seconds(), date);
-    ASSERT_EQ(task.labels().size(), 2);
-    EXPECT_EQ(task.labels()[0], labels[0]);
-    EXPECT_EQ(task.labels()[1], labels[1]);
+    EXPECT_TRUE(std::equal(labels.begin(), labels.end(), task.labels().begin()));
     EXPECT_EQ(task.status(), Task_Status_IN_PROGRESS);
 }
 
+TEST_F(CreateProtoObjectsTest, ShouldCreateTaskWithId) {
+    auto id{CreateTaskId(4)};
+    auto task{CreateTask("first")};
+    TaskWithId task_with_id{CreateTaskWithId(id, task)};
+
+    ASSERT_TRUE(task_with_id.has_id());
+    EXPECT_EQ(task_with_id.id(), id);
+    ASSERT_TRUE(task_with_id.has_task());
+    EXPECT_EQ(task_with_id.task(), task);
+}
+
 TEST_F(CreateProtoObjectsTest, ShouldCreateHierarchicalTask) {
-    const int value{3};
-    const TaskId id{CreateTaskId(value)};
-    const std::string title{"first"};
-    const Task task{CreateTask(title)};
-    const HierarchicalTask hierarchical_task{CreateHierarchicalTask(task, id)};
+    auto id{CreateTaskId(3)};
+    auto task{CreateTask("second")};
+    HierarchicalTask hierarchical_task{CreateHierarchicalTask(task, id)};
 
     ASSERT_TRUE(hierarchical_task.has_task());
     EXPECT_EQ(hierarchical_task.task(), task);
@@ -42,9 +49,8 @@ TEST_F(CreateProtoObjectsTest, ShouldCreateHierarchicalTask) {
 }
 
 TEST_F(CreateProtoObjectsTest, ShouldCreateHierarchicalTaskWithoutParent) {
-    const std::string title{"first"};
-    const Task task{CreateTask(title)};
-    const HierarchicalTask hierarchical_task{CreateHierarchicalTask(task, std::nullopt)};
+    auto task{CreateTask("third")};
+    HierarchicalTask hierarchical_task{CreateHierarchicalTask(task, std::nullopt)};
 
     ASSERT_TRUE(hierarchical_task.has_task());
     EXPECT_EQ(hierarchical_task.task(), task);
