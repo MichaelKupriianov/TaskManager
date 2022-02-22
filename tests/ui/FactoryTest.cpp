@@ -6,10 +6,8 @@ using namespace ui;
 class FactoryTest : public ::testing::Test {
 public:
     void SetUp() override {
-        auto reader = std::make_shared<ui::Reader>();
-        auto printer = std::make_shared<ui::Printer>();
-        auto view = std::make_shared<View>(reader, printer);
-        factory_ = std::make_shared<Factory>(view);
+        factory_ = std::make_shared<Factory>(
+                std::make_shared<View>(std::make_shared<ui::Reader>(), std::make_shared<ui::Printer>()));
     }
 protected:
     std::shared_ptr<View> view_;

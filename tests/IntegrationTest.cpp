@@ -26,18 +26,14 @@ public:
     void SetUp() override {
         ConsoleLogging{boost::log::trivial::fatal};
 
-        auto generator = std::make_shared<model::IdGenerator>();
-        auto manager = std::make_shared<model::TaskManager>(generator);
-        auto model =std::make_shared<model::Model>(manager);
-        controller_= std::make_shared<ui::DefaultController>(model);
+        controller_ = std::make_shared<ui::DefaultController>(std::make_shared<model::Model>(
+                std::make_shared<model::TaskManager>(std::make_shared<model::IdGenerator>())));
 
         reader_ = std::make_shared<ReaderMock>();
         printer_ = std::make_shared<PrinterMock>();
-        auto view = std::make_shared<ui::View>(reader_, printer_);
-        auto factory = std::make_shared<ui::Factory>(view);
 
-        auto initial_step{factory->GetInitialStep()};
-        machine_ = std::make_shared<ui::StateMachine>(initial_step);
+        auto factory = std::make_shared<ui::Factory>(std::make_shared<ui::View>(reader_, printer_));
+        machine_ = std::make_shared<ui::StateMachine>(factory->GetInitialStep());
     }
 
 protected:
