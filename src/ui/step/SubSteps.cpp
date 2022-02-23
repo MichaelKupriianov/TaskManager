@@ -27,7 +27,7 @@ SubStepDate::SubStepDate(const std::shared_ptr<Factory>& factory, const std::sha
 
 std::shared_ptr<Step> SubStepDate::execute(Context& context) {
     google::protobuf::Timestamp date(view_->ReadDate(context.wizard_string()));
-    context.task()->set_allocated_date(new google::protobuf::Timestamp(date));
+    context.task()->set_allocated_date(std::make_unique<google::protobuf::Timestamp>(date).release());
     return factory_->GetNextSubStepFrom(*this);
 }
 

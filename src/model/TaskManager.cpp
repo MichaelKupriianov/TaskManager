@@ -37,7 +37,7 @@ bool TaskManager::Edit(const TaskId& id, const Task& task) {
     if (tasks_.find(id) == tasks_.end() || tasks_[id].task().status() == Task_Status_COMPLETED)
         return false;
 
-    tasks_[id].set_allocated_task(new Task(task));
+    tasks_[id].set_allocated_task(std::make_unique<Task>(task).release());
     return true;
 }
 
@@ -114,7 +114,8 @@ CompositeTask TaskManager::ShowTask(const TaskId& parent, const TasksSortBy& sor
             if (task.has_parent() && task.parent() == parent && task.task().status() != Task_Status_COMPLETED)
                 child.mutable_tasks()->Add(CreateTaskWithId(id, task.task()));
 
-        result.set_allocated_task(new TaskWithId(CreateTaskWithId(parent, tasks_.at(parent).task())));
+        result.set_allocated_task(
+                std::make_unique<TaskWithId>(CreateTaskWithId(parent, tasks_.at(parent).task())).release());
     }
     SortTasksWithId(child, sort_by);
 
@@ -135,8 +136,7 @@ ManyHierarchicalTasks TaskManager::GetAllTasks() {
     ManyHierarchicalTasks tasks;
     {
         std::shared_lock lock(mutex_);
-        for (const auto& task: tasks_)
-            tasks.push_back(task);
+        std::copy(tasks_.begin(), tasks_.end(), std::back_inserter(tasks));
     }
     return tasks;
 }
