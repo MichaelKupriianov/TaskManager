@@ -22,8 +22,8 @@ public:
 
     std::shared_ptr<Step> execute(Context&) override;
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Quit : public Step {
@@ -33,8 +33,8 @@ public:
 
     std::shared_ptr<Step> execute(Context&) override;
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Help : public Step {
@@ -44,8 +44,8 @@ public:
 
     std::shared_ptr<Step> execute(Context&) override;
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Print : public Step {
@@ -55,8 +55,8 @@ public:
 
     std::shared_ptr<Step> execute(Context&) override;
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Complete : public Step {
@@ -67,8 +67,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Delete : public Step {
@@ -79,8 +79,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Show : public Step {
@@ -91,8 +91,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class ShowTask : public Step {
@@ -103,8 +103,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class ShowByLabel : public Step {
@@ -115,8 +115,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Save : public Step {
@@ -127,8 +127,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 
 class Load : public Step {
@@ -139,8 +139,8 @@ public:
     std::shared_ptr<Step> execute(Context&) override;
     std::string name();
 private:
-    std::shared_ptr<Factory> factory_;
-    std::shared_ptr<View> view_;
+    const std::shared_ptr<Factory> factory_;
+    const std::shared_ptr<View> view_;
 };
 }
 }
