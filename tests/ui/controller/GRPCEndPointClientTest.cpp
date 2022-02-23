@@ -21,9 +21,8 @@ public:
 
         task_ = std::make_shared<Task>();
         id_ = std::make_shared<TaskId>();
-        auto task_with_id = std::make_shared<TaskWithId>(CreateTaskWithId(*id_, *task_));
         many_tasks_with_id = std::make_shared<ManyTasksWithId>();
-        composite_task_ = std::make_shared<CompositeTask>(CreateCompositeTask(*task_with_id, *many_tasks_with_id));
+        composite_task_ = std::make_shared<CompositeTask>();
         many_composite_tasks_ = std::make_shared<ManyCompositeTasks>();
     }
 protected:
