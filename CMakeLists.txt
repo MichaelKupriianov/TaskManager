@@ -12,6 +12,8 @@ set(Boost_USE_RELEASE_LIBS ON)  # only find release libs
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=nullability")
+
 find_package(Boost REQUIRED log_setup log program_options COMPONENTS)
 if (Boost_FOUND)
     message(STATUS "Using BOOST ${Boost_VERSION}")
