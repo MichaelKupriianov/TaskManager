@@ -2,7 +2,6 @@
 #include "gmock/gmock.h"
 #include "model/GRPCEndPoint.h"
 #include "ModelMock.h"
-#include "utilities/CreateProtoObjects.h"
 #include "utilities/ComparisonProtoObjects.h"
 #include "logging/Initialisation.h"
 

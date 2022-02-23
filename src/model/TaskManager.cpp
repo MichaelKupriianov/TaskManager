@@ -136,8 +136,7 @@ ManyHierarchicalTasks TaskManager::GetAllTasks() {
     ManyHierarchicalTasks tasks;
     {
         std::shared_lock lock(mutex_);
-        for (const auto& task: tasks_)
-            tasks.push_back(task);
+        std::copy(tasks_.begin(), tasks_.end(), std::back_inserter(tasks));
     }
     return tasks;
 }

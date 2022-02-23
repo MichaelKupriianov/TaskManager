@@ -64,7 +64,8 @@ std::optional<ui::step::Type> StringToStepType(const std::string& command) {
 
 std::optional<int> StringToId(const std::string& id) {
     for (auto symbol: id)
-        if (symbol < '0' || symbol > '9') return std::nullopt;
+        if (symbol < '0' || symbol > '9')
+            return std::nullopt;
     try {
         int result = std::stoi(id);
         return result;
@@ -140,7 +141,8 @@ std::string ToString(const Task& task) {
     result += ", date: " + convert::ToString(task.date());
     if (!task.labels().empty()) {
         result += ", labels:";
-        for (const auto& label: task.labels()) result += " " + label;
+        for (const auto& label: task.labels())
+            result += " " + label;
     }
     return result;
 }

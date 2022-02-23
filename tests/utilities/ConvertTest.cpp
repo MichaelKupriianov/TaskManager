@@ -64,10 +64,8 @@ TEST_F(ConvertTest, shouldConvertStringToSortBy) {
 TEST_F(ConvertTest, shouldConvertStringToVectorLabels) {
     const std::string labels = "first  second first q";
     std::vector<std::string> result{convert::StringToLabels(labels)};
-    ASSERT_EQ(result.size(), 3);
-    EXPECT_EQ(result[0], "first");
-    EXPECT_EQ(result[1], "second");
-    EXPECT_EQ(result[2], "q");
+    std::vector<std::string> expectation{"first", "second", "q"};
+    ASSERT_EQ(result, expectation);
 }
 
 TEST_F(ConvertTest, shouldConvertPriorityToString) {
